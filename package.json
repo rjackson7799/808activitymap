@@ -17,6 +17,7 @@
     "test": "vitest run",
     "rls:generate": "tsx db/rls/generate.ts",
     "provision:super-admin": "tsx --env-file-if-exists=.env.local scripts/provision-super-admin.ts",
+    "smoke:auth": "tsx --env-file-if-exists=.env.local scripts/smoke-auth.ts",
     "db:start": "supabase start",
     "db:reset": "supabase db reset",
     "db:stop": "supabase stop"
