@@ -24,7 +24,15 @@ jobs:
       - run: npm ci
       - run: npm run typecheck
       - run: npm run lint
-      # CP2 adds the RLS drift gate here: regenerate policies + git diff --exit-code
+      # RLS drift gate (ADR-003): the committed generated policy migration
+      # must be byte-identical to what db/rls (matrix ∧ availability) renders.
+      # `git add` first so an UNTRACKED regenerated file (e.g. after an
+      # OUTPUT_MIGRATION bump without committing) also fails the gate.
+      - name: RLS drift gate
+        run: |
+          npm run rls:generate
+          git add -A -- supabase/migrations db/rls .gitattributes
+          git diff --cached --exit-code
 
   unit:
     name: Unit tests (no DB)
