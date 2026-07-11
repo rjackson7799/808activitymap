@@ -38,7 +38,12 @@ create index events_session_ts_idx on public.events (session_id, ts);
 alter table public.events enable row level security;
 revoke all on table public.events from anon, authenticated;
 
+-- Partitions are directly addressable tables: each one must be locked down
+-- itself (RLS + revoked grants), or Supabase's default privileges would let
+-- anon read a partition directly while the parent stays deny-all.
 create table public.events_default partition of public.events default;
+alter table public.events_default enable row level security;
+revoke all on table public.events_default from anon, authenticated;
 
 -- Idempotent partition creation, advisory-locked against concurrent runs
 -- (cron overlap, parallel deploys).
@@ -74,6 +79,8 @@ begin
         'create table public.%I partition of public.events for values from (%L) to (%L)',
         v_name, v_month, (v_month + interval '1 month')::date
       );
+      execute format('alter table public.%I enable row level security', v_name);
+      execute format('revoke all on table public.%I from anon, authenticated', v_name);
       v_created := v_created + 1;
     end if;
   end loop;

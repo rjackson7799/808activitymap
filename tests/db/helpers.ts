@@ -98,6 +98,38 @@ class Rollback extends Error {
   }
 }
 
+/**
+ * Expect a statement to fail INSIDE an open transaction without killing it:
+ * runs `fn` in a SAVEPOINT so the transaction stays usable afterwards.
+ */
+export async function expectErrorIn(
+  tx: TxSql,
+  messagePattern: RegExp | string,
+  fn: (sp: TxSql) => Promise<unknown>,
+): Promise<void> {
+  let error: unknown;
+  try {
+    await tx.savepoint((sp) => fn(sp as TxSql));
+  } catch (e) {
+    error = e;
+  }
+  if (error === undefined) {
+    throw new Error(
+      `Expected a Postgres error matching ${messagePattern}, but the statement succeeded`,
+    );
+  }
+  const message = error instanceof Error ? error.message : String(error);
+  const matches =
+    typeof messagePattern === "string"
+      ? message.includes(messagePattern)
+      : messagePattern.test(message);
+  if (!matches) {
+    throw new Error(
+      `Expected error matching ${messagePattern}, got: ${message}`,
+    );
+  }
+}
+
 /** Expect `promise` to reject with a Postgres error whose message matches. */
 export async function expectPgError(
   promise: Promise<unknown>,
