@@ -1,0 +1,13 @@
+# LF everywhere — generated SQL (RLS generator, migrations) must be byte-stable
+# across Windows dev and Linux CI for the drift gate (slice-1 §RLS determinism).
+* text=auto eol=lf
+
+# binary assets
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.avif binary
+*.ico binary
+*.woff binary
+*.woff2 binary

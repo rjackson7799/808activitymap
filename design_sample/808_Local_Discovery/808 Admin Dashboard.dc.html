@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Marcellus&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;background:#EEE7D9;font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:#1E232B;-webkit-font-smoothing:antialiased}
+  a{color:#0E8FA8;text-decoration:none}
+  a:hover{color:#0B6E86}
+  ::-webkit-scrollbar{width:9px;height:9px}
+  ::-webkit-scrollbar-thumb{background:rgba(30,35,43,.18);border-radius:9px}
+  ::-webkit-scrollbar-track{background:transparent}
+</style>
+</helmet>
+
+<section style="display:flex;flex-direction:column;gap:34px;padding:52px 60px 90px;width:max-content;background:radial-gradient(1200px 600px at 20% -5%,#F7F1E4,#EAE1CF)">
+
+  <!-- turn header -->
+  <div style="display:flex;align-items:center;gap:14px">
+    <span style="background:#1E232B;color:#fff;font:800 12px 'Plus Jakarta Sans';letter-spacing:.1em;padding:6px 12px;border-radius:8px">TURN 1</span>
+    <span style="font:400 26px 'Marcellus';color:#1E232B">808 Admin — Site Owner Console</span>
+    <span style="font:500 12.5px 'Plus Jakarta Sans';color:#8A8170">Two overview directions (<a href="#1a">1a</a>, <a href="#1b">1b</a>) · supporting screens (<a href="#1c">1c</a>–<a href="#1e">1e</a>) follow direction <a href="#1a">1a</a></span>
+  </div>
+
+  <!-- ===================== OVERVIEW VARIATIONS ===================== -->
+  <div style="display:flex;gap:48px;align-items:flex-start;flex-wrap:wrap">
+
+    <!-- ============ 1a · SIDEBAR COMMAND CENTER ============ -->
+    <div id="1a" style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:#1E232B;color:#D9B673;font:800 12px 'Plus Jakarta Sans';padding:5px 10px;border-radius:7px">1a</span><span style="font:800 12.5px 'Plus Jakarta Sans';letter-spacing:.12em;color:#8A8170">OVERVIEW · SIDEBAR COMMAND CENTER · 1280</span></div>
+      <div data-screen-label="1a Admin Overview" style="width:1280px;background:#FBF8F1;border-radius:20px;overflow:hidden;box-shadow:0 40px 90px -30px rgba(20,40,60,.45);display:flex">
+
+        <!-- sidebar -->
+        <div style="width:222px;flex-shrink:0;background:linear-gradient(170deg,#1E232B,#252B34);color:#fff;display:flex;flex-direction:column;padding:18px 14px 16px">
+          <div style="display:flex;align-items:center;gap:9px;padding:0 6px 16px"><img src="uploads/808_logo_t.png" alt="808eVentures" style="height:34px;width:auto"/><span style="font:600 10px 'Plus Jakarta Sans';letter-spacing:.14em;color:#D9B673">ADMIN</span></div>
+          <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:10px 11px;margin-bottom:16px">
+            <div style="width:36px;height:36px;border-radius:9px;background:#0B6E86;display:flex;align-items:center;justify-content:center;font:400 17px 'Marcellus';color:#fff;flex-shrink:0">K</div>
+            <div style="flex:1;min-width:0"><div style="font:700 12.5px 'Plus Jakarta Sans';color:#fff">Kai Nakamura</div><div style="font:500 10px 'Plus Jakarta Sans';color:rgba(255,255,255,.55)">Super Admin</div></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.09);border-left:3px solid #D9B673;border-radius:9px;padding:9px 11px;font:700 12.5px 'Plus Jakarta Sans';color:#fff;cursor:pointer">📊 Overview</div>
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65);cursor:pointer">👥 Users <span style="margin-left:auto;font:600 10px 'Plus Jakarta Sans';color:rgba(255,255,255,.4)">642</span></div>
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65);cursor:pointer">🏪 Businesses <span style="margin-left:auto;min-width:16px;height:16px;border-radius:8px;background:#C4692A;color:#fff;font:800 9.5px 'Plus Jakarta Sans';display:flex;align-items:center;justify-content:center;padding:0 4px">5</span></div>
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65);cursor:pointer">💳 Subscriptions</div>
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65);cursor:pointer">📈 Analytics</div>
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65);cursor:pointer">🛡️ Moderation <span style="margin-left:auto;min-width:16px;height:16px;border-radius:8px;background:#C4692A;color:#fff;font:800 9.5px 'Plus Jakarta Sans';display:flex;align-items:center;justify-content:center;padding:0 4px">3</span></div>
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65);cursor:pointer">🎟️ Deals</div>
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65);cursor:pointer">⚙️ Settings</div>
+          </div>
+          <div style="margin-top:auto;display:flex;align-items:center;gap:8px;border-top:1px solid rgba(255,255,255,.08);padding-top:12px">
+            <span style="width:7px;height:7px;border-radius:50%;background:#5FBF6A;box-shadow:0 0 0 3px rgba(95,191,106,.22);flex-shrink:0"></span>
+            <span style="font:500 10.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.6)">All systems operational</span>
+            <span style="margin-left:auto;font:500 10px 'Plus Jakarta Sans';color:rgba(255,255,255,.35)">v2.4</span>
+          </div>
+        </div>
+
+        <!-- main -->
+        <div style="flex:1;min-width:0;padding:22px 26px 28px">
+          <div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:18px">
+            <div style="flex:1"><div style="font:400 25px 'Marcellus';color:#1E232B">Aloha, Kai 🤙</div><div style="font:500 12.5px 'Plus Jakarta Sans';color:#8A8170;margin-top:2px">Here's how Oahu's doing — Mon Jul 6 – Sun Jul 12, 2026.</div></div>
+            <button style="display:flex;align-items:center;gap:7px;background:#fff;border:1px solid rgba(30,35,43,.14);border-radius:11px;padding:9px 13px;cursor:pointer;font:600 12.5px 'Plus Jakarta Sans';color:#1E232B">This week <span style="font-size:10px;color:#8A8170">▾</span></button>
+            <button style="background:#1E232B;border:none;border-radius:11px;padding:9px 16px;cursor:pointer;color:#fff;font:700 12.5px 'Plus Jakarta Sans'">⇩ Export report</button>
+          </div>
+
+          <!-- KPIs -->
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px">
+            <div style="background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:14px;padding:13px 15px"><div style="font:500 10px 'Plus Jakarta Sans';letter-spacing:.08em;color:#A79E8C">TOTAL USERS</div><div style="display:flex;align-items:baseline;gap:8px;margin-top:5px"><span style="font:400 27px 'Marcellus';color:#1E232B">642</span><span style="font:700 11px 'Plus Jakarta Sans';color:#4E9A1C">▲ 8.2%</span></div><div style="font:500 10.5px 'Plus Jakarta Sans';color:#A79E8C;margin-top:2px">+37 this week</div></div>
+            <div style="background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:14px;padding:13px 15px"><div style="font:500 10px 'Plus Jakarta Sans';letter-spacing:.08em;color:#A79E8C">ACTIVE BUSINESSES</div><div style="display:flex;align-items:baseline;gap:8px;margin-top:5px"><span style="font:400 27px 'Marcellus';color:#1E232B">48</span><span style="font:700 11px 'Plus Jakarta Sans';color:#4E9A1C">▲ 2</span></div><div style="font:500 10.5px 'Plus Jakarta Sans';color:#C4692A;margin-top:2px">5 awaiting approval</div></div>
+            <div style="background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:14px;padding:13px 15px"><div style="font:500 10px 'Plus Jakarta Sans';letter-spacing:.08em;color:#A79E8C">MRR</div><div style="display:flex;align-items:baseline;gap:8px;margin-top:5px"><span style="font:400 27px 'Marcellus';color:#0B6E86">$1,984</span><span style="font:700 11px 'Plus Jakarta Sans';color:#4E9A1C">▲ 12%</span></div><div style="font:500 10.5px 'Plus Jakarta Sans';color:#A79E8C;margin-top:2px">≈ $23.8k ARR</div></div>
+            <div style="background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:14px;padding:13px 15px"><div style="font:500 10px 'Plus Jakarta Sans';letter-spacing:.08em;color:#A79E8C">PREMIUM CONVERSION</div><div style="display:flex;align-items:baseline;gap:8px;margin-top:5px"><span style="font:400 27px 'Marcellus';color:#1E232B">33%</span><span style="font:700 11px 'Plus Jakarta Sans';color:#4E9A1C">▲ 4pt</span></div><div style="font:500 10.5px 'Plus Jakarta Sans';color:#A79E8C;margin-top:2px">16 of 48 paid</div></div>
+          </div>
+
+          <!-- revenue chart + plan split -->
+          <div style="display:flex;gap:12px;margin-bottom:14px">
+            <div style="flex:1.7;background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:15px;padding:15px 17px">
+              <div style="display:flex;align-items:center;gap:9px;margin-bottom:14px"><span style="font:700 13px 'Plus Jakarta Sans';color:#1E232B">Monthly recurring revenue</span><span style="font:600 10.5px 'Plus Jakarta Sans';color:#4E9A1C;background:#EFF7E4;padding:2px 8px;border-radius:20px">+12% MoM</span><span style="margin-left:auto;font:500 10.5px 'Plus Jakarta Sans';color:#A79E8C">last 8 months</span></div>
+              <div style="display:flex;align-items:flex-end;gap:12px;height:132px">
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px"><div style="width:100%;height:34%;background:#DCE3E0;border-radius:5px 5px 0 0"></div><span style="font:500 9.5px 'Plus Jakarta Sans';color:#A79E8C">Dec</span></div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px"><div style="width:100%;height:41%;background:#DCE3E0;border-radius:5px 5px 0 0"></div><span style="font:500 9.5px 'Plus Jakarta Sans';color:#A79E8C">Jan</span></div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px"><div style="width:100%;height:47%;background:#DCE3E0;border-radius:5px 5px 0 0"></div><span style="font:500 9.5px 'Plus Jakarta Sans';color:#A79E8C">Feb</span></div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px"><div style="width:100%;height:55%;background:#DCE3E0;border-radius:5px 5px 0 0"></div><span style="font:500 9.5px 'Plus Jakarta Sans';color:#A79E8C">Mar</span></div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px"><div style="width:100%;height:62%;background:#DCE3E0;border-radius:5px 5px 0 0"></div><span style="font:500 9.5px 'Plus Jakarta Sans';color:#A79E8C">Apr</span></div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px"><div style="width:100%;height:74%;background:#0E8FA8;border-radius:5px 5px 0 0"></div><span style="font:500 9.5px 'Plus Jakarta Sans';color:#A79E8C">May</span></div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px"><div style="width:100%;height:86%;background:#0E8FA8;border-radius:5px 5px 0 0"></div><span style="font:500 9.5px 'Plus Jakarta Sans';color:#A79E8C">Jun</span></div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px"><div style="width:100%;height:100%;background:#0B6E86;border-radius:5px 5px 0 0;position:relative"><span style="position:absolute;top:-18px;left:50%;transform:translateX(-50%);font:700 9.5px 'Plus Jakarta Sans';color:#0B6E86;white-space:nowrap">$1,984</span></div><span style="font:700 9.5px 'Plus Jakarta Sans';color:#0B6E86">Jul</span></div>
+              </div>
+            </div>
+            <div style="flex:1;background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:15px;padding:15px 17px">
+              <div style="font:700 13px 'Plus Jakarta Sans';color:#1E232B;margin-bottom:14px">Plan mix</div>
+              <div style="display:flex;align-items:center;gap:16px">
+                <div style="width:96px;height:96px;border-radius:50%;flex-shrink:0;background:conic-gradient(#0B6E86 0 30deg,#0E8FA8 30deg 120deg,#DCE3E0 120deg 360deg);display:flex;align-items:center;justify-content:center"><div style="width:58px;height:58px;border-radius:50%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center"><span style="font:400 18px 'Marcellus';color:#1E232B">48</span><span style="font:600 8px 'Plus Jakarta Sans';color:#A79E8C;letter-spacing:.05em">TOTAL</span></div></div>
+                <div style="flex:1;display:flex;flex-direction:column;gap:9px">
+                  <div style="display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:3px;background:#DCE3E0"></span><span style="font:600 11.5px 'Plus Jakarta Sans';color:#1E232B">Free</span><span style="margin-left:auto;font:700 12px 'Plus Jakarta Sans';color:#1E232B">32</span></div>
+                  <div style="display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:3px;background:#0E8FA8"></span><span style="font:600 11.5px 'Plus Jakarta Sans';color:#1E232B">Premium</span><span style="margin-left:auto;font:700 12px 'Plus Jakarta Sans';color:#1E232B">12</span></div>
+                  <div style="display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:3px;background:#0B6E86"></span><span style="font:600 11.5px 'Plus Jakarta Sans';color:#1E232B">Pro</span><span style="margin-left:auto;font:700 12px 'Plus Jakarta Sans';color:#1E232B">4</span></div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;margin-top:13px;padding-top:11px;border-top:1px solid rgba(30,35,43,.07)"><span style="font:500 11px 'Plus Jakarta Sans';color:#A79E8C">Churn this month</span><span style="margin-left:auto;font:700 12px 'Plus Jakarta Sans';color:#C4692A">2.1%</span></div>
+            </div>
+          </div>
+
+          <!-- action queues -->
+          <div style="display:flex;gap:12px;margin-bottom:14px">
+            <!-- pending approvals -->
+            <div style="flex:1;background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:15px;padding:15px 17px">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px"><span style="font:700 13px 'Plus Jakarta Sans';color:#1E232B">Pending business approvals</span><span style="min-width:18px;height:18px;border-radius:9px;background:#C4692A;color:#fff;font:800 10px 'Plus Jakarta Sans';display:flex;align-items:center;justify-content:center;padding:0 5px">5</span><a href="#1d" style="margin-left:auto;font:600 10.5px 'Plus Jakarta Sans';color:#0B6E86">Review all →</a></div>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <div style="display:flex;align-items:center;gap:11px;padding:8px 10px;background:#FBF8F1;border:1px solid rgba(30,35,43,.07);border-radius:11px"><img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=90&q=80&auto=format&fit=crop" alt="" style="width:38px;height:38px;border-radius:9px;object-fit:cover;flex-shrink:0"/><div style="flex:1;min-width:0"><div style="font:700 12.5px 'Plus Jakarta Sans';color:#1E232B">Hale Kai Café</div><div style="font:500 10.5px 'Plus Jakarta Sans';color:#8A8170">Kailua · Café · submitted 2h ago</div></div><button style="background:#4E7D2E;border:none;border-radius:8px;padding:6px 11px;cursor:pointer;color:#fff;font:700 10.5px 'Plus Jakarta Sans'">Approve</button><button style="background:#fff;border:1px solid rgba(30,35,43,.14);border-radius:8px;padding:6px 10px;cursor:pointer;color:#8A8170;font:700 10.5px 'Plus Jakarta Sans'">View</button></div>
+                <div style="display:flex;align-items:center;gap:11px;padding:8px 10px;background:#FBF8F1;border:1px solid rgba(30,35,43,.07);border-radius:11px"><img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=90&q=80&auto=format&fit=crop" alt="" style="width:38px;height:38px;border-radius:9px;object-fit:cover;flex-shrink:0"/><div style="flex:1;min-width:0"><div style="font:700 12.5px 'Plus Jakarta Sans';color:#1E232B">North Shore Grindz</div><div style="font:500 10.5px 'Plus Jakarta Sans';color:#8A8170">Haleiwa · Food truck · submitted 5h ago</div></div><button style="background:#4E7D2E;border:none;border-radius:8px;padding:6px 11px;cursor:pointer;color:#fff;font:700 10.5px 'Plus Jakarta Sans'">Approve</button><button style="background:#fff;border:1px solid rgba(30,35,43,.14);border-radius:8px;padding:6px 10px;cursor:pointer;color:#8A8170;font:700 10.5px 'Plus Jakarta Sans'">View</button></div>
+                <div style="display:flex;align-items:center;gap:11px;padding:8px 10px;background:#FBF8F1;border:1px solid rgba(30,35,43,.07);border-radius:11px"><img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=90&q=80&auto=format&fit=crop" alt="" style="width:38px;height:38px;border-radius:9px;object-fit:cover;flex-shrink:0"/><div style="flex:1;min-width:0"><div style="font:700 12.5px 'Plus Jakarta Sans';color:#1E232B">Lanikai Juice Stand</div><div style="font:500 10.5px 'Plus Jakarta Sans';color:#8A8170">Kailua · Juice bar · submitted 1d ago</div></div><button style="background:#4E7D2E;border:none;border-radius:8px;padding:6px 11px;cursor:pointer;color:#fff;font:700 10.5px 'Plus Jakarta Sans'">Approve</button><button style="background:#fff;border:1px solid rgba(30,35,43,.14);border-radius:8px;padding:6px 10px;cursor:pointer;color:#8A8170;font:700 10.5px 'Plus Jakarta Sans'">View</button></div>
+              </div>
+            </div>
+            <!-- moderation -->
+            <div style="flex:1;background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:15px;padding:15px 17px">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px"><span style="font:700 13px 'Plus Jakarta Sans';color:#1E232B">Moderation queue</span><span style="min-width:18px;height:18px;border-radius:9px;background:#C4692A;color:#fff;font:800 10px 'Plus Jakarta Sans';display:flex;align-items:center;justify-content:center;padding:0 5px">3</span><span style="margin-left:auto;font:600 10.5px 'Plus Jakarta Sans';color:#0B6E86;cursor:pointer">Open queue →</span></div>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <div style="padding:9px 11px;background:#FBF8F1;border:1px solid rgba(30,35,43,.07);border-left:3px solid #C4692A;border-radius:11px"><div style="display:flex;align-items:center;gap:7px;margin-bottom:3px"><span style="font:700 9px 'Plus Jakarta Sans';letter-spacing:.08em;color:#C4692A">REPORTED REVIEW</span><span style="font:500 9.5px 'Plus Jakarta Sans';color:#A79E8C">· spam</span></div><div style="font:500 11.5px/1.5 'Plus Jakarta Sans';color:#5B646F">"Best deal ever click here bit.ly/…" on <b style="color:#1E232B">Ono Seafood</b></div><div style="display:flex;gap:7px;margin-top:8px"><button style="background:#C4692A;border:none;border-radius:8px;padding:5px 11px;cursor:pointer;color:#fff;font:700 10px 'Plus Jakarta Sans'">Remove</button><button style="background:#fff;border:1px solid rgba(30,35,43,.14);border-radius:8px;padding:5px 11px;cursor:pointer;color:#8A8170;font:700 10px 'Plus Jakarta Sans'">Keep</button></div></div>
+                <div style="padding:9px 11px;background:#FBF8F1;border:1px solid rgba(30,35,43,.07);border-left:3px solid #C4692A;border-radius:11px"><div style="display:flex;align-items:center;gap:7px;margin-bottom:3px"><span style="font:700 9px 'Plus Jakarta Sans';letter-spacing:.08em;color:#C4692A">REPORTED PHOTO</span><span style="font:500 9.5px 'Plus Jakarta Sans';color:#A79E8C">· off-topic</span></div><div style="font:500 11.5px/1.5 'Plus Jakarta Sans';color:#5B646F">Flagged image on <b style="color:#1E232B">Diamond Head Market</b> · reported by 2 users</div><div style="display:flex;gap:7px;margin-top:8px"><button style="background:#C4692A;border:none;border-radius:8px;padding:5px 11px;cursor:pointer;color:#fff;font:700 10px 'Plus Jakarta Sans'">Remove</button><button style="background:#fff;border:1px solid rgba(30,35,43,.14);border-radius:8px;padding:5px 11px;cursor:pointer;color:#8A8170;font:700 10px 'Plus Jakarta Sans'">Keep</button></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- demographics -->
+          <div style="background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:15px;padding:15px 17px">
+            <div style="display:flex;align-items:center;gap:9px;margin-bottom:14px"><span style="font:700 13px 'Plus Jakarta Sans';color:#1E232B">Who's using 808</span><span style="margin-left:auto;font:500 10.5px 'Plus Jakarta Sans';color:#A79E8C">642 users · last 30 days</span></div>
+            <div style="display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:22px">
+              <!-- visitor vs local -->
+              <div>
+                <div style="font:600 10px 'Plus Jakarta Sans';letter-spacing:.08em;color:#A79E8C;margin-bottom:9px">VISITOR VS LOCAL</div>
+                <div style="display:flex;height:12px;border-radius:7px;overflow:hidden;margin-bottom:10px"><div style="width:58%;background:#0E8FA8"></div><div style="width:42%;background:#C4692A"></div></div>
+                <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px"><span style="width:9px;height:9px;border-radius:2px;background:#0E8FA8"></span><span style="font:500 11.5px 'Plus Jakarta Sans';color:#1E232B">Visitors</span><span style="margin-left:auto;font:700 11.5px 'Plus Jakarta Sans'">58%</span></div>
+                <div style="display:flex;align-items:center;gap:7px"><span style="width:9px;height:9px;border-radius:2px;background:#C4692A"></span><span style="font:500 11.5px 'Plus Jakarta Sans';color:#1E232B">Kama'āina</span><span style="margin-left:auto;font:700 11.5px 'Plus Jakarta Sans'">42%</span></div>
+              </div>
+              <!-- age -->
+              <div>
+                <div style="font:600 10px 'Plus Jakarta Sans';letter-spacing:.08em;color:#A79E8C;margin-bottom:9px">AGE</div>
+                <div style="display:flex;flex-direction:column;gap:7px">
+                  <div style="display:flex;align-items:center;gap:8px"><span style="width:38px;font:500 10.5px 'Plus Jakarta Sans';color:#5B646F">18–24</span><div style="flex:1;height:8px;border-radius:5px;background:#EEE7D9;overflow:hidden"><div style="width:22%;height:100%;background:#0E8FA8"></div></div><span style="width:26px;text-align:right;font:600 10px 'Plus Jakarta Sans';color:#8A8170">22%</span></div>
+                  <div style="display:flex;align-items:center;gap:8px"><span style="width:38px;font:500 10.5px 'Plus Jakarta Sans';color:#5B646F">25–34</span><div style="flex:1;height:8px;border-radius:5px;background:#EEE7D9;overflow:hidden"><div style="width:38%;height:100%;background:#0B6E86"></div></div><span style="width:26px;text-align:right;font:600 10px 'Plus Jakarta Sans';color:#8A8170">38%</span></div>
+                  <div style="display:flex;align-items:center;gap:8px"><span style="width:38px;font:500 10.5px 'Plus Jakarta Sans';color:#5B646F">35–49</span><div style="flex:1;height:8px;border-radius:5px;background:#EEE7D9;overflow:hidden"><div style="width:27%;height:100%;background:#0E8FA8"></div></div><span style="width:26px;text-align:right;font:600 10px 'Plus Jakarta Sans';color:#8A8170">27%</span></div>
+                  <div style="display:flex;align-items:center;gap:8px"><span style="width:38px;font:500 10.5px 'Plus Jakarta Sans';color:#5B646F">50+</span><div style="flex:1;height:8px;border-radius:5px;background:#EEE7D9;overflow:hidden"><div style="width:13%;height:100%;background:#C4692A"></div></div><span style="width:26px;text-align:right;font:600 10px 'Plus Jakarta Sans';color:#8A8170">13%</span></div>
+                </div>
+              </div>
+              <!-- top areas -->
+              <div>
+                <div style="font:600 10px 'Plus Jakarta Sans';letter-spacing:.08em;color:#A79E8C;margin-bottom:9px">TOP AREAS</div>
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <div style="display:flex;align-items:center;gap:8px"><span style="font:500 11.5px 'Plus Jakarta Sans';color:#1E232B">Waikiki</span><span style="margin-left:auto;font:700 11px 'Plus Jakarta Sans';color:#0B6E86">31%</span></div>
+                  <div style="display:flex;align-items:center;gap:8px"><span style="font:500 11.5px 'Plus Jakarta Sans';color:#1E232B">Kailua</span><span style="margin-left:auto;font:700 11px 'Plus Jakarta Sans';color:#0B6E86">19%</span></div>
+                  <div style="display:flex;align-items:center;gap:8px"><span style="font:500 11.5px 'Plus Jakarta Sans';color:#1E232B">North Shore</span><span style="margin-left:auto;font:700 11px 'Plus Jakarta Sans';color:#0B6E86">16%</span></div>
+                  <div style="display:flex;align-items:center;gap:8px"><span style="font:500 11.5px 'Plus Jakarta Sans';color:#1E232B">Ko Olina</span><span style="margin-left:auto;font:700 11px 'Plus Jakarta Sans';color:#0B6E86">11%</span></div>
+                  <div style="display:flex;align-items:center;gap:8px"><span style="font:500 11.5px 'Plus Jakarta Sans';color:#8A8170">Other</span><span style="margin-left:auto;font:700 11px 'Plus Jakarta Sans';color:#8A8170">23%</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 1b · TOP-NAV INSIGHT BENTO ============ -->
+    <div id="1b" style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:#1E232B;color:#D9B673;font:800 12px 'Plus Jakarta Sans';padding:5px 10px;border-radius:7px">1b</span><span style="font:800 12.5px 'Plus Jakarta Sans';letter-spacing:.12em;color:#8A8170">OVERVIEW · TOP-NAV INSIGHT BENTO · 1280</span></div>
+      <div data-screen-label="1b Admin Overview Bento" style="width:1280px;background:#FBF8F1;border-radius:20px;overflow:hidden;box-shadow:0 40px 90px -30px rgba(20,40,60,.45)">
+
+        <!-- top bar -->
+        <div style="display:flex;align-items:center;gap:22px;background:#1E232B;padding:13px 26px">
+          <img src="uploads/808_logo_t.png" alt="808eVentures" style="height:32px;width:auto"/>
+          <span style="font:600 10px 'Plus Jakarta Sans';letter-spacing:.14em;color:#D9B673">ADMIN</span>
+          <div style="display:flex;gap:4px;margin-left:14px">
+            <span style="font:700 12px 'Plus Jakarta Sans';color:#fff;background:rgba(255,255,255,.12);padding:7px 13px;border-radius:9px">Overview</span>
+            <span style="font:500 12px 'Plus Jakarta Sans';color:rgba(255,255,255,.6);padding:7px 13px;border-radius:9px;cursor:pointer">Users</span>
+            <span style="font:500 12px 'Plus Jakarta Sans';color:rgba(255,255,255,.6);padding:7px 13px;border-radius:9px;cursor:pointer">Businesses</span>
+            <span style="font:500 12px 'Plus Jakarta Sans';color:rgba(255,255,255,.6);padding:7px 13px;border-radius:9px;cursor:pointer">Subscriptions</span>
+            <span style="font:500 12px 'Plus Jakarta Sans';color:rgba(255,255,255,.6);padding:7px 13px;border-radius:9px;cursor:pointer">Analytics</span>
+            <span style="font:500 12px 'Plus Jakarta Sans';color:rgba(255,255,255,.6);padding:7px 13px;border-radius:9px;cursor:pointer">Moderation</span>
+          </div>
+          <div style="margin-left:auto;display:flex;align-items:center;gap:12px">
+            <span style="position:relative;font-size:16px;cursor:pointer">🔔<span style="position:absolute;top:-3px;right:-4px;width:8px;height:8px;border-radius:50%;background:#C4692A"></span></span>
+            <div style="width:34px;height:34px;border-radius:9px;background:#0B6E86;display:flex;align-items:center;justify-content:center;font:400 16px 'Marcellus';color:#fff">K</div>
+          </div>
+        </div>
+
+        <div style="padding:22px 26px 28px">
+          <div style="display:flex;align-items:flex-end;gap:14px;margin-bottom:16px">
+            <div style="flex:1"><div style="font:400 25px 'Marcellus';color:#1E232B">Island at a glance</div><div style="font:500 12.5px 'Plus Jakarta Sans';color:#8A8170;margin-top:2px">Week of Jul 6, 2026 · everything you need before your coffee's cold.</div></div>
+            <button style="background:#fff;border:1px solid rgba(30,35,43,.14);border-radius:11px;padding:9px 13px;cursor:pointer;font:600 12.5px 'Plus Jakarta Sans';color:#1E232B">This week ▾</button>
+          </div>
+
+          <!-- bento grid -->
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:minmax(0,auto);gap:12px">
+
+            <!-- big MRR hero -->
+            <div style="grid-column:span 2;grid-row:span 2;background:linear-gradient(160deg,#0B6E86,#0E8FA8);border-radius:16px;padding:20px 22px;color:#fff;display:flex;flex-direction:column">
+              <div style="display:flex;align-items:center;gap:8px"><span style="font:600 10px 'Plus Jakarta Sans';letter-spacing:.1em;color:rgba(255,255,255,.7)">MONTHLY RECURRING REVENUE</span><span style="margin-left:auto;font:700 10.5px 'Plus Jakarta Sans';color:#fff;background:rgba(255,255,255,.18);padding:2px 8px;border-radius:20px">▲ 12%</span></div>
+              <div style="font:400 46px 'Marcellus';margin:8px 0 2px">$1,984</div>
+              <div style="font:500 11.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.75)">≈ $23,808 ARR · +$212 vs last month</div>
+              <div style="display:flex;align-items:flex-end;gap:7px;height:70px;margin-top:auto">
+                <div style="flex:1;height:38%;background:rgba(255,255,255,.28);border-radius:4px 4px 0 0"></div>
+                <div style="flex:1;height:46%;background:rgba(255,255,255,.28);border-radius:4px 4px 0 0"></div>
+                <div style="flex:1;height:52%;background:rgba(255,255,255,.28);border-radius:4px 4px 0 0"></div>
+                <div style="flex:1;height:60%;background:rgba(255,255,255,.4);border-radius:4px 4px 0 0"></div>
+                <div style="flex:1;height:70%;background:rgba(255,255,255,.4);border-radius:4px 4px 0 0"></div>
+                <div style="flex:1;height:82%;background:rgba(255,255,255,.6);border-radius:4px 4px 0 0"></div>
+                <div style="flex:1;height:100%;background:#fff;border-radius:4px 4px 0 0"></div>
+              </div>
+            </div>
+
+            <!-- users -->
+            <div style="background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:16px;padding:15px 16px"><div style="font:500 10px 'Plus Jakarta Sans';letter-spacing:.08em;color:#A79E8C">TOTAL USERS</div><div style="font:400 30px 'Marcellus';color:#1E232B;margin-top:4px">642</div><div style="font:600 10.5px 'Plus Jakarta Sans';color:#4E9A1C;margin-top:1px">▲ 8.2% · +37 this wk</div></div>
+            <!-- businesses -->
+            <div style="background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:16px;padding:15px 16px"><div style="font:500 10px 'Plus Jakarta Sans';letter-spacing:.08em;color:#A79E8C">ACTIVE BUSINESSES</div><div style="font:400 30px 'Marcellus';color:#1E232B;margin-top:4px">48</div><div style="font:600 10.5px 'Plus Jakarta Sans';color:#C4692A;margin-top:1px">5 awaiting approval</div></div>
+
+            <!-- conversion -->
+            <div style="background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:16px;padding:15px 16px"><div style="font:500 10px 'Plus Jakarta Sans';letter-spacing:.08em;color:#A79E8C">PREMIUM CONVERSION</div><div style="font:400 30px 'Marcellus';color:#0B6E86;margin-top:4px">33%</div><div style="font:600 10.5px 'Plus Jakarta Sans';color:#4E9A1C;margin-top:1px">16 of 48 businesses paid</div></div>
+            <!-- churn -->
+            <div style="background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:16px;padding:15px 16px"><div style="font:500 10px 'Plus Jakarta Sans';letter-spacing:.08em;color:#A79E8C">CHURN</div><div style="font:400 30px 'Marcellus';color:#1E232B;margin-top:4px">2.1%</div><div style="font:600 10.5px 'Plus Jakarta Sans';color:#8A8170;margin-top:1px">1 downgrade this month</div></div>
+
+            <!-- plan mix wide -->
+            <div style="grid-column:span 2;background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:16px;padding:15px 17px">
+              <div style="display:flex;align-items:center;gap:9px;margin-bottom:11px"><span style="font:700 13px 'Plus Jakarta Sans';color:#1E232B">Plan mix</span><span style="margin-left:auto;font:500 10.5px 'Plus Jakarta Sans';color:#A79E8C">48 businesses</span></div>
+              <div style="display:flex;height:14px;border-radius:8px;overflow:hidden;margin-bottom:11px"><div style="width:66.6%;background:#DCE3E0"></div><div style="width:25%;background:#0E8FA8"></div><div style="width:8.4%;background:#0B6E86"></div></div>
+              <div style="display:flex;gap:18px">
+                <div style="display:flex;align-items:center;gap:7px"><span style="width:9px;height:9px;border-radius:2px;background:#DCE3E0"></span><span style="font:500 11.5px 'Plus Jakarta Sans';color:#1E232B">Free <b>32</b></span></div>
+                <div style="display:flex;align-items:center;gap:7px"><span style="width:9px;height:9px;border-radius:2px;background:#0E8FA8"></span><span style="font:500 11.5px 'Plus Jakarta Sans';color:#1E232B">Premium <b>12</b> · $99</span></div>
+                <div style="display:flex;align-items:center;gap:7px"><span style="width:9px;height:9px;border-radius:2px;background:#0B6E86"></span><span style="font:500 11.5px 'Plus Jakarta Sans';color:#1E232B">Pro <b>4</b> · $199</span></div>
+              </div>
+            </div>
+
+            <!-- needs attention (tall) -->
+            <div style="grid-column:span 2;grid-row:span 2;background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:16px;padding:15px 17px">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px"><span style="font:700 13px 'Plus Jakarta Sans';color:#1E232B">Needs your attention</span><span style="min-width:18px;height:18px;border-radius:9px;background:#C4692A;color:#fff;font:800 10px 'Plus Jakarta Sans';display:flex;align-items:center;justify-content:center;padding:0 5px">8</span></div>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;background:#FBF8F1;border:1px solid rgba(30,35,43,.07);border-radius:11px"><span style="width:30px;height:30px;border-radius:8px;background:#FBF0D6;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">🏪</span><div style="flex:1"><div style="font:700 12px 'Plus Jakarta Sans';color:#1E232B">5 businesses awaiting approval</div><div style="font:500 10.5px 'Plus Jakarta Sans';color:#8A8170">oldest 1 day ago</div></div><a href="#1d" style="font:700 11px 'Plus Jakarta Sans';color:#0B6E86">Review →</a></div>
+                <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;background:#FBF8F1;border:1px solid rgba(30,35,43,.07);border-radius:11px"><span style="width:30px;height:30px;border-radius:8px;background:#F6DED3;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">🛡️</span><div style="flex:1"><div style="font:700 12px 'Plus Jakarta Sans';color:#1E232B">3 reported items in moderation</div><div style="font:500 10.5px 'Plus Jakarta Sans';color:#8A8170">2 reviews · 1 photo</div></div><span style="font:700 11px 'Plus Jakarta Sans';color:#0B6E86;cursor:pointer">Open →</span></div>
+                <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;background:#FBF8F1;border:1px solid rgba(30,35,43,.07);border-radius:11px"><span style="width:30px;height:30px;border-radius:8px;background:#E3EFE0;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">💳</span><div style="flex:1"><div style="font:700 12px 'Plus Jakarta Sans';color:#1E232B">2 trials ending in 3 days</div><div style="font:500 10.5px 'Plus Jakarta Sans';color:#8A8170">Ono Seafood · Kaka'ako Kava</div></div><a href="#1e" style="font:700 11px 'Plus Jakarta Sans';color:#0B6E86">View →</a></div>
+                <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;background:#FBF8F1;border:1px solid rgba(30,35,43,.07);border-radius:11px"><span style="width:30px;height:30px;border-radius:8px;background:#F6DED3;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">⚠️</span><div style="flex:1"><div style="font:700 12px 'Plus Jakarta Sans';color:#1E232B">1 failed payment</div><div style="font:500 10.5px 'Plus Jakarta Sans';color:#8A8170">Waimea Valley Tours · retry Jul 11</div></div><a href="#1e" style="font:700 11px 'Plus Jakarta Sans';color:#0B6E86">View →</a></div>
+              </div>
+            </div>
+
+            <!-- visitor/local -->
+            <div style="background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:16px;padding:15px 16px"><div style="font:500 10px 'Plus Jakarta Sans';letter-spacing:.08em;color:#A79E8C;margin-bottom:9px">VISITOR VS LOCAL</div><div style="width:64px;height:64px;border-radius:50%;margin:0 auto 6px;background:conic-gradient(#0E8FA8 0 209deg,#C4692A 209deg 360deg);display:flex;align-items:center;justify-content:center"><div style="width:38px;height:38px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font:400 14px 'Marcellus';color:#0B6E86">58%</div></div><div style="display:flex;justify-content:center;gap:12px"><span style="font:600 10px 'Plus Jakarta Sans';color:#0B6E86">● Visitor</span><span style="font:600 10px 'Plus Jakarta Sans';color:#C4692A">● Local</span></div></div>
+            <!-- itineraries -->
+            <div style="background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:16px;padding:15px 16px"><div style="font:500 10px 'Plus Jakarta Sans';letter-spacing:.08em;color:#A79E8C">ITINERARIES CREATED</div><div style="font:400 30px 'Marcellus';color:#1E232B;margin-top:4px">1,204</div><div style="font:600 10.5px 'Plus Jakarta Sans';color:#4E9A1C;margin-top:1px">▲ 14% · 4.2 spots avg</div></div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===================== SUPPORTING SCREENS ===================== -->
+  <div style="display:flex;gap:48px;align-items:flex-start;flex-wrap:wrap">
+
+    <!-- ============ 1c · USER MANAGEMENT ============ -->
+    <div id="1c" style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:#1E232B;color:#D9B673;font:800 12px 'Plus Jakarta Sans';padding:5px 10px;border-radius:7px">1c</span><span style="font:800 12.5px 'Plus Jakarta Sans';letter-spacing:.12em;color:#8A8170">USER MANAGEMENT · 1280</span></div>
+      <div data-screen-label="1c Users" style="width:1280px;background:#FBF8F1;border-radius:20px;overflow:hidden;box-shadow:0 40px 90px -30px rgba(20,40,60,.45);display:flex">
+
+        <div style="width:222px;flex-shrink:0;background:linear-gradient(170deg,#1E232B,#252B34);color:#fff;display:flex;flex-direction:column;padding:18px 14px 16px">
+          <div style="display:flex;align-items:center;gap:9px;padding:0 6px 16px"><img src="uploads/808_logo_t.png" alt="808eVentures" style="height:34px;width:auto"/><span style="font:600 10px 'Plus Jakarta Sans';letter-spacing:.14em;color:#D9B673">ADMIN</span></div>
+          <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:10px 11px;margin-bottom:16px"><div style="width:36px;height:36px;border-radius:9px;background:#0B6E86;display:flex;align-items:center;justify-content:center;font:400 17px 'Marcellus';color:#fff;flex-shrink:0">K</div><div style="flex:1;min-width:0"><div style="font:700 12.5px 'Plus Jakarta Sans';color:#fff">Kai Nakamura</div><div style="font:500 10px 'Plus Jakarta Sans';color:rgba(255,255,255,.55)">Super Admin</div></div></div>
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65);cursor:pointer">📊 Overview</div>
+            <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.09);border-left:3px solid #D9B673;border-radius:9px;padding:9px 11px;font:700 12.5px 'Plus Jakarta Sans';color:#fff;cursor:pointer">👥 Users <span style="margin-left:auto;font:600 10px 'Plus Jakarta Sans';color:rgba(255,255,255,.5)">642</span></div>
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65);cursor:pointer">🏪 Businesses <span style="margin-left:auto;min-width:16px;height:16px;border-radius:8px;background:#C4692A;color:#fff;font:800 9.5px 'Plus Jakarta Sans';display:flex;align-items:center;justify-content:center;padding:0 4px">5</span></div>
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65);cursor:pointer">💳 Subscriptions</div>
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65);cursor:pointer">📈 Analytics</div>
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65);cursor:pointer">🛡️ Moderation <span style="margin-left:auto;min-width:16px;height:16px;border-radius:8px;background:#C4692A;color:#fff;font:800 9.5px 'Plus Jakarta Sans';display:flex;align-items:center;justify-content:center;padding:0 4px">3</span></div>
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65);cursor:pointer">🎟️ Deals</div>
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65);cursor:pointer">⚙️ Settings</div>
+          </div>
+          <div style="margin-top:auto;display:flex;align-items:center;gap:8px;border-top:1px solid rgba(255,255,255,.08);padding-top:12px"><span style="width:7px;height:7px;border-radius:50%;background:#5FBF6A;box-shadow:0 0 0 3px rgba(95,191,106,.22);flex-shrink:0"></span><span style="font:500 10.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.6)">All systems operational</span><span style="margin-left:auto;font:500 10px 'Plus Jakarta Sans';color:rgba(255,255,255,.35)">v2.4</span></div>
+        </div>
+
+        <div style="flex:1;min-width:0;padding:22px 26px 28px">
+          <div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:16px"><div style="flex:1"><div style="font:400 25px 'Marcellus';color:#1E232B">Users</div><div style="font:500 12.5px 'Plus Jakarta Sans';color:#8A8170;margin-top:2px">642 total · 37 new this week · 5 suspended</div></div><button style="background:#fff;border:1px solid rgba(30,35,43,.14);border-radius:11px;padding:9px 13px;cursor:pointer;font:600 12.5px 'Plus Jakarta Sans';color:#1E232B">⇩ Export CSV</button><button style="background:#1E232B;border:none;border-radius:11px;padding:9px 16px;cursor:pointer;color:#fff;font:700 12.5px 'Plus Jakarta Sans'">＋ Invite admin</button></div>
+
+          <!-- search + filters -->
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+            <div style="flex:1;max-width:340px;display:flex;align-items:center;gap:9px;background:#fff;border:1px solid rgba(30,35,43,.12);border-radius:11px;padding:9px 13px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8A8170" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/></svg><input placeholder="Search name or email…" style="border:none;background:none;outline:none;font:500 13px 'Plus Jakarta Sans';color:#1E232B;flex:1"/></div>
+            <div style="display:flex;gap:7px">
+              <span style="font:700 11.5px 'Plus Jakarta Sans';color:#fff;background:#1E232B;padding:7px 13px;border-radius:20px;cursor:pointer">All 642</span>
+              <span style="font:600 11.5px 'Plus Jakarta Sans';color:#5B646F;background:#fff;border:1px solid rgba(30,35,43,.12);padding:7px 13px;border-radius:20px;cursor:pointer">Explorers 601</span>
+              <span style="font:600 11.5px 'Plus Jakarta Sans';color:#5B646F;background:#fff;border:1px solid rgba(30,35,43,.12);padding:7px 13px;border-radius:20px;cursor:pointer">Business owners 33</span>
+              <span style="font:600 11.5px 'Plus Jakarta Sans';color:#5B646F;background:#fff;border:1px solid rgba(30,35,43,.12);padding:7px 13px;border-radius:20px;cursor:pointer">Moderators 3</span>
+              <span style="font:600 11.5px 'Plus Jakarta Sans';color:#C4692A;background:#F6DED3;padding:7px 13px;border-radius:20px;cursor:pointer">Suspended 5</span>
+            </div>
+          </div>
+
+          <!-- table -->
+          <div style="background:#fff;border:1px solid rgba(30,35,43,.09);border-radius:15px;overflow:hidden">
+            <div style="display:grid;grid-template-columns:2.4fr 1.3fr 1fr 1fr 0.8fr;padding:11px 18px;background:#F3EFE6;font:700 10px 'Plus Jakarta Sans';letter-spacing:.08em;color:#8A8170"><span>USER</span><span>ROLE</span><span>JOINED</span><span>STATUS</span><span style="text-align:right">ACTIONS</span></div>
+            <sc-for list="{{ users }}" as="u" hint-placeholder-count="8">
+              <div style="{{ u.rowStyle }}">
+                <div style="display:flex;align-items:center;gap:11px;min-width:0"><div style="{{ u.avStyle }}">{{ u.initials }}</div><div style="min-width:0"><div style="font:700 12.5px 'Plus Jakarta Sans';color:#1E232B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ u.name }}</div><div style="font:500 10.5px 'Plus Jakarta Sans';color:#8A8170;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ u.email }}</div></div></div>
+                <div style="display:flex;align-items:center"><span style="{{ u.roleStyle }}">{{ u.role }}</span></div>
+                <div style="display:flex;align-items:center;font:500 11.5px 'Plus Jakarta Sans';color:#5B646F">{{ u.joined }}</div>
+                <div style="display:flex;align-items:center"><span style="{{ u.statusStyle }}">{{ u.status }}</span></div>
+                <div style="display:flex;align-items:center;justify-content:flex-end;gap:6px"><button style="background:#fff;border:1px solid rgba(30,35,43,.14);border-radius:8px;padding:5px 10px;cursor:pointer;color:#5B646F;font:700 10px 'Plus Jakarta Sans'">Edit</button><button style="{{ u.banStyle }}">{{ u.banLabel }}</button></div>
+              </div>
+            </sc-for>
+            <div style="display:flex;align-items:center;gap:8px;padding:11px 18px;border-top:1px solid rgba(30,35,43,.07)"><span style="font:500 11px 'Plus Jakarta Sans';color:#A79E8C">Showing 8 of 642</span><div style="margin-left:auto;display:flex;gap:5px"><span style="width:28px;height:28px;border-radius:8px;background:#1E232B;color:#fff;font:700 11px 'Plus Jakarta Sans';display:flex;align-items:center;justify-content:center;cursor:pointer">1</span><span style="width:28px;height:28px;border-radius:8px;background:#fff;border:1px solid rgba(30,35,43,.12);color:#5B646F;font:600 11px 'Plus Jakarta Sans';display:flex;align-items:center;justify-content:center;cursor:pointer">2</span><span style="width:28px;height:28px;border-radius:8px;background:#fff;border:1px solid rgba(30,35,43,.12);color:#5B646F;font:600 11px 'Plus Jakarta Sans';display:flex;align-items:center;justify-content:center;cursor:pointer">3</span><span style="width:28px;height:28px;border-radius:8px;background:#fff;border:1px solid rgba(30,35,43,.12);color:#5B646F;font:600 11px 'Plus Jakarta Sans';display:flex;align-items:center;justify-content:center;cursor:pointer">›</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 1d · BUSINESS MANAGEMENT ============ -->
+    <div id="1d" style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:#1E232B;color:#D9B673;font:800 12px 'Plus Jakarta Sans';padding:5px 10px;border-radius:7px">1d</span><span style="font:800 12.5px 'Plus Jakarta Sans';letter-spacing:.12em;color:#8A8170">BUSINESS MANAGEMENT · 1280</span></div>
+      <div data-screen-label="1d Businesses" style="width:1280px;background:#FBF8F1;border-radius:20px;overflow:hidden;box-shadow:0 40px 90px -30px rgba(20,40,60,.45);display:flex">
+
+        <div style="width:222px;flex-shrink:0;background:linear-gradient(170deg,#1E232B,#252B34);color:#fff;display:flex;flex-direction:column;padding:18px 14px 16px">
+          <div style="display:flex;align-items:center;gap:9px;padding:0 6px 16px"><img src="uploads/808_logo_t.png" alt="808eVentures" style="height:34px;width:auto"/><span style="font:600 10px 'Plus Jakarta Sans';letter-spacing:.14em;color:#D9B673">ADMIN</span></div>
+          <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:10px 11px;margin-bottom:16px"><div style="width:36px;height:36px;border-radius:9px;background:#0B6E86;display:flex;align-items:center;justify-content:center;font:400 17px 'Marcellus';color:#fff;flex-shrink:0">K</div><div style="flex:1;min-width:0"><div style="font:700 12.5px 'Plus Jakarta Sans';color:#fff">Kai Nakamura</div><div style="font:500 10px 'Plus Jakarta Sans';color:rgba(255,255,255,.55)">Super Admin</div></div></div>
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65);cursor:pointer">📊 Overview</div>
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65);cursor:pointer">👥 Users <span style="margin-left:auto;font:600 10px 'Plus Jakarta Sans';color:rgba(255,255,255,.4)">642</span></div>
+            <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.09);border-left:3px solid #D9B673;border-radius:9px;padding:9px 11px;font:700 12.5px 'Plus Jakarta Sans';color:#fff;cursor:pointer">🏪 Businesses <span style="margin-left:auto;min-width:16px;height:16px;border-radius:8px;background:#C4692A;color:#fff;font:800 9.5px 'Plus Jakarta Sans';display:flex;align-items:center;justify-content:center;padding:0 4px">5</span></div>
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65);cursor:pointer">💳 Subscriptions</div>
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65);cursor:pointer">📈 Analytics</div>
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65);cursor:pointer">🛡️ Moderation <span style="margin-left:auto;min-width:16px;height:16px;border-radius:8px;background:#C4692A;color:#fff;font:800 9.5px 'Plus Jakarta Sans';display:flex;align-items:center;justify-content:center;padding:0 4px">3</span></div>
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65);cursor:pointer">🎟️ Deals</div>
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65);cursor:pointer">⚙️ Settings</div>
+          </div>
+          <div style="margin-top:auto;display:flex;align-items:center;gap:8px;border-top:1px solid rgba(255,255,255,.08);padding-top:12px"><span style="width:7px;height:7px;border-radius:50%;background:#5FBF6A;box-shadow:0 0 0 3px rgba(95,191,106,.22);flex-shrink:0"></span><span style="font:500 10.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.6)">All systems operational</span><span style="margin-left:auto;font:500 10px 'Plus Jakarta Sans';color:rgba(255,255,255,.35)">v2.4</span></div>
+        </div>
+
+        <div style="flex:1;min-width:0;padding:22px 26px 28px">
+          <div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:16px"><div style="flex:1"><div style="font:400 25px 'Marcellus';color:#1E232B">Businesses</div><div style="font:500 12.5px 'Plus Jakarta Sans';color:#8A8170;margin-top:2px">48 live · 5 pending approval · 16 paid</div></div><button style="background:#fff;border:1px solid rgba(30,35,43,.14);border-radius:11px;padding:9px 13px;cursor:pointer;font:600 12.5px 'Plus Jakarta Sans';color:#1E232B">⇩ Export</button><button style="background:#1E232B;border:none;border-radius:11px;padding:9px 16px;cursor:pointer;color:#fff;font:700 12.5px 'Plus Jakarta Sans'">＋ Add business</button></div>
+
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+            <div style="flex:1;max-width:320px;display:flex;align-items:center;gap:9px;background:#fff;border:1px solid rgba(30,35,43,.12);border-radius:11px;padding:9px 13px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8A8170" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/></svg><input placeholder="Search businesses…" style="border:none;background:none;outline:none;font:500 13px 'Plus Jakarta Sans';color:#1E232B;flex:1"/></div>
+            <div style="display:flex;gap:7px">
+              <span style="font:700 11.5px 'Plus Jakarta Sans';color:#fff;background:#1E232B;padding:7px 13px;border-radius:20px;cursor:pointer">All 53</span>
+              <span style="font:600 11.5px 'Plus Jakarta Sans';color:#C4692A;background:#F6DED3;padding:7px 13px;border-radius:20px;cursor:pointer">Pending 5</span>
+              <span style="font:600 11.5px 'Plus Jakarta Sans';color:#5B646F;background:#fff;border:1px solid rgba(30,35,43,.12);padding:7px 13px;border-radius:20px;cursor:pointer">Verified 29</span>
+              <span style="font:600 11.5px 'Plus Jakarta Sans';color:#5B646F;background:#fff;border:1px solid rgba(30,35,43,.12);padding:7px 13px;border-radius:20px;cursor:pointer">Flagged 1</span>
+            </div>
+          </div>
+
+          <div style="background:#fff;border:1px solid rgba(30,35,43,.09);border-radius:15px;overflow:hidden">
+            <div style="display:grid;grid-template-columns:2.4fr 1.4fr 1fr 1.1fr 1fr;padding:11px 18px;background:#F3EFE6;font:700 10px 'Plus Jakarta Sans';letter-spacing:.08em;color:#8A8170"><span>BUSINESS</span><span>CATEGORY · AREA</span><span>PLAN</span><span>STATUS</span><span style="text-align:right">ACTIONS</span></div>
+            <sc-for list="{{ biz }}" as="b" hint-placeholder-count="8">
+              <div style="{{ b.rowStyle }}">
+                <div style="display:flex;align-items:center;gap:11px;min-width:0"><img src="{{ b.photo }}" alt="" loading="lazy" style="width:38px;height:38px;border-radius:9px;object-fit:cover;flex-shrink:0"/><div style="min-width:0"><div style="display:flex;align-items:center;gap:5px"><span style="font:700 12.5px 'Plus Jakarta Sans';color:#1E232B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ b.name }}</span><sc-if value="{{ b.verified }}" hint-placeholder-val="{{ false }}"><span title="Verified" style="color:#0E8FA8;font-size:12px">✔</span></sc-if></div><div style="font:500 10.5px 'Plus Jakarta Sans';color:#8A8170">{{ b.owner }}</div></div></div>
+                <div style="display:flex;flex-direction:column;justify-content:center"><span style="font:600 11.5px 'Plus Jakarta Sans';color:#1E232B">{{ b.cat }}</span><span style="font:500 10.5px 'Plus Jakarta Sans';color:#8A8170">{{ b.area }}</span></div>
+                <div style="display:flex;align-items:center"><span style="{{ b.planStyle }}">{{ b.plan }}</span></div>
+                <div style="display:flex;align-items:center"><span style="{{ b.statusStyle }}">{{ b.status }}</span></div>
+                <div style="display:flex;align-items:center;justify-content:flex-end;gap:6px"><sc-if value="{{ b.pending }}" hint-placeholder-val="{{ false }}"><button style="background:#4E7D2E;border:none;border-radius:8px;padding:5px 11px;cursor:pointer;color:#fff;font:700 10px 'Plus Jakarta Sans'">Approve</button></sc-if><button style="background:#fff;border:1px solid rgba(30,35,43,.14);border-radius:8px;padding:5px 10px;cursor:pointer;color:#5B646F;font:700 10px 'Plus Jakarta Sans'">{{ b.secondAction }}</button></div>
+              </div>
+            </sc-for>
+            <div style="display:flex;align-items:center;gap:8px;padding:11px 18px;border-top:1px solid rgba(30,35,43,.07)"><span style="font:500 11px 'Plus Jakarta Sans';color:#A79E8C">Showing 8 of 53</span><div style="margin-left:auto;display:flex;gap:5px"><span style="width:28px;height:28px;border-radius:8px;background:#1E232B;color:#fff;font:700 11px 'Plus Jakarta Sans';display:flex;align-items:center;justify-content:center;cursor:pointer">1</span><span style="width:28px;height:28px;border-radius:8px;background:#fff;border:1px solid rgba(30,35,43,.12);color:#5B646F;font:600 11px 'Plus Jakarta Sans';display:flex;align-items:center;justify-content:center;cursor:pointer">2</span><span style="width:28px;height:28px;border-radius:8px;background:#fff;border:1px solid rgba(30,35,43,.12);color:#5B646F;font:600 11px 'Plus Jakarta Sans';display:flex;align-items:center;justify-content:center;cursor:pointer">›</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 1e · SUBSCRIPTIONS & BILLING ============ -->
+    <div id="1e" style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:#1E232B;color:#D9B673;font:800 12px 'Plus Jakarta Sans';padding:5px 10px;border-radius:7px">1e</span><span style="font:800 12.5px 'Plus Jakarta Sans';letter-spacing:.12em;color:#8A8170">SUBSCRIPTIONS & BILLING · 1280</span></div>
+      <div data-screen-label="1e Subscriptions" style="width:1280px;background:#FBF8F1;border-radius:20px;overflow:hidden;box-shadow:0 40px 90px -30px rgba(20,40,60,.45);display:flex">
+
+        <div style="width:222px;flex-shrink:0;background:linear-gradient(170deg,#1E232B,#252B34);color:#fff;display:flex;flex-direction:column;padding:18px 14px 16px">
+          <div style="display:flex;align-items:center;gap:9px;padding:0 6px 16px"><img src="uploads/808_logo_t.png" alt="808eVentures" style="height:34px;width:auto"/><span style="font:600 10px 'Plus Jakarta Sans';letter-spacing:.14em;color:#D9B673">ADMIN</span></div>
+          <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:10px 11px;margin-bottom:16px"><div style="width:36px;height:36px;border-radius:9px;background:#0B6E86;display:flex;align-items:center;justify-content:center;font:400 17px 'Marcellus';color:#fff;flex-shrink:0">K</div><div style="flex:1;min-width:0"><div style="font:700 12.5px 'Plus Jakarta Sans';color:#fff">Kai Nakamura</div><div style="font:500 10px 'Plus Jakarta Sans';color:rgba(255,255,255,.55)">Super Admin</div></div></div>
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65);cursor:pointer">📊 Overview</div>
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65);cursor:pointer">👥 Users <span style="margin-left:auto;font:600 10px 'Plus Jakarta Sans';color:rgba(255,255,255,.4)">642</span></div>
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65);cursor:pointer">🏪 Businesses <span style="margin-left:auto;min-width:16px;height:16px;border-radius:8px;background:#C4692A;color:#fff;font:800 9.5px 'Plus Jakarta Sans';display:flex;align-items:center;justify-content:center;padding:0 4px">5</span></div>
+            <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.09);border-left:3px solid #D9B673;border-radius:9px;padding:9px 11px;font:700 12.5px 'Plus Jakarta Sans';color:#fff;cursor:pointer">💳 Subscriptions</div>
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65);cursor:pointer">📈 Analytics</div>
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65);cursor:pointer">🛡️ Moderation <span style="margin-left:auto;min-width:16px;height:16px;border-radius:8px;background:#C4692A;color:#fff;font:800 9.5px 'Plus Jakarta Sans';display:flex;align-items:center;justify-content:center;padding:0 4px">3</span></div>
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65);cursor:pointer">🎟️ Deals</div>
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65);cursor:pointer">⚙️ Settings</div>
+          </div>
+          <div style="margin-top:auto;display:flex;align-items:center;gap:8px;border-top:1px solid rgba(255,255,255,.08);padding-top:12px"><span style="width:7px;height:7px;border-radius:50%;background:#5FBF6A;box-shadow:0 0 0 3px rgba(95,191,106,.22);flex-shrink:0"></span><span style="font:500 10.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.6)">All systems operational</span><span style="margin-left:auto;font:500 10px 'Plus Jakarta Sans';color:rgba(255,255,255,.35)">v2.4</span></div>
+        </div>
+
+        <div style="flex:1;min-width:0;padding:22px 26px 28px">
+          <div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:16px"><div style="flex:1"><div style="font:400 25px 'Marcellus';color:#1E232B">Subscriptions &amp; billing</div><div style="font:500 12.5px 'Plus Jakarta Sans';color:#8A8170;margin-top:2px">16 paid subscriptions · $1,984 MRR · 1 payment needs attention</div></div><button style="background:#1E232B;border:none;border-radius:11px;padding:9px 16px;cursor:pointer;color:#fff;font:700 12.5px 'Plus Jakarta Sans'">Manage plans</button></div>
+
+          <!-- KPI row -->
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px">
+            <div style="background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:14px;padding:13px 15px"><div style="font:500 10px 'Plus Jakarta Sans';letter-spacing:.08em;color:#A79E8C">MRR</div><div style="display:flex;align-items:baseline;gap:8px;margin-top:5px"><span style="font:400 26px 'Marcellus';color:#0B6E86">$1,984</span><span style="font:700 11px 'Plus Jakarta Sans';color:#4E9A1C">▲ 12%</span></div></div>
+            <div style="background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:14px;padding:13px 15px"><div style="font:500 10px 'Plus Jakarta Sans';letter-spacing:.08em;color:#A79E8C">ARR (PROJECTED)</div><div style="font:400 26px 'Marcellus';color:#1E232B;margin-top:5px">$23.8k</div></div>
+            <div style="background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:14px;padding:13px 15px"><div style="font:500 10px 'Plus Jakarta Sans';letter-spacing:.08em;color:#A79E8C">ACTIVE PAID</div><div style="display:flex;align-items:baseline;gap:8px;margin-top:5px"><span style="font:400 26px 'Marcellus';color:#1E232B">16</span><span style="font:600 10.5px 'Plus Jakarta Sans';color:#8A8170">+2 trials</span></div></div>
+            <div style="background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:14px;padding:13px 15px"><div style="font:500 10px 'Plus Jakarta Sans';letter-spacing:.08em;color:#A79E8C">FAILED PAYMENTS</div><div style="display:flex;align-items:baseline;gap:8px;margin-top:5px"><span style="font:400 26px 'Marcellus';color:#C4692A">1</span><span style="font:600 10.5px 'Plus Jakarta Sans';color:#8A8170">retry Jul 11</span></div></div>
+          </div>
+
+          <!-- plan cards -->
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px">
+            <div style="background:#fff;border:1px solid rgba(30,35,43,.09);border-radius:14px;padding:15px 17px"><div style="display:flex;align-items:baseline;gap:8px"><span style="font:400 18px 'Marcellus';color:#1E232B">Free</span><span style="margin-left:auto;font:400 20px 'Marcellus';color:#1E232B">32</span></div><div style="font:500 11px 'Plus Jakarta Sans';color:#8A8170;margin-top:2px">$0 · basic listing</div><div style="height:6px;border-radius:6px;background:#EEE7D9;overflow:hidden;margin-top:11px"><div style="width:66%;height:100%;background:#DCE3E0"></div></div><div style="font:500 10.5px 'Plus Jakarta Sans';color:#A79E8C;margin-top:6px">$0 / mo</div></div>
+            <div style="background:#fff;border:1px solid rgba(14,143,168,.35);border-radius:14px;padding:15px 17px"><div style="display:flex;align-items:baseline;gap:8px"><span style="font:400 18px 'Marcellus';color:#0B6E86">Premium</span><span style="margin-left:auto;font:400 20px 'Marcellus';color:#1E232B">12</span></div><div style="font:500 11px 'Plus Jakarta Sans';color:#8A8170;margin-top:2px">$99/mo · 20 photos, analytics</div><div style="height:6px;border-radius:6px;background:#EEE7D9;overflow:hidden;margin-top:11px"><div style="width:75%;height:100%;background:#0E8FA8"></div></div><div style="font:600 10.5px 'Plus Jakarta Sans';color:#0B6E86;margin-top:6px">$1,188 / mo</div></div>
+            <div style="background:linear-gradient(160deg,#1E232B,#2A313C);border-radius:14px;padding:15px 17px;color:#fff"><div style="display:flex;align-items:baseline;gap:8px"><span style="font:400 18px 'Marcellus';color:#D9B673">Pro</span><span style="margin-left:auto;font:400 20px 'Marcellus';color:#fff">4</span></div><div style="font:500 11px 'Plus Jakarta Sans';color:rgba(255,255,255,.6);margin-top:2px">$199/mo · featured + languages</div><div style="height:6px;border-radius:6px;background:rgba(255,255,255,.15);overflow:hidden;margin-top:11px"><div style="width:50%;height:100%;background:#D9B673"></div></div><div style="font:600 10.5px 'Plus Jakarta Sans';color:#D9B673;margin-top:6px">$796 / mo</div></div>
+          </div>
+
+          <!-- billing table -->
+          <div style="background:#fff;border:1px solid rgba(30,35,43,.09);border-radius:15px;overflow:hidden">
+            <div style="display:grid;grid-template-columns:2.2fr 1.1fr 1fr 1.2fr 1fr;padding:11px 18px;background:#F3EFE6;font:700 10px 'Plus Jakarta Sans';letter-spacing:.08em;color:#8A8170"><span>BUSINESS</span><span>PLAN</span><span>AMOUNT</span><span>NEXT RENEWAL</span><span style="text-align:right">STATUS</span></div>
+            <sc-for list="{{ subs }}" as="s" hint-placeholder-count="7">
+              <div style="{{ s.rowStyle }}">
+                <div style="display:flex;align-items:center;gap:11px;min-width:0"><img src="{{ s.photo }}" alt="" loading="lazy" style="width:34px;height:34px;border-radius:8px;object-fit:cover;flex-shrink:0"/><div style="min-width:0"><div style="font:700 12.5px 'Plus Jakarta Sans';color:#1E232B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ s.name }}</div><div style="font:500 10.5px 'Plus Jakarta Sans';color:#8A8170">{{ s.area }}</div></div></div>
+                <div style="display:flex;align-items:center"><span style="{{ s.planStyle }}">{{ s.plan }}</span></div>
+                <div style="display:flex;align-items:center;font:700 12px 'Plus Jakarta Sans';color:#1E232B">{{ s.amount }}</div>
+                <div style="display:flex;align-items:center;font:500 11.5px 'Plus Jakarta Sans';color:#5B646F">{{ s.renewal }}</div>
+                <div style="display:flex;align-items:center;justify-content:flex-end"><span style="{{ s.statusStyle }}">{{ s.status }}</span></div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const ROW = "display:grid;grid-template-columns:2.4fr 1.3fr 1fr 1fr 0.8fr;padding:10px 18px;border-top:1px solid rgba(30,35,43,.06);align-items:center";
+    const AV = (bg) => `width:34px;height:34px;border-radius:9px;flex-shrink:0;background:${bg};display:flex;align-items:center;justify-content:center;font:700 12px 'Plus Jakarta Sans';color:#fff`;
+    const pill = (col,bg) => `font:700 10px 'Plus Jakarta Sans';letter-spacing:.03em;color:${col};background:${bg};padding:3px 9px;border-radius:20px;display:inline-block`;
+    const roleP = (r) => {
+      if (r === 'Admin') return pill('#8A6A12','#FBF0D6');
+      if (r === 'Moderator') return pill('#0B6E86','#E4F1F3');
+      if (r === 'Business owner') return pill('#4E7D2E','#EFF7E4');
+      return pill('#5B646F','#F0ECE2');
+    };
+    const statusP = (susp) => susp
+      ? pill('#C4692A','#F6DED3')
+      : "font:600 11px 'Plus Jakarta Sans';color:#4E7D2E;display:inline-flex;align-items:center;gap:5px";
+    const banBtn = (susp) => susp
+      ? "background:#EFF7E4;border:1px solid rgba(78,125,46,.35);border-radius:8px;padding:5px 10px;cursor:pointer;color:#4E7D2E;font:700 10px 'Plus Jakarta Sans'"
+      : "background:#fff;border:1px solid rgba(196,105,42,.35);border-radius:8px;padding:5px 10px;cursor:pointer;color:#C4692A;font:700 10px 'Plus Jakarta Sans'";
+
+    const rawUsers = [
+      ['Kai Nakamura','kai@808eventures.co','Admin','Mar 2025',false,'#0B6E86'],
+      ['Leilani Char','leilani.char@gmail.com','Moderator','Aug 2025',false,'#C4692A'],
+      ['Marcus Reed','mreed@onoseafood.com','Business owner','Jan 2026',false,'#4E7D2E'],
+      ['Ashley Tanaka','ashley.t@icloud.com','Explorer','Apr 2026',false,'#0E8FA8'],
+      ['Dylan Brooks','dbrooks92@gmail.com','Explorer','May 2026',true,'#8A8170'],
+      ['Nohea Kealoha','nohea.k@hawaii.edu','Business owner','Feb 2026',false,'#8A6A12'],
+      ['Sofia Rivera','sofiar@outlook.com','Explorer','Jun 2026',false,'#0B6E86'],
+      ['Trent Wallace','trentw@spammail.co','Explorer','Jul 2026',true,'#8A8170'],
+    ];
+    const users = rawUsers.map(([name,email,role,joined,susp,av]) => ({
+      name, email, role, joined,
+      initials: name.split(' ').map(w=>w[0]).join('').slice(0,2),
+      avStyle: AV(av),
+      roleStyle: roleP(role),
+      status: susp ? 'Suspended' : '● Active',
+      statusStyle: statusP(susp),
+      banLabel: susp ? 'Restore' : 'Suspend',
+      banStyle: banBtn(susp),
+      rowStyle: ROW + (susp ? ';background:#FCF4EE' : ''),
+    }));
+
+    // ---- businesses ----
+    const BROW = "display:grid;grid-template-columns:2.4fr 1.4fr 1fr 1.1fr 1fr;padding:10px 18px;border-top:1px solid rgba(30,35,43,.06);align-items:center";
+    const planP = (p) => {
+      if (p === 'Pro') return pill('#8A6A12','#FBF0D6');
+      if (p === 'Premium') return pill('#0B6E86','#E4F1F3');
+      return pill('#8A8170','#F0ECE2');
+    };
+    const bStatusP = (s) => {
+      if (s === 'Pending') return pill('#C4692A','#F6DED3');
+      if (s === 'Flagged') return pill('#B23B3B','#F6DED3');
+      return "font:600 11px 'Plus Jakarta Sans';color:#4E7D2E;display:inline-flex;align-items:center;gap:5px";
+    };
+    const rawBiz = [
+      ['Ono Seafood','Poke · Kapahulu','Premium','Live','Marcus Reed',true,'https://images.unsplash.com/photo-1553621042-f6e147245754?w=90&q=80&auto=format&fit=crop'],
+      ['Diamond Head Market','Grocery · Kaimuki','Pro','Flagged','J. Silva',true,'https://images.unsplash.com/photo-1542838132-92c53300491e?w=90&q=80&auto=format&fit=crop'],
+      ['Hale Kai Café','Café · Kailua','—','Pending','A. Wong',false,'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=90&q=80&auto=format&fit=crop'],
+      ['North Shore Grindz','Food truck · Haleiwa','—','Pending','K. Meyer',false,'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=90&q=80&auto=format&fit=crop'],
+      ['Kaka\u2019ako Kava','Bar · Kaka\u2019ako','Premium','Live','Nohea Kealoha',true,'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=90&q=80&auto=format&fit=crop'],
+      ['Waimea Valley Tours','Tours · Haleiwa','Pro','Live','R. Kahale',true,'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=90&q=80&auto=format&fit=crop'],
+      ['Lanikai Juice Stand','Juice bar · Kailua','—','Pending','M. Ito',false,'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=90&q=80&auto=format&fit=crop'],
+      ['Ko Olina Shave Ice','Dessert · Ko Olina','Free','Live','T. Park',false,'https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=90&q=80&auto=format&fit=crop'],
+    ];
+    const biz = rawBiz.map(([name,catArea,plan,status,owner,verified,photo]) => {
+      const pending = status === 'Pending';
+      const parts = catArea.split(' · ');
+      const p = plan === '—' ? 'Free' : plan;
+      return {
+        name, cat: parts[0], area: parts[1], owner: 'Owner · ' + owner, photo, verified,
+        plan: p, planStyle: planP(p),
+        status: status === 'Live' ? '● Live' : status,
+        statusStyle: bStatusP(status),
+        pending, secondAction: pending ? 'Review' : 'Edit',
+        rowStyle: BROW + (pending ? ';background:#FCF4EE' : (status==='Flagged' ? ';background:#FCF1F1' : '')),
+      };
+    });
+
+    // ---- subscriptions ----
+    const SROW = "display:grid;grid-template-columns:2.2fr 1.1fr 1fr 1.2fr 1fr;padding:10px 18px;border-top:1px solid rgba(30,35,43,.06);align-items:center";
+    const subStatusP = (s) => {
+      if (s === 'Failed') return pill('#B23B3B','#F6DED3');
+      if (s === 'Trial') return pill('#8A6A12','#FBF0D6');
+      return "font:600 11px 'Plus Jakarta Sans';color:#4E7D2E;display:inline-flex;align-items:center;gap:5px";
+    };
+    const rawSubs = [
+      ['Ono Seafood','Kapahulu','Trial','$99','ends Jul 12','Trial','https://images.unsplash.com/photo-1553621042-f6e147245754?w=80&q=80&auto=format&fit=crop'],
+      ['Diamond Head Market','Kaimuki','Pro','$199','Aug 1, 2026','Paid','https://images.unsplash.com/photo-1542838132-92c53300491e?w=80&q=80&auto=format&fit=crop'],
+      ['Kaka\u2019ako Kava','Kaka\u2019ako','Premium','$99','Jul 28, 2026','Paid','https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=80&q=80&auto=format&fit=crop'],
+      ['Waimea Valley Tours','Haleiwa','Pro','$199','retry Jul 11','Failed','https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=80&q=80&auto=format&fit=crop'],
+      ['Pipeline Surf Co.','Haleiwa','Premium','$99','Jul 22, 2026','Paid','https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=80&q=80&auto=format&fit=crop'],
+      ['Kaimuki Coffee','Kaimuki','Premium','$99','Aug 3, 2026','Paid','https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=80&q=80&auto=format&fit=crop'],
+      ['Ko Olina Shave Ice','Ko Olina','Free','$0','—','Paid','https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=80&q=80&auto=format&fit=crop'],
+    ];
+    const subs = rawSubs.map(([name,area,plan,amount,renewal,status,photo]) => ({
+      name, area, plan, amount: amount === '$0' ? '$0' : amount + '/mo', renewal, photo,
+      planStyle: planP(plan),
+      status: status === 'Paid' ? '● Paid' : status,
+      statusStyle: subStatusP(status),
+      rowStyle: SROW + (status==='Failed' ? ';background:#FCF1F1' : (status==='Trial' ? ';background:#FCF9EF' : '')),
+    }));
+
+    return { users, biz, subs };
+  }
+}
+</script>
+</body>
+</html>

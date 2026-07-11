@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Marcellus&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;background:#EEE7D9;font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:#1E232B;-webkit-font-smoothing:antialiased}
+  a{color:#0E8FA8;text-decoration:none}
+  a:hover{color:#0B6E86}
+  ::-webkit-scrollbar{width:9px;height:9px}
+  ::-webkit-scrollbar-thumb{background:rgba(30,35,43,.18);border-radius:9px}
+  ::-webkit-scrollbar-track{background:transparent}
+</style>
+</helmet>
+
+<section style="display:flex;flex-direction:column;gap:30px;padding:52px 60px 90px;width:max-content;background:radial-gradient(1200px 600px at 20% -5%,#F7F1E4,#EAE1CF)">
+
+  <!-- turn header -->
+  <div style="display:flex;align-items:center;gap:14px">
+    <span style="background:#1E232B;color:#fff;font:800 12px 'Plus Jakarta Sans';letter-spacing:.1em;padding:6px 12px;border-radius:8px">TURN 1</span>
+    <span style="font:400 26px 'Marcellus';color:#1E232B">808 for Business — Profile Manager · Ono Seafood</span>
+    <span style="font:500 12.5px 'Plus Jakarta Sans';color:#8A8170">Three dashboard directions (<a href="#1a">1a</a>–<a href="#1c">1c</a>) · supporting screens (<a href="#1d">1d</a>–<a href="#1i">1i</a>) follow direction <a href="#1a">1a</a></span>
+  </div>
+
+  <!-- ============ DASHBOARD EXPLORATIONS ============ -->
+  <div style="display:flex;gap:48px;align-items:flex-start;flex-wrap:wrap">
+
+    <!-- ================= 1a · SIDEBAR COMMAND CENTER ================= -->
+    <div id="1a" style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:#1E232B;color:#D9B673;font:800 12px 'Plus Jakarta Sans';padding:5px 10px;border-radius:7px">1a</span><span style="font:800 12.5px 'Plus Jakarta Sans';letter-spacing:.12em;color:#8A8170">DASHBOARD · SIDEBAR COMMAND CENTER · 1240</span></div>
+      <div data-screen-label="1a Dashboard Sidebar" style="width:1240px;background:#FBF8F1;border-radius:20px;overflow:hidden;box-shadow:0 40px 90px -30px rgba(20,40,60,.45);display:flex">
+
+        <!-- sidebar -->
+        <div style="width:216px;flex-shrink:0;background:linear-gradient(170deg,#1E232B,#252B34);color:#fff;display:flex;flex-direction:column;padding:18px 14px 16px">
+          <div style="display:flex;align-items:center;gap:9px;padding:0 6px 16px">
+            <img src="uploads/808_logo_t.png" alt="808eVentures" style="height:34px;width:auto"/>
+            <span style="font:600 10px 'Plus Jakarta Sans';letter-spacing:.14em;color:#D9B673">FOR BUSINESS</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:10px 11px;margin-bottom:16px">
+            <img src="https://images.unsplash.com/photo-1553621042-f6e147245754?w=100&q=80&auto=format&fit=crop" alt="" style="width:36px;height:36px;border-radius:9px;object-fit:cover"/>
+            <div style="flex:1;min-width:0"><div style="font:700 12.5px 'Plus Jakarta Sans';color:#fff">Ono Seafood</div><div style="font:500 10px 'Plus Jakarta Sans';color:rgba(255,255,255,.55)">Kapahulu · Poke</div></div>
+            <span style="font:700 8.5px 'Plus Jakarta Sans';letter-spacing:.06em;color:#B7AF9E;border:1px solid rgba(255,255,255,.22);padding:2px 6px;border-radius:6px">FREE</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.09);border-left:3px solid #D9B673;border-radius:9px;padding:9px 11px;font:700 12.5px 'Plus Jakarta Sans';color:#fff;cursor:pointer">📊 Dashboard</div>
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65);cursor:pointer">🏪 Profile &amp; Hours</div>
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65);cursor:pointer">📷 Photos <span style="margin-left:auto;font:600 10px 'Plus Jakarta Sans';color:rgba(255,255,255,.4)">8/10</span></div>
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65);cursor:pointer">🎟️ Deals <span style="margin-left:auto;font:600 10px 'Plus Jakarta Sans';color:rgba(255,255,255,.4)">1/1</span></div>
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65);cursor:pointer">💬 Reviews <span style="margin-left:auto;width:16px;height:16px;border-radius:50%;background:#C4692A;color:#fff;font:800 9.5px 'Plus Jakarta Sans';display:flex;align-items:center;justify-content:center">1</span></div>
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65);cursor:pointer">📈 Analytics</div>
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.4);cursor:pointer">🌐 Languages <span style="margin-left:auto;font-size:11px;color:#D9B673">🔒</span></div>
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65);cursor:pointer">⚙️ Settings</div>
+          </div>
+          <div style="margin-top:auto;border:1px dashed rgba(217,182,115,.5);border-radius:13px;padding:12px;background:rgba(217,182,115,.07)">
+            <div style="font:400 14.5px 'Marcellus';color:#D9B673">Go Premium</div>
+            <div style="font:500 10.5px/1.5 'Plus Jakarta Sans';color:rgba(255,255,255,.6);margin:4px 0 9px">20 photos · 4 languages · advanced analytics · featured placement</div>
+            <button style="width:100%;background:#D9B673;border:none;border-radius:9px;padding:8px;cursor:pointer;font:800 11.5px 'Plus Jakarta Sans';color:#1E232B">Try free for 30 days</button>
+          </div>
+        </div>
+
+        <!-- main -->
+        <div style="flex:1;min-width:0;padding:22px 26px 28px">
+          <div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:18px">
+            <div style="flex:1"><div style="font:400 25px 'Marcellus';color:#1E232B">Aloha, Kaleo 🤙</div><div style="font:500 12.5px 'Plus Jakarta Sans';color:#8A8170;margin-top:2px">Here's how Ono Seafood did this week.</div></div>
+            <button style="display:flex;align-items:center;gap:7px;background:#fff;border:1px solid rgba(30,35,43,.14);border-radius:11px;padding:9px 14px;cursor:pointer;font:600 12.5px 'Plus Jakarta Sans';color:#1E232B">View public listing ↗</button>
+            <button style="background:#1E232B;border:none;border-radius:11px;padding:9px 16px;cursor:pointer;color:#fff;font:700 12.5px 'Plus Jakarta Sans'">＋ New deal</button>
+          </div>
+
+          <!-- profile strength -->
+          <div style="background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:15px;padding:14px 16px;margin-bottom:14px">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:9px">
+              <span style="font:700 13px 'Plus Jakarta Sans';color:#1E232B">Profile strength</span>
+              <span style="font:400 16px 'Marcellus';color:#0B6E86">72%</span>
+              <span style="font:600 10.5px 'Plus Jakarta Sans';color:#4E9A1C;background:#EFF7E4;padding:2px 8px;border-radius:20px">Good</span>
+              <span style="margin-left:auto;font:500 11px 'Plus Jakarta Sans';color:#A79E8C">Stronger profiles appear higher in Explore</span>
+            </div>
+            <div style="height:7px;border-radius:7px;background:#EEE7D9;overflow:hidden;margin-bottom:11px"><div style="width:72%;height:100%;background:linear-gradient(90deg,#0E8FA8,#0B6E86);border-radius:7px"></div></div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button style="display:flex;align-items:center;gap:6px;background:#EEF5F6;border:1px solid rgba(14,143,168,.25);border-radius:20px;padding:6px 12px;cursor:pointer;font:600 11.5px 'Plus Jakarta Sans';color:#0B6E86">＋ Add 2 more photos</button>
+              <button style="display:flex;align-items:center;gap:6px;background:#EEF5F6;border:1px solid rgba(14,143,168,.25);border-radius:20px;padding:6px 12px;cursor:pointer;font:600 11.5px 'Plus Jakarta Sans';color:#0B6E86">＋ Add holiday hours</button>
+              <button style="display:flex;align-items:center;gap:6px;background:#FBF0D6;border:1px solid #EFD9A0;border-radius:20px;padding:6px 12px;cursor:pointer;font:600 11.5px 'Plus Jakarta Sans';color:#8A6A12">🔒 Add a Japanese listing · Premium</button>
+            </div>
+          </div>
+
+          <!-- KPIs -->
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px">
+            <div style="background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:14px;padding:13px 15px"><div style="font:500 10px 'Plus Jakarta Sans';letter-spacing:.08em;color:#A79E8C">PROFILE VIEWS</div><div style="display:flex;align-items:baseline;gap:8px;margin-top:5px"><span style="font:400 26px 'Marcellus';color:#1E232B">1,284</span><span style="font:700 11px 'Plus Jakarta Sans';color:#4E9A1C">▲ 18%</span></div></div>
+            <div style="background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:14px;padding:13px 15px"><div style="font:500 10px 'Plus Jakarta Sans';letter-spacing:.08em;color:#A79E8C">SEARCH APPEARANCES</div><div style="display:flex;align-items:baseline;gap:8px;margin-top:5px"><span style="font:400 26px 'Marcellus';color:#1E232B">3,412</span><span style="font:700 11px 'Plus Jakarta Sans';color:#4E9A1C">▲ 6%</span></div></div>
+            <div style="background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:14px;padding:13px 15px"><div style="font:500 10px 'Plus Jakarta Sans';letter-spacing:.08em;color:#A79E8C">ITINERARY ADDS</div><div style="display:flex;align-items:baseline;gap:8px;margin-top:5px"><span style="font:400 26px 'Marcellus';color:#1E232B">96</span><span style="font:700 11px 'Plus Jakarta Sans';color:#4E9A1C">▲ 22%</span></div></div>
+            <div style="background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:14px;padding:13px 15px"><div style="font:500 10px 'Plus Jakarta Sans';letter-spacing:.08em;color:#A79E8C">DEAL REDEMPTIONS</div><div style="display:flex;align-items:baseline;gap:8px;margin-top:5px"><span style="font:400 26px 'Marcellus';color:#1E232B">214</span><span style="font:600 10.5px 'Plus Jakarta Sans';color:#8A8170">free slot</span></div></div>
+          </div>
+
+          <!-- chart + locked origin -->
+          <div style="display:flex;gap:12px;margin-bottom:14px">
+            <div style="flex:1.5;background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:15px;padding:15px 17px">
+              <div style="display:flex;align-items:center;gap:9px;margin-bottom:12px"><span style="font:700 13px 'Plus Jakarta Sans';color:#1E232B">Views this week</span><span style="margin-left:auto;font:500 10.5px 'Plus Jakarta Sans';color:#A79E8C">Basic analytics · included free</span></div>
+              <div style="display:flex;align-items:flex-end;gap:9px;height:110px">
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px"><div style="width:100%;height:38%;background:#DCE3E0;border-radius:5px 5px 0 0"></div><span style="font:500 9.5px 'Plus Jakarta Sans';color:#A79E8C">Mon</span></div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px"><div style="width:100%;height:46%;background:#DCE3E0;border-radius:5px 5px 0 0"></div><span style="font:500 9.5px 'Plus Jakarta Sans';color:#A79E8C">Tue</span></div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px"><div style="width:100%;height:42%;background:#DCE3E0;border-radius:5px 5px 0 0"></div><span style="font:500 9.5px 'Plus Jakarta Sans';color:#A79E8C">Wed</span></div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px"><div style="width:100%;height:58%;background:#DCE3E0;border-radius:5px 5px 0 0"></div><span style="font:500 9.5px 'Plus Jakarta Sans';color:#A79E8C">Thu</span></div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px"><div style="width:100%;height:74%;background:#0E8FA8;border-radius:5px 5px 0 0"></div><span style="font:500 9.5px 'Plus Jakarta Sans';color:#A79E8C">Fri</span></div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px"><div style="width:100%;height:96%;background:#0B6E86;border-radius:5px 5px 0 0;position:relative"><span style="position:absolute;top:-17px;left:50%;transform:translateX(-50%);font:700 9px 'Plus Jakarta Sans';color:#0B6E86;white-space:nowrap">312</span></div><span style="font:700 9.5px 'Plus Jakarta Sans';color:#0B6E86">Sat</span></div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px"><div style="width:100%;height:66%;background:#DCE3E0;border-radius:5px 5px 0 0"></div><span style="font:500 9.5px 'Plus Jakarta Sans';color:#A79E8C">Sun</span></div>
+              </div>
+            </div>
+            <div style="flex:1;position:relative;background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:15px;padding:15px 17px;overflow:hidden">
+              <div style="filter:blur(4px);opacity:.5;pointer-events:none">
+                <div style="font:700 13px 'Plus Jakarta Sans';color:#1E232B;margin-bottom:12px">Who's viewing you</div>
+                <div style="display:flex;flex-direction:column;gap:8px">
+                  <div style="display:flex;align-items:center;gap:9px"><span style="font:500 11px 'Plus Jakarta Sans';width:70px">🇯🇵 Japan</span><div style="flex:1;height:8px;background:#EEE7D9;border-radius:8px;overflow:hidden"><div style="width:32%;height:100%;background:#C4692A"></div></div><span style="font:600 11px 'Plus Jakarta Sans'">32%</span></div>
+                  <div style="display:flex;align-items:center;gap:9px"><span style="font:500 11px 'Plus Jakarta Sans';width:70px">🇺🇸 Mainland</span><div style="flex:1;height:8px;background:#EEE7D9;border-radius:8px;overflow:hidden"><div style="width:28%;height:100%;background:#C4692A"></div></div><span style="font:600 11px 'Plus Jakarta Sans'">28%</span></div>
+                  <div style="display:flex;align-items:center;gap:9px"><span style="font:500 11px 'Plus Jakarta Sans';width:70px">🌺 Local</span><div style="flex:1;height:8px;background:#EEE7D9;border-radius:8px;overflow:hidden"><div style="width:22%;height:100%;background:#C4692A"></div></div><span style="font:600 11px 'Plus Jakarta Sans'">22%</span></div>
+                  <div style="display:flex;align-items:center;gap:9px"><span style="font:500 11px 'Plus Jakarta Sans';width:70px">🇰🇷 Korea</span><div style="flex:1;height:8px;background:#EEE7D9;border-radius:8px;overflow:hidden"><div style="width:11%;height:100%;background:#C4692A"></div></div><span style="font:600 11px 'Plus Jakarta Sans'">11%</span></div>
+                </div>
+              </div>
+              <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;background:rgba(251,248,241,.55)">
+                <span style="font-size:20px">🔒</span>
+                <div style="font:700 12.5px 'Plus Jakarta Sans';color:#1E232B;text-align:center">Visitor origin is a Premium insight</div>
+                <button style="background:#D9B673;border:none;border-radius:9px;padding:7px 14px;cursor:pointer;font:800 11px 'Plus Jakarta Sans';color:#1E232B">Try free · 30 days</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- needs attention + upsell -->
+          <div style="display:flex;gap:12px">
+            <div style="flex:1.5;background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:15px;padding:15px 17px">
+              <div style="font:700 13px 'Plus Jakarta Sans';color:#1E232B;margin-bottom:11px">Needs attention</div>
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <div style="display:flex;align-items:center;gap:11px;padding-bottom:10px;border-bottom:1px solid rgba(30,35,43,.07)">
+                  <span style="width:8px;height:8px;border-radius:50%;background:#C4692A;flex-shrink:0"></span>
+                  <div style="flex:1;min-width:0"><div style="font:600 12.5px 'Plus Jakarta Sans';color:#1E232B">New 5★ review from Marisa T. — "spicy ahi was still going strong…"</div><div style="font:500 10.5px 'Plus Jakarta Sans';color:#8A8170">2 days ago · replying builds local trust</div></div>
+                  <button style="background:#1E232B;border:none;border-radius:9px;padding:7px 13px;cursor:pointer;color:#fff;font:700 11px 'Plus Jakarta Sans'">Reply</button>
+                </div>
+                <div style="display:flex;align-items:center;gap:11px">
+                  <span style="width:8px;height:8px;border-radius:50%;background:#B98F45;flex-shrink:0"></span>
+                  <div style="flex:1;min-width:0"><div style="font:600 12.5px 'Plus Jakarta Sans';color:#1E232B">Confirm your Labor Day hours</div><div style="font:500 10.5px 'Plus Jakarta Sans';color:#8A8170">Sept 7 · listings with confirmed holiday hours get a "verified" badge</div></div>
+                  <button style="background:#fff;border:1px solid rgba(30,35,43,.16);border-radius:9px;padding:7px 13px;cursor:pointer;color:#1E232B;font:700 11px 'Plus Jakarta Sans'">Confirm</button>
+                </div>
+              </div>
+            </div>
+            <div style="flex:1;background:linear-gradient(110deg,#FBF0D6,#FDE3B4);border:1px solid #EFD9A0;border-radius:15px;padding:15px 17px;display:flex;flex-direction:column">
+              <div style="font:400 16px 'Marcellus';color:#7A5A0F">Get placed first</div>
+              <div style="font:500 11.5px/1.55 'Plus Jakarta Sans';color:#7A5A0F;margin:5px 0 12px">Premium listings appear in the Featured row and Right Now feed. Similar poke shops see <b>~2.4× more profile views</b>.</div>
+              <button style="margin-top:auto;background:#1E232B;border:none;border-radius:10px;padding:10px;cursor:pointer;color:#fff;font:800 12px 'Plus Jakarta Sans'">Try Premium free for 30 days</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= 1b · CHECKLIST-FIRST TOP NAV ================= -->
+    <div id="1b" style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:#1E232B;color:#D9B673;font:800 12px 'Plus Jakarta Sans';padding:5px 10px;border-radius:7px">1b</span><span style="font:800 12.5px 'Plus Jakarta Sans';letter-spacing:.12em;color:#8A8170">DASHBOARD · CHECKLIST-FIRST · 1240</span></div>
+      <div data-screen-label="1b Dashboard Checklist" style="width:1240px;background:#FBF8F1;border-radius:20px;overflow:hidden;box-shadow:0 40px 90px -30px rgba(20,40,60,.45)">
+
+        <div style="display:flex;align-items:center;gap:22px;background:#fff;border-bottom:1px solid rgba(30,35,43,.08);padding:12px 26px">
+          <div style="display:flex;align-items:center;gap:8px"><img src="uploads/808_logo.png" alt="808eVentures" style="height:38px;width:auto"/><span style="font:600 9.5px 'Plus Jakarta Sans';letter-spacing:.12em;color:#C4692A">FOR BUSINESS</span></div>
+          <div style="display:flex;gap:4px">
+            <span style="font:700 12.5px 'Plus Jakarta Sans';color:#1E232B;background:#F3EFE6;padding:8px 14px;border-radius:10px;cursor:pointer">Dashboard</span>
+            <span style="font:500 12.5px 'Plus Jakarta Sans';color:#5B646F;padding:8px 14px;cursor:pointer">Profile</span>
+            <span style="font:500 12.5px 'Plus Jakarta Sans';color:#5B646F;padding:8px 14px;cursor:pointer">Photos</span>
+            <span style="font:500 12.5px 'Plus Jakarta Sans';color:#5B646F;padding:8px 14px;cursor:pointer">Deals</span>
+            <span style="font:500 12.5px 'Plus Jakarta Sans';color:#5B646F;padding:8px 14px;cursor:pointer">Analytics</span>
+            <span style="font:500 12.5px 'Plus Jakarta Sans';color:#B7AF9E;padding:8px 14px;cursor:pointer">Languages 🔒</span>
+          </div>
+          <span style="margin-left:auto;font:700 9.5px 'Plus Jakarta Sans';letter-spacing:.06em;color:#5B646F;border:1px solid rgba(30,35,43,.16);padding:4px 9px;border-radius:7px">FREE PLAN</span>
+          <div style="width:36px;height:36px;border-radius:50%;background:#0B6E86;display:flex;align-items:center;justify-content:center;color:#fff;font:400 15px 'Marcellus'">K</div>
+        </div>
+
+        <div style="padding:22px 26px 28px">
+          <!-- hero: checklist + upsell -->
+          <div style="display:flex;gap:14px;margin-bottom:14px">
+            <div style="flex:1.7;background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:16px;padding:18px 20px">
+              <div style="display:flex;align-items:center;gap:16px;margin-bottom:14px">
+                <div style="position:relative;width:64px;height:64px;flex-shrink:0">
+                  <svg viewBox="0 0 36 36" style="width:64px;height:64px;transform:rotate(-90deg)"><circle cx="18" cy="18" r="15.5" fill="none" stroke="#EEE7D9" stroke-width="4"/><circle cx="18" cy="18" r="15.5" fill="none" stroke="#0E8FA8" stroke-width="4" stroke-dasharray="70 28" stroke-linecap="round"/></svg>
+                  <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:400 16px 'Marcellus';color:#0B6E86">72%</span>
+                </div>
+                <div><div style="font:400 21px 'Marcellus';color:#1E232B">Finish setting up Ono Seafood</div><div style="font:500 12px 'Plus Jakarta Sans';color:#8A8170;margin-top:2px">3 quick wins this week — stronger profiles rank higher in Explore.</div></div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <div style="display:flex;align-items:center;gap:11px;background:#FBF8F1;border:1px solid rgba(30,35,43,.07);border-radius:12px;padding:11px 13px"><span style="width:22px;height:22px;border-radius:50%;border:2px solid #0E8FA8;flex-shrink:0"></span><div style="flex:1"><span style="font:600 12.5px 'Plus Jakarta Sans';color:#1E232B">Add 2 more photos</span> <span style="font:500 11px 'Plus Jakarta Sans';color:#8A8170">— 8 of 10 free slots used</span></div><button style="background:#fff;border:1px solid rgba(30,35,43,.16);border-radius:8px;padding:6px 12px;cursor:pointer;font:700 11px 'Plus Jakarta Sans';color:#1E232B">Upload</button></div>
+                <div style="display:flex;align-items:center;gap:11px;background:#FBF8F1;border:1px solid rgba(30,35,43,.07);border-radius:12px;padding:11px 13px"><span style="width:22px;height:22px;border-radius:50%;border:2px solid #0E8FA8;flex-shrink:0"></span><div style="flex:1"><span style="font:600 12.5px 'Plus Jakarta Sans';color:#1E232B">Reply to Marisa's 5★ review</span> <span style="font:500 11px 'Plus Jakarta Sans';color:#8A8170">— owners who reply earn more repeat visits</span></div><button style="background:#fff;border:1px solid rgba(30,35,43,.16);border-radius:8px;padding:6px 12px;cursor:pointer;font:700 11px 'Plus Jakarta Sans';color:#1E232B">Reply</button></div>
+                <div style="display:flex;align-items:center;gap:11px;background:#FBF8F1;border:1px solid rgba(30,35,43,.07);border-radius:12px;padding:11px 13px"><span style="width:22px;height:22px;border-radius:50%;border:2px solid #0E8FA8;flex-shrink:0"></span><div style="flex:1"><span style="font:600 12.5px 'Plus Jakarta Sans';color:#1E232B">Confirm Labor Day hours</span> <span style="font:500 11px 'Plus Jakarta Sans';color:#8A8170">— avoids "hours unconfirmed" flag on Sept 7</span></div><button style="background:#fff;border:1px solid rgba(30,35,43,.16);border-radius:8px;padding:6px 12px;cursor:pointer;font:700 11px 'Plus Jakarta Sans';color:#1E232B">Confirm</button></div>
+              </div>
+            </div>
+            <div style="flex:1;background:linear-gradient(150deg,#1E232B,#2A3038);border-radius:16px;padding:18px 20px;color:#fff;display:flex;flex-direction:column">
+              <div style="display:flex;align-items:center;gap:8px"><span style="font:400 18px 'Marcellus';color:#D9B673">Premium</span><span style="font:700 9px 'Plus Jakarta Sans';letter-spacing:.06em;color:#1E232B;background:#D9B673;padding:2px 7px;border-radius:6px">$20/MO</span></div>
+              <div style="display:flex;flex-direction:column;gap:7px;margin:12px 0;font:500 12px 'Plus Jakarta Sans';color:rgba(255,255,255,.75)">
+                <div style="display:flex;gap:8px"><span style="color:#D9B673">✓</span>20 photo slots + video</div>
+                <div style="display:flex;gap:8px"><span style="color:#D9B673">✓</span>Listing in 🇯🇵 🇰🇷 🇪🇸 🇫🇷 — AI-translated</div>
+                <div style="display:flex;gap:8px"><span style="color:#D9B673">✓</span>Advanced analytics &amp; visitor origin</div>
+                <div style="display:flex;gap:8px"><span style="color:#D9B673">✓</span>Featured placement · 3 deal slots</div>
+              </div>
+              <button style="margin-top:auto;background:#D9B673;border:none;border-radius:10px;padding:10px;cursor:pointer;font:800 12px 'Plus Jakarta Sans';color:#1E232B">Try free for 30 days</button>
+            </div>
+          </div>
+
+          <!-- inline stats bar -->
+          <div style="display:flex;align-items:center;background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:14px;padding:14px 20px;margin-bottom:14px">
+            <div style="flex:1"><div style="font:400 22px 'Marcellus';color:#1E232B">1,284 <span style="font:700 11px 'Plus Jakarta Sans';color:#4E9A1C">▲18%</span></div><div style="font:500 10.5px 'Plus Jakarta Sans';color:#A79E8C">Profile views</div></div>
+            <span style="width:1px;height:34px;background:rgba(30,35,43,.09)"></span>
+            <div style="flex:1;padding-left:20px"><div style="font:400 22px 'Marcellus';color:#1E232B">3,412</div><div style="font:500 10.5px 'Plus Jakarta Sans';color:#A79E8C">Search appearances</div></div>
+            <span style="width:1px;height:34px;background:rgba(30,35,43,.09)"></span>
+            <div style="flex:1;padding-left:20px"><div style="font:400 22px 'Marcellus';color:#1E232B">96 <span style="font:700 11px 'Plus Jakarta Sans';color:#4E9A1C">▲22%</span></div><div style="font:500 10.5px 'Plus Jakarta Sans';color:#A79E8C">Itinerary adds</div></div>
+            <span style="width:1px;height:34px;background:rgba(30,35,43,.09)"></span>
+            <div style="flex:1;padding-left:20px"><div style="font:400 22px 'Marcellus';color:#1E232B">214</div><div style="font:500 10.5px 'Plus Jakarta Sans';color:#A79E8C">Deal redemptions</div></div>
+            <button style="background:none;border:none;cursor:pointer;font:700 12px 'Plus Jakarta Sans';color:#0B6E86">Full analytics ›</button>
+          </div>
+
+          <!-- activity feed -->
+          <div style="background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:14px;padding:15px 20px">
+            <div style="font:700 13px 'Plus Jakarta Sans';color:#1E232B;margin-bottom:11px">Latest activity</div>
+            <div style="display:flex;flex-direction:column;gap:9px;font:500 12.5px 'Plus Jakarta Sans';color:#3B4149">
+              <div style="display:flex;gap:10px;align-items:center"><span style="width:7px;height:7px;border-radius:50%;background:#0E8FA8"></span>Added to <b>12 itineraries</b> today — most on "Day 1 · South Shore"</div>
+              <div style="display:flex;gap:10px;align-items:center"><span style="width:7px;height:7px;border-radius:50%;background:#C4692A"></span>Your deal was redeemed <b>8 times</b> today</div>
+              <div style="display:flex;gap:10px;align-items:center"><span style="width:7px;height:7px;border-radius:50%;background:#4E7D2E"></span>Appeared in <b>"best poke oahu"</b> searches 214 times this week</div>
+              <div style="display:flex;gap:10px;align-items:center"><span style="width:7px;height:7px;border-radius:50%;background:#B7AF9E"></span>808 team verified your hours in person · 4 days ago</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= 1c · MOBILE COMPANION ================= -->
+    <div id="1c" style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:#1E232B;color:#D9B673;font:800 12px 'Plus Jakarta Sans';padding:5px 10px;border-radius:7px">1c</span><span style="font:800 12.5px 'Plus Jakarta Sans';letter-spacing:.12em;color:#8A8170">DASHBOARD · MOBILE · 390</span></div>
+      <div data-screen-label="1c Dashboard Mobile" style="position:relative;width:390px;height:844px;background:#000;border-radius:52px;padding:11px;box-shadow:0 40px 90px -30px rgba(20,40,60,.5)">
+        <div style="position:absolute;left:50%;top:11px;transform:translateX(-50%);width:120px;height:30px;background:#000;border-radius:0 0 18px 18px;z-index:30"></div>
+        <div style="position:relative;width:100%;height:100%;border-radius:42px;overflow:hidden;background:#FBF8F1;display:flex;flex-direction:column">
+          <div style="background:linear-gradient(170deg,#1E232B,#252B34);padding:56px 18px 16px;color:#fff">
+            <div style="display:flex;align-items:center;gap:10px">
+              <img src="https://images.unsplash.com/photo-1553621042-f6e147245754?w=100&q=80&auto=format&fit=crop" alt="" style="width:40px;height:40px;border-radius:11px;object-fit:cover"/>
+              <div style="flex:1"><div style="font:700 15px 'Plus Jakarta Sans'">Ono Seafood</div><div style="font:500 10.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.55)">Kapahulu · Poke</div></div>
+              <span style="font:700 8.5px 'Plus Jakarta Sans';color:#B7AF9E;border:1px solid rgba(255,255,255,.25);padding:3px 7px;border-radius:6px">FREE</span>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:14px">
+              <div style="flex:1;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:9px 11px"><div style="font:400 19px 'Marcellus';color:#fff">1,284</div><div style="font:500 9px 'Plus Jakarta Sans';color:rgba(255,255,255,.5)">Views · ▲18%</div></div>
+              <div style="flex:1;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:9px 11px"><div style="font:400 19px 'Marcellus';color:#fff">96</div><div style="font:500 9px 'Plus Jakarta Sans';color:rgba(255,255,255,.5)">Itinerary adds</div></div>
+              <div style="flex:1;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:9px 11px"><div style="font:400 19px 'Marcellus';color:#fff">214</div><div style="font:500 9px 'Plus Jakarta Sans';color:rgba(255,255,255,.5)">Redemptions</div></div>
+            </div>
+          </div>
+          <div style="flex:1;overflow-y:auto;padding:14px 16px 90px">
+            <div style="background:#fff;border:1px solid rgba(30,35,43,.09);border-radius:14px;padding:12px 14px;margin-bottom:11px">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span style="font:700 12.5px 'Plus Jakarta Sans'">Profile strength</span><span style="font:400 14px 'Marcellus';color:#0B6E86">72%</span></div>
+              <div style="height:6px;border-radius:6px;background:#EEE7D9;overflow:hidden;margin-bottom:9px"><div style="width:72%;height:100%;background:#0E8FA8"></div></div>
+              <div style="font:500 11px 'Plus Jakarta Sans';color:#8A8170">Next: add 2 photos · confirm holiday hours</div>
+            </div>
+            <div style="background:#fff;border:1px solid rgba(30,35,43,.09);border-radius:14px;padding:12px 14px;margin-bottom:11px">
+              <div style="display:flex;align-items:center;gap:9px"><span style="width:7px;height:7px;border-radius:50%;background:#C4692A;flex-shrink:0"></span><div style="flex:1"><div style="font:600 12px 'Plus Jakarta Sans'">Reply to Marisa's 5★ review</div><div style="font:500 10px 'Plus Jakarta Sans';color:#8A8170">2 days ago</div></div><button style="background:#1E232B;border:none;border-radius:8px;padding:6px 11px;color:#fff;font:700 10.5px 'Plus Jakarta Sans';cursor:pointer">Reply</button></div>
+            </div>
+            <div style="position:relative;background:#fff;border:1px solid rgba(30,35,43,.09);border-radius:14px;padding:12px 14px;margin-bottom:11px;overflow:hidden">
+              <div style="filter:blur(3px);opacity:.5"><div style="font:700 12.5px 'Plus Jakarta Sans';margin-bottom:8px">Who's viewing you</div><div style="font:500 11px 'Plus Jakarta Sans';color:#5B646F">🇯🇵 32% · 🇺🇸 28% · 🌺 22% · 🇰🇷 11%</div></div>
+              <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(251,248,241,.5)"><span>🔒</span><span style="font:700 11.5px 'Plus Jakarta Sans'">Premium insight</span><button style="background:#D9B673;border:none;border-radius:8px;padding:5px 10px;font:800 10px 'Plus Jakarta Sans';color:#1E232B;cursor:pointer">Try free</button></div>
+            </div>
+            <div style="background:linear-gradient(110deg,#FBF0D6,#FDE3B4);border:1px solid #EFD9A0;border-radius:14px;padding:13px 14px">
+              <div style="font:400 15px 'Marcellus';color:#7A5A0F">Go Premium — 30 days free</div>
+              <div style="font:500 10.5px/1.5 'Plus Jakarta Sans';color:#7A5A0F;margin:3px 0 9px">20 photos · 4 languages · featured placement · advanced analytics</div>
+              <button style="width:100%;background:#1E232B;border:none;border-radius:9px;padding:9px;color:#fff;font:800 11.5px 'Plus Jakarta Sans';cursor:pointer">Start free trial</button>
+            </div>
+          </div>
+          <div style="position:absolute;left:0;right:0;bottom:0;background:#fff;border-top:1px solid rgba(30,35,43,.08);display:flex;padding:9px 6px 24px;z-index:20">
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><span style="font-size:18px">📊</span><span style="font:700 9px 'Plus Jakarta Sans';color:#0E8FA8">Home</span></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><span style="font-size:18px;opacity:.45">🏪</span><span style="font:700 9px 'Plus Jakarta Sans';color:#8A8170">Profile</span></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><span style="font-size:18px;opacity:.45">🎟️</span><span style="font:700 9px 'Plus Jakarta Sans';color:#8A8170">Deals</span></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><span style="font-size:18px;opacity:.45">📈</span><span style="font:700 9px 'Plus Jakarta Sans';color:#8A8170">Insights</span></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><span style="font-size:18px;opacity:.45">⚙️</span><span style="font:700 9px 'Plus Jakarta Sans';color:#8A8170">More</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SUPPORTING SCREENS · DIRECTION 1a ============ -->
+  <div style="display:flex;align-items:center;gap:12px;margin-top:8px">
+    <span style="height:1px;flex:1;background:rgba(30,35,43,.16)"></span>
+    <span style="font:800 12.5px 'Plus Jakarta Sans';letter-spacing:.13em;color:#8A8170">SUPPORTING SCREENS · IN DIRECTION <a href="#1a" style="color:#0B6E86">1a</a></span>
+    <span style="height:1px;flex:1;background:rgba(30,35,43,.16)"></span>
+  </div>
+
+  <div style="display:flex;gap:48px;align-items:flex-start;flex-wrap:wrap">
+
+    <!-- ================= 1d · PROFILE EDITOR ================= -->
+    <div id="1d" style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:#1E232B;color:#D9B673;font:800 12px 'Plus Jakarta Sans';padding:5px 10px;border-radius:7px">1d</span><span style="font:800 12.5px 'Plus Jakarta Sans';letter-spacing:.12em;color:#8A8170">PROFILE &amp; HOURS EDITOR</span></div>
+      <div data-screen-label="1d Profile Editor" style="width:1240px;background:#FBF8F1;border-radius:20px;overflow:hidden;box-shadow:0 40px 90px -30px rgba(20,40,60,.45);display:flex">
+        <div style="width:216px;flex-shrink:0;background:linear-gradient(170deg,#1E232B,#252B34);color:#fff;padding:18px 14px">
+          <div style="display:flex;align-items:center;gap:9px;padding:0 6px 16px"><img src="uploads/808_logo_t.png" alt="" style="height:34px"/><span style="font:600 10px 'Plus Jakarta Sans';letter-spacing:.14em;color:#D9B673">FOR BUSINESS</span></div>
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <div style="padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65)">📊 Dashboard</div>
+            <div style="background:rgba(255,255,255,.09);border-left:3px solid #D9B673;border-radius:9px;padding:9px 11px;font:700 12.5px 'Plus Jakarta Sans';color:#fff">🏪 Profile &amp; Hours</div>
+            <div style="padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65)">📷 Photos</div>
+            <div style="padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65)">🎟️ Deals</div>
+            <div style="padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65)">📈 Analytics</div>
+            <div style="padding:9px 11px;border-left:3px solid transparent;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.4)">🌐 Languages 🔒</div>
+          </div>
+        </div>
+        <div style="flex:1;min-width:0;padding:22px 26px 28px">
+          <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px">
+            <div style="flex:1"><div style="font:400 24px 'Marcellus'">Profile &amp; Hours</div><div style="font:500 12px 'Plus Jakarta Sans';color:#8A8170;margin-top:2px">Changes go live after a quick check by the 808 team — usually within a day.</div></div>
+            <button style="background:#fff;border:1px solid rgba(30,35,43,.14);border-radius:11px;padding:9px 14px;cursor:pointer;font:600 12.5px 'Plus Jakarta Sans'">Preview listing</button>
+            <button style="background:#1E232B;border:none;border-radius:11px;padding:9px 18px;cursor:pointer;color:#fff;font:700 12.5px 'Plus Jakarta Sans'">Save changes</button>
+          </div>
+          <div style="display:flex;gap:14px;align-items:flex-start">
+            <!-- left forms -->
+            <div style="flex:1.4;display:flex;flex-direction:column;gap:14px;min-width:0">
+              <div style="background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:15px;padding:16px 18px">
+                <div style="font:700 13px 'Plus Jakarta Sans';margin-bottom:12px">Basic info</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px">
+                  <div><div style="font:600 10px 'Plus Jakarta Sans';letter-spacing:.07em;color:#A79E8C;margin-bottom:5px">BUSINESS NAME</div><div style="background:#FBF8F1;border:1px solid rgba(30,35,43,.12);border-radius:10px;padding:9px 12px;font:600 13px 'Plus Jakarta Sans'">Ono Seafood</div></div>
+                  <div><div style="font:600 10px 'Plus Jakarta Sans';letter-spacing:.07em;color:#A79E8C;margin-bottom:5px">PHONE</div><div style="background:#FBF8F1;border:1px solid rgba(30,35,43,.12);border-radius:10px;padding:9px 12px;font:600 13px 'Plus Jakarta Sans'">(808) 732-4806</div></div>
+                  <div style="grid-column:span 2"><div style="font:600 10px 'Plus Jakarta Sans';letter-spacing:.07em;color:#A79E8C;margin-bottom:5px">ADDRESS</div><div style="background:#FBF8F1;border:1px solid rgba(30,35,43,.12);border-radius:10px;padding:9px 12px;font:600 13px 'Plus Jakarta Sans'">747 Kapahulu Ave, Honolulu, HI 96816</div></div>
+                </div>
+                <div style="margin-top:12px"><div style="font:600 10px 'Plus Jakarta Sans';letter-spacing:.07em;color:#A79E8C;margin-bottom:7px">CATEGORY · pick up to 3</div>
+                  <div style="display:flex;gap:7px;flex-wrap:wrap">
+                    <span style="background:#1E232B;color:#fff;border-radius:18px;padding:6px 13px;font:600 11.5px 'Plus Jakarta Sans'">Poke ✕</span>
+                    <span style="background:#1E232B;color:#fff;border-radius:18px;padding:6px 13px;font:600 11.5px 'Plus Jakarta Sans'">Hawaiian ✕</span>
+                    <span style="background:#fff;border:1px solid rgba(30,35,43,.16);border-radius:18px;padding:6px 13px;font:500 11.5px 'Plus Jakarta Sans';color:#5B646F">＋ Seafood</span>
+                    <span style="background:#fff;border:1px solid rgba(30,35,43,.16);border-radius:18px;padding:6px 13px;font:500 11.5px 'Plus Jakarta Sans';color:#5B646F">＋ Takeout</span>
+                  </div>
+                </div>
+                <div style="margin-top:12px"><div style="font:600 10px 'Plus Jakarta Sans';letter-spacing:.07em;color:#A79E8C;margin-bottom:5px">ABOUT · shown on your public listing</div>
+                  <div style="background:#FBF8F1;border:1px solid rgba(30,35,43,.12);border-radius:10px;padding:10px 12px;font:500 12.5px/1.6 'Plus Jakarta Sans';color:#3B4149">A Kapahulu institution since 1996. Fish cut fresh each morning — spicy ahi and shoyu are what regulars line up for. Cash only, takeout only.</div>
+                </div>
+              </div>
+              <div style="background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:15px;padding:16px 18px">
+                <div style="display:flex;align-items:center;gap:9px;margin-bottom:12px"><span style="font:700 13px 'Plus Jakarta Sans'">Open days &amp; hours</span><span style="margin-left:auto;font:600 10.5px 'Plus Jakarta Sans';color:#0B6E86;background:#EEF5F6;padding:3px 9px;border-radius:20px">Verified in person · 4 days ago</span></div>
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <div style="display:flex;align-items:center;gap:12px;padding:7px 0;border-bottom:1px solid rgba(30,35,43,.06)"><span style="width:34px;height:19px;border-radius:19px;background:#DCE3E0;position:relative;flex-shrink:0"><span style="position:absolute;left:2px;top:2px;width:15px;height:15px;border-radius:50%;background:#fff"></span></span><span style="font:600 12.5px 'Plus Jakarta Sans';width:44px;color:#B7AF9E">Sun</span><span style="font:500 12px 'Plus Jakarta Sans';color:#B7AF9E">Closed</span></div>
+                  <div style="display:flex;align-items:center;gap:12px;padding:7px 0;border-bottom:1px solid rgba(30,35,43,.06)"><span style="width:34px;height:19px;border-radius:19px;background:#DCE3E0;position:relative;flex-shrink:0"><span style="position:absolute;left:2px;top:2px;width:15px;height:15px;border-radius:50%;background:#fff"></span></span><span style="font:600 12.5px 'Plus Jakarta Sans';width:44px;color:#B7AF9E">Mon</span><span style="font:500 12px 'Plus Jakarta Sans';color:#B7AF9E">Closed</span></div>
+                  <div style="display:flex;align-items:center;gap:12px;padding:7px 0;border-bottom:1px solid rgba(30,35,43,.06)"><span style="width:34px;height:19px;border-radius:19px;background:#0E8FA8;position:relative;flex-shrink:0"><span style="position:absolute;right:2px;top:2px;width:15px;height:15px;border-radius:50%;background:#fff"></span></span><span style="font:600 12.5px 'Plus Jakarta Sans';width:44px">Tue–Fri</span><span style="background:#FBF8F1;border:1px solid rgba(30,35,43,.12);border-radius:8px;padding:5px 10px;font:600 12px 'Plus Jakarta Sans'">9:00 AM</span><span style="color:#A79E8C">–</span><span style="background:#FBF8F1;border:1px solid rgba(30,35,43,.12);border-radius:8px;padding:5px 10px;font:600 12px 'Plus Jakarta Sans'">6:00 PM</span></div>
+                  <div style="display:flex;align-items:center;gap:12px;padding:7px 0"><span style="width:34px;height:19px;border-radius:19px;background:#0E8FA8;position:relative;flex-shrink:0"><span style="position:absolute;right:2px;top:2px;width:15px;height:15px;border-radius:50%;background:#fff"></span></span><span style="font:600 12.5px 'Plus Jakarta Sans';width:44px">Sat</span><span style="background:#FBF8F1;border:1px solid rgba(30,35,43,.12);border-radius:8px;padding:5px 10px;font:600 12px 'Plus Jakarta Sans'">9:00 AM</span><span style="color:#A79E8C">–</span><span style="background:#FBF8F1;border:1px solid rgba(30,35,43,.12);border-radius:8px;padding:5px 10px;font:600 12px 'Plus Jakarta Sans'">6:00 PM</span></div>
+                </div>
+                <div style="display:flex;align-items:center;gap:9px;margin-top:11px;background:#FBEFE6;border:1px solid rgba(196,105,42,.25);border-radius:11px;padding:9px 12px">
+                  <span style="font-size:14px">⚠️</span><span style="flex:1;font:500 11.5px 'Plus Jakarta Sans';color:#B0592A">"Often sells out early" note is ON — shows on your listing so visitors aren't surprised.</span>
+                  <span style="width:34px;height:19px;border-radius:19px;background:#C4692A;position:relative;flex-shrink:0"><span style="position:absolute;right:2px;top:2px;width:15px;height:15px;border-radius:50%;background:#fff"></span></span>
+                </div>
+              </div>
+            </div>
+            <!-- right column -->
+            <div style="flex:1;display:flex;flex-direction:column;gap:14px;min-width:0">
+              <div style="background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:15px;padding:16px 18px">
+                <div style="font:700 13px 'Plus Jakarta Sans';margin-bottom:11px">Logo</div>
+                <div style="display:flex;align-items:center;gap:14px">
+                  <div style="width:64px;height:64px;border-radius:50%;background:#F3EFE6;border:1px solid rgba(30,35,43,.1);display:flex;align-items:center;justify-content:center;font:400 24px 'Marcellus';color:#0B6E86;flex-shrink:0">O</div>
+                  <div style="flex:1"><div style="font:500 11.5px/1.5 'Plus Jakarta Sans';color:#8A8170">Square PNG or JPG, at least 400×400.</div><button style="margin-top:7px;background:#fff;border:1px solid rgba(30,35,43,.16);border-radius:9px;padding:7px 13px;cursor:pointer;font:700 11.5px 'Plus Jakarta Sans'">Replace logo</button></div>
+                </div>
+              </div>
+              <div style="background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:15px;padding:16px 18px">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:11px"><span style="font:700 13px 'Plus Jakarta Sans'">Photos</span><span style="font:600 11px 'Plus Jakarta Sans';color:#8A8170">8 of 10 free slots</span></div>
+                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:7px">
+                  <img src="https://images.unsplash.com/photo-1553621042-f6e147245754?w=200&q=80&auto=format&fit=crop" alt="" style="width:100%;aspect-ratio:1;border-radius:9px;object-fit:cover"/>
+                  <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&q=80&auto=format&fit=crop" alt="" style="width:100%;aspect-ratio:1;border-radius:9px;object-fit:cover"/>
+                  <img src="https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=200&q=80&auto=format&fit=crop" alt="" style="width:100%;aspect-ratio:1;border-radius:9px;object-fit:cover"/>
+                  <img src="https://images.unsplash.com/photo-1607330289024-1535c6b4e1c1?w=200&q=80&auto=format&fit=crop" alt="" style="width:100%;aspect-ratio:1;border-radius:9px;object-fit:cover"/>
+                  <img src="https://images.unsplash.com/photo-1580476262798-bddd9f4b7369?w=200&q=80&auto=format&fit=crop" alt="" style="width:100%;aspect-ratio:1;border-radius:9px;object-fit:cover"/>
+                  <img src="https://images.unsplash.com/photo-1553621042-f6e147245754?w=201&q=80&auto=format&fit=crop" alt="" style="width:100%;aspect-ratio:1;border-radius:9px;object-fit:cover"/>
+                  <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=201&q=80&auto=format&fit=crop" alt="" style="width:100%;aspect-ratio:1;border-radius:9px;object-fit:cover"/>
+                  <img src="https://images.unsplash.com/photo-1580476262798-bddd9f4b7369?w=201&q=80&auto=format&fit=crop" alt="" style="width:100%;aspect-ratio:1;border-radius:9px;object-fit:cover"/>
+                  <div style="aspect-ratio:1;border:2px dashed rgba(14,143,168,.45);border-radius:9px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer"><span style="font:800 16px 'Plus Jakarta Sans';color:#0E8FA8">＋</span><span style="font:600 8.5px 'Plus Jakarta Sans';color:#0E8FA8">Add</span></div>
+                  <div style="aspect-ratio:1;border:2px dashed rgba(30,35,43,.14);border-radius:9px;display:flex;align-items:center;justify-content:center;font:600 9px 'Plus Jakarta Sans';color:#B7AF9E">1 left</div>
+                  <div style="grid-column:span 2;border:1px solid #EFD9A0;background:#FBF0D6;border-radius:9px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:6px;cursor:pointer"><span style="font:700 10px 'Plus Jakarta Sans';color:#8A6A12">🔒 +10 slots &amp; video</span><span style="font:600 9px 'Plus Jakarta Sans';color:#A67C2E">with Premium</span></div>
+                </div>
+              </div>
+              <div style="background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:15px;padding:16px 18px">
+                <div style="font:700 13px 'Plus Jakarta Sans';margin-bottom:10px">How visitors see you</div>
+                <div style="background:#FBF8F1;border:1px solid rgba(30,35,43,.09);border-radius:13px;overflow:hidden;display:flex">
+                  <img src="https://images.unsplash.com/photo-1553621042-f6e147245754?w=200&q=80&auto=format&fit=crop" alt="" style="width:74px;object-fit:cover"/>
+                  <div style="padding:9px 11px;min-width:0">
+                    <div style="font:700 12.5px 'Plus Jakarta Sans'">Ono Seafood</div>
+                    <div style="font:600 10px 'Plus Jakarta Sans';color:#8A8170;margin-top:1px">⭐ 4.9 · Poke · $</div>
+                    <div style="display:flex;gap:4px;margin-top:5px;flex-wrap:wrap"><span style="font:700 8px 'Plus Jakarta Sans';color:#4E9A1C;background:#EFF7E4;padding:2px 6px;border-radius:12px">Verified Local</span><span style="font:700 8px 'Plus Jakarta Sans';color:#B0592A;background:#FBEFE6;padding:2px 6px;border-radius:12px">Locally Owned</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= 1e · ANALYTICS ================= -->
+    <div id="1e" style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:#1E232B;color:#D9B673;font:800 12px 'Plus Jakarta Sans';padding:5px 10px;border-radius:7px">1e</span><span style="font:800 12.5px 'Plus Jakarta Sans';letter-spacing:.12em;color:#8A8170">ANALYTICS · BASIC FREE + ADVANCED LOCKED (interactive preview)</span></div>
+      <div data-screen-label="1e Analytics" style="width:1240px;background:#FBF8F1;border-radius:20px;overflow:hidden;box-shadow:0 40px 90px -30px rgba(20,40,60,.45);display:flex">
+        <div style="width:216px;flex-shrink:0;background:linear-gradient(170deg,#1E232B,#252B34);color:#fff;padding:18px 14px">
+          <div style="display:flex;align-items:center;gap:9px;padding:0 6px 16px"><img src="uploads/808_logo_t.png" alt="" style="height:34px"/><span style="font:600 10px 'Plus Jakarta Sans';letter-spacing:.14em;color:#D9B673">FOR BUSINESS</span></div>
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <div style="padding:9px 11px;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65)">📊 Dashboard</div>
+            <div style="padding:9px 11px;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65)">🏪 Profile &amp; Hours</div>
+            <div style="padding:9px 11px;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65)">🎟️ Deals</div>
+            <div style="background:rgba(255,255,255,.09);border-left:3px solid #D9B673;border-radius:9px;padding:9px 11px;font:700 12.5px 'Plus Jakarta Sans';color:#fff">📈 Analytics</div>
+            <div style="padding:9px 11px;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.4)">🌐 Languages 🔒</div>
+          </div>
+        </div>
+        <div style="flex:1;min-width:0;padding:22px 26px 28px">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+            <div style="flex:1"><div style="font:400 24px 'Marcellus'">Analytics</div></div>
+            <div style="display:flex;gap:5px;background:#fff;border:1px solid rgba(30,35,43,.12);border-radius:11px;padding:4px">
+              <span style="background:#1E232B;color:#fff;border-radius:8px;padding:6px 13px;font:700 11.5px 'Plus Jakarta Sans'">7 days</span>
+              <span style="padding:6px 13px;font:500 11.5px 'Plus Jakarta Sans';color:#5B646F">30 days</span>
+              <span style="padding:6px 13px;font:500 11.5px 'Plus Jakarta Sans';color:#5B646F">90 days</span>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:9px;margin-bottom:11px"><span style="font:600 10.5px 'Plus Jakarta Sans';letter-spacing:.12em;color:#A79E8C">BASIC · INCLUDED FREE</span><span style="height:1px;flex:1;background:rgba(30,35,43,.1)"></span></div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px">
+            <div style="background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:14px;padding:13px 15px"><div style="font:500 10px 'Plus Jakarta Sans';letter-spacing:.08em;color:#A79E8C">PROFILE VIEWS</div><div style="font:400 24px 'Marcellus';margin-top:4px">1,284</div><div style="font:700 10.5px 'Plus Jakarta Sans';color:#4E9A1C;margin-top:2px">▲ 18% vs last week</div></div>
+            <div style="background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:14px;padding:13px 15px"><div style="font:500 10px 'Plus Jakarta Sans';letter-spacing:.08em;color:#A79E8C">SEARCH APPEARANCES</div><div style="font:400 24px 'Marcellus';margin-top:4px">3,412</div><div style="font:700 10.5px 'Plus Jakarta Sans';color:#4E9A1C;margin-top:2px">▲ 6%</div></div>
+            <div style="background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:14px;padding:13px 15px"><div style="font:500 10px 'Plus Jakarta Sans';letter-spacing:.08em;color:#A79E8C">ITINERARY ADDS</div><div style="font:400 24px 'Marcellus';margin-top:4px">96</div><div style="font:700 10.5px 'Plus Jakarta Sans';color:#4E9A1C;margin-top:2px">▲ 22%</div></div>
+            <div style="background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:14px;padding:13px 15px"><div style="font:500 10px 'Plus Jakarta Sans';letter-spacing:.08em;color:#A79E8C">DIRECTIONS + CALLS</div><div style="font:400 24px 'Marcellus';margin-top:4px">407</div><div style="font:600 10.5px 'Plus Jakarta Sans';color:#8A8170;margin-top:2px">348 directions · 59 calls</div></div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:11px">
+            <span style="font:600 10.5px 'Plus Jakarta Sans';letter-spacing:.12em;color:#A67C2E">ADVANCED · PREMIUM</span>
+            <span style="font-size:12px">🔒</span>
+            <span style="{{ sampleChipStyle }}">SAMPLE DATA — PREMIUM PREVIEW</span>
+            <span style="height:1px;flex:1;background:rgba(30,35,43,.1)"></span>
+            <button onClick="{{ toggleAdvPreview }}" style="background:#fff;border:1.5px solid #A67C2E;border-radius:10px;padding:7px 14px;cursor:pointer;font:700 11.5px 'Plus Jakarta Sans';color:#A67C2E">{{ previewLabel }}</button>
+          </div>
+          <div style="position:relative">
+            <div style="{{ advStyle }}">
+              <div style="display:flex;gap:12px;margin-bottom:12px">
+                <div style="flex:1.2;background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:15px;padding:15px 17px">
+                  <div style="font:700 13px 'Plus Jakarta Sans';margin-bottom:11px">Visitor origin</div>
+                  <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px">
+                    <div style="flex:1;text-align:center;background:#FBF8F1;border-radius:11px;padding:10px"><div style="font:400 22px 'Marcellus';color:#0B6E86">68%</div><div style="font:600 10px 'Plus Jakarta Sans';color:#8A8170">Visitors</div></div>
+                    <div style="flex:1;text-align:center;background:#FBF8F1;border-radius:11px;padding:10px"><div style="font:400 22px 'Marcellus';color:#C4692A">32%</div><div style="font:600 10px 'Plus Jakarta Sans';color:#8A8170">Locals</div></div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:7px">
+                    <div style="display:flex;align-items:center;gap:9px"><span style="font:500 11px 'Plus Jakarta Sans';width:76px">🇯🇵 Japan</span><div style="flex:1;height:8px;background:#EEE7D9;border-radius:8px;overflow:hidden"><div style="width:32%;height:100%;background:#C4692A"></div></div><span style="font:600 11px 'Plus Jakarta Sans'">32%</span></div>
+                    <div style="display:flex;align-items:center;gap:9px"><span style="font:500 11px 'Plus Jakarta Sans';width:76px">🇺🇸 Mainland</span><div style="flex:1;height:8px;background:#EEE7D9;border-radius:8px;overflow:hidden"><div style="width:28%;height:100%;background:#C4692A"></div></div><span style="font:600 11px 'Plus Jakarta Sans'">28%</span></div>
+                    <div style="display:flex;align-items:center;gap:9px"><span style="font:500 11px 'Plus Jakarta Sans';width:76px">🇰🇷 Korea</span><div style="flex:1;height:8px;background:#EEE7D9;border-radius:8px;overflow:hidden"><div style="width:11%;height:100%;background:#C4692A"></div></div><span style="font:600 11px 'Plus Jakarta Sans'">11%</span></div>
+                    <div style="display:flex;align-items:center;gap:9px"><span style="font:500 11px 'Plus Jakarta Sans';width:76px">🇨🇦 Canada</span><div style="flex:1;height:8px;background:#EEE7D9;border-radius:8px;overflow:hidden"><div style="width:8%;height:100%;background:#C4692A"></div></div><span style="font:600 11px 'Plus Jakarta Sans'">8%</span></div>
+                  </div>
+                  <div style="font:500 10.5px/1.5 'Plus Jakarta Sans';color:#A67C2E;background:#FBF6EC;border-radius:9px;padding:8px 10px;margin-top:11px">💡 32% of viewers browse in Japanese — a Japanese listing would speak to them directly.</div>
+                </div>
+                <div style="flex:1;background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:15px;padding:15px 17px">
+                  <div style="font:700 13px 'Plus Jakarta Sans';margin-bottom:11px">Top search terms</div>
+                  <div style="display:flex;flex-direction:column;gap:9px">
+                    <div style="display:flex;align-items:center;gap:9px"><span style="flex:1;font:600 12px 'Plus Jakarta Sans'">"poke near me"</span><span style="font:400 15px 'Marcellus';color:#0B6E86">412</span></div>
+                    <div style="display:flex;align-items:center;gap:9px"><span style="flex:1;font:600 12px 'Plus Jakarta Sans'">"best poke oahu"</span><span style="font:400 15px 'Marcellus';color:#0B6E86">268</span></div>
+                    <div style="display:flex;align-items:center;gap:9px"><span style="flex:1;font:600 12px 'Plus Jakarta Sans'">"ono seafood"</span><span style="font:400 15px 'Marcellus';color:#0B6E86">190</span></div>
+                    <div style="display:flex;align-items:center;gap:9px"><span style="flex:1;font:600 12px 'Plus Jakarta Sans'">"cheap eats waikiki"</span><span style="font:400 15px 'Marcellus';color:#0B6E86">84</span></div>
+                  </div>
+                  <div style="font:700 13px 'Plus Jakarta Sans';margin:15px 0 9px">When people view you</div>
+                  <div style="display:flex;gap:3px;align-items:flex-end;height:44px">
+                    <div style="flex:1;height:20%;background:#DCE3E0;border-radius:3px"></div><div style="flex:1;height:36%;background:#DCE3E0;border-radius:3px"></div><div style="flex:1;height:62%;background:#0E8FA8;border-radius:3px"></div><div style="flex:1;height:95%;background:#0B6E86;border-radius:3px"></div><div style="flex:1;height:70%;background:#0E8FA8;border-radius:3px"></div><div style="flex:1;height:38%;background:#DCE3E0;border-radius:3px"></div><div style="flex:1;height:24%;background:#DCE3E0;border-radius:3px"></div><div style="flex:1;height:18%;background:#DCE3E0;border-radius:3px"></div>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;font:500 9px 'Plus Jakarta Sans';color:#A79E8C;margin-top:4px"><span>6a</span><span>9a</span><span>12p</span><span>3p</span><span>6p</span><span>9p</span></div>
+                  <div style="font:500 10.5px 'Plus Jakarta Sans';color:#8A8170;margin-top:8px">Peak: 10am–12pm — most views happen while people plan lunch.</div>
+                </div>
+              </div>
+              <div style="background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:15px;padding:15px 17px">
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px"><span style="font:700 13px 'Plus Jakarta Sans'">Review sentiment</span><span style="font:700 11px 'Plus Jakarta Sans';color:#4E9A1C;background:#EFF7E4;padding:3px 9px;border-radius:20px">92% positive</span></div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap">
+                  <span style="font:600 11px 'Plus Jakarta Sans';color:#4E7D2E;background:#EFF7E4;padding:5px 11px;border-radius:18px">"fresh fish" · 61 mentions</span>
+                  <span style="font:600 11px 'Plus Jakarta Sans';color:#4E7D2E;background:#EFF7E4;padding:5px 11px;border-radius:18px">"worth the line" · 38</span>
+                  <span style="font:600 11px 'Plus Jakarta Sans';color:#4E7D2E;background:#EFF7E4;padding:5px 11px;border-radius:18px">"generous portions" · 29</span>
+                  <span style="font:600 11px 'Plus Jakarta Sans';color:#B0592A;background:#FBEFE6;padding:5px 11px;border-radius:18px">"sold out" · 22</span>
+                  <span style="font:600 11px 'Plus Jakarta Sans';color:#B0592A;background:#FBEFE6;padding:5px 11px;border-radius:18px">"no parking" · 14</span>
+                </div>
+              </div>
+            </div>
+            <sc-if value="{{ advLocked }}" hint-placeholder-val="{{ true }}">
+              <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;background:rgba(251,248,241,.55);border-radius:15px">
+                <span style="font-size:26px">🔒</span>
+                <div style="font:400 19px 'Marcellus';color:#1E232B">Advanced analytics is a Premium feature</div>
+                <div style="font:500 12px 'Plus Jakarta Sans';color:#8A8170">Visitor origin · search terms · peak hours · review sentiment</div>
+                <button style="background:#D9B673;border:none;border-radius:11px;padding:10px 20px;cursor:pointer;font:800 12.5px 'Plus Jakarta Sans';color:#1E232B;margin-top:4px">Try Premium free for 30 days</button>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= 1f · PLAN COMPARISON ================= -->
+    <div id="1f" style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:#1E232B;color:#D9B673;font:800 12px 'Plus Jakarta Sans';padding:5px 10px;border-radius:7px">1f</span><span style="font:800 12.5px 'Plus Jakarta Sans';letter-spacing:.12em;color:#8A8170">FREE vs PREMIUM · UPGRADE PAGE (interactive billing toggle)</span></div>
+      <div data-screen-label="1f Plan Comparison" style="width:1080px;background:#FBF8F1;border-radius:20px;box-shadow:0 40px 90px -30px rgba(20,40,60,.45);padding:34px 44px 40px">
+        <div style="text-align:center;margin-bottom:8px"><img src="uploads/808_logo.png" alt="808eVentures" style="height:44px"/></div>
+        <div style="text-align:center;font:400 30px 'Marcellus';color:#1E232B">Grow with the island</div>
+        <div style="text-align:center;font:500 13px 'Plus Jakarta Sans';color:#8A8170;margin-top:4px">Every plan keeps your listing verified by our team, in person.</div>
+        <div style="display:flex;justify-content:center;margin:18px 0 22px">
+          <div style="display:flex;gap:4px;background:#fff;border:1px solid rgba(30,35,43,.12);border-radius:12px;padding:4px">
+            <sc-for list="{{ billTabs }}" as="b" hint-placeholder-count="2">
+              <button data-bill="{{ b.id }}" onClick="{{ setBilling }}" style="{{ b.style }}">{{ b.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display:flex;gap:18px;align-items:stretch;max-width:820px;margin:0 auto">
+          <div style="flex:1;background:#fff;border:1px solid rgba(30,35,43,.1);border-radius:18px;padding:22px 24px;display:flex;flex-direction:column">
+            <div style="font:400 20px 'Marcellus'">Free</div>
+            <div style="display:flex;align-items:baseline;gap:6px;margin:8px 0 4px"><span style="font:400 34px 'Marcellus'">$0</span><span style="font:500 12px 'Plus Jakarta Sans';color:#8A8170">forever</span></div>
+            <div style="font:500 11.5px 'Plus Jakarta Sans';color:#8A8170;margin-bottom:15px">Everything you need to be found.</div>
+            <div style="display:flex;flex-direction:column;gap:8px;font:500 12.5px 'Plus Jakarta Sans';color:#3B4149">
+              <div style="display:flex;gap:9px"><span style="color:#4E9A1C">✓</span>Verified business profile + logo</div>
+              <div style="display:flex;gap:9px"><span style="color:#4E9A1C">✓</span>Open days, hours &amp; category listing</div>
+              <div style="display:flex;gap:9px"><span style="color:#4E9A1C">✓</span>Up to 10 photos</div>
+              <div style="display:flex;gap:9px"><span style="color:#4E9A1C">✓</span>Basic analytics — views, searches, adds</div>
+              <div style="display:flex;gap:9px"><span style="color:#4E9A1C">✓</span>1 basic deal slot</div>
+              <div style="display:flex;gap:9px"><span style="color:#4E9A1C">✓</span>Reply to reviews</div>
+            </div>
+            <button style="margin-top:auto;background:#fff;border:1.5px solid rgba(30,35,43,.2);border-radius:12px;padding:12px;cursor:default;font:700 13px 'Plus Jakarta Sans';color:#8A8170;margin-top:18px">Your current plan</button>
+          </div>
+          <div style="flex:1.08;position:relative;background:linear-gradient(160deg,#1E232B,#2A3038);border:1px solid #D9B673;border-radius:18px;padding:22px 24px;color:#fff;display:flex;flex-direction:column;box-shadow:0 24px 50px -24px rgba(30,35,43,.7)">
+            <span style="position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:#D9B673;color:#1E232B;font:800 9.5px 'Plus Jakarta Sans';letter-spacing:.08em;padding:5px 13px;border-radius:14px;white-space:nowrap">MOST POPULAR</span>
+            <div style="font:400 20px 'Marcellus';color:#D9B673">Premium</div>
+            <div style="display:flex;align-items:baseline;gap:6px;margin:8px 0 4px"><span style="font:400 34px 'Marcellus'">{{ premPrice }}</span><span style="font:500 12px 'Plus Jakarta Sans';color:rgba(255,255,255,.6)">/month · {{ billNote }}</span></div>
+            <div style="font:500 11.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.6);margin-bottom:15px">Everything in Free, plus:</div>
+            <div style="display:flex;flex-direction:column;gap:8px;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.85)">
+              <div style="display:flex;gap:9px"><span style="color:#D9B673">✓</span>Up to 20 photos + optional video</div>
+              <div style="display:flex;gap:9px"><span style="color:#D9B673">✓</span>Multi-lingual listing — 🇯🇵 🇰🇷 🇪🇸 🇫🇷, AI-translated</div>
+              <div style="display:flex;gap:9px"><span style="color:#D9B673">✓</span>Advanced analytics — visitor origin, search terms, peak hours, sentiment</div>
+              <div style="display:flex;gap:9px"><span style="color:#D9B673">✓</span>Premium placement — Featured row &amp; Right Now feed</div>
+              <div style="display:flex;gap:9px"><span style="color:#D9B673">✓</span>3 deal slots + scheduling</div>
+            </div>
+            <button style="margin-top:auto;background:#D9B673;border:none;border-radius:12px;padding:12px;cursor:pointer;font:800 13px 'Plus Jakarta Sans';color:#1E232B;margin-top:18px">{{ trialCta }}</button>
+            <div style="text-align:center;font:500 10.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.45);margin-top:8px">No card needed to start · cancel anytime</div>
+          </div>
+        </div>
+        <div style="max-width:820px;margin:26px auto 0;background:#fff;border:1px solid rgba(30,35,43,.09);border-radius:16px;overflow:hidden">
+          <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr;padding:11px 20px;background:#F3EFE6;font:700 10.5px 'Plus Jakarta Sans';letter-spacing:.07em;color:#8A8170"><span>FEATURE</span><span style="text-align:center">FREE</span><span style="text-align:center;color:#A67C2E">PREMIUM</span></div>
+          <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr;padding:10px 20px;border-top:1px solid rgba(30,35,43,.06);font:500 12.5px 'Plus Jakarta Sans'"><span>Photos</span><span style="text-align:center;color:#8A8170">10</span><span style="text-align:center;font-weight:700">20 + video</span></div>
+          <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr;padding:10px 20px;border-top:1px solid rgba(30,35,43,.06);font:500 12.5px 'Plus Jakarta Sans'"><span>Languages</span><span style="text-align:center;color:#B7AF9E">English</span><span style="text-align:center;font-weight:700">+ JA · KO · ES · FR</span></div>
+          <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr;padding:10px 20px;border-top:1px solid rgba(30,35,43,.06);font:500 12.5px 'Plus Jakarta Sans'"><span>Analytics</span><span style="text-align:center;color:#8A8170">Basic</span><span style="text-align:center;font-weight:700">Advanced</span></div>
+          <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr;padding:10px 20px;border-top:1px solid rgba(30,35,43,.06);font:500 12.5px 'Plus Jakarta Sans'"><span>Deal slots</span><span style="text-align:center;color:#8A8170">1 basic</span><span style="text-align:center;font-weight:700">3 + scheduling</span></div>
+          <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr;padding:10px 20px;border-top:1px solid rgba(30,35,43,.06);font:500 12.5px 'Plus Jakarta Sans'"><span>Placement</span><span style="text-align:center;color:#8A8170">Standard</span><span style="text-align:center;font-weight:700">Featured + Right Now</span></div>
+          <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr;padding:10px 20px;border-top:1px solid rgba(30,35,43,.06);font:500 12.5px 'Plus Jakarta Sans'"><span>In-person verification by 808 team</span><span style="text-align:center;color:#4E9A1C">✓</span><span style="text-align:center;color:#4E9A1C">✓</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= 1g · MULTILINGUAL EDITOR ================= -->
+    <div id="1g" style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:#1E232B;color:#D9B673;font:800 12px 'Plus Jakarta Sans';padding:5px 10px;border-radius:7px">1g</span><span style="font:800 12.5px 'Plus Jakarta Sans';letter-spacing:.12em;color:#8A8170">MULTI-LINGUAL LISTING · PREMIUM ACTIVE (interactive language tabs)</span></div>
+      <div data-screen-label="1g Languages" style="width:1240px;background:#FBF8F1;border-radius:20px;overflow:hidden;box-shadow:0 40px 90px -30px rgba(20,40,60,.45);display:flex">
+        <div style="width:216px;flex-shrink:0;background:linear-gradient(170deg,#1E232B,#252B34);color:#fff;padding:18px 14px">
+          <div style="display:flex;align-items:center;gap:9px;padding:0 6px 12px"><img src="uploads/808_logo_t.png" alt="" style="height:34px"/><span style="font:600 10px 'Plus Jakarta Sans';letter-spacing:.14em;color:#D9B673">FOR BUSINESS</span></div>
+          <div style="display:flex;align-items:center;gap:6px;margin:0 6px 14px"><span style="font:800 8.5px 'Plus Jakarta Sans';letter-spacing:.06em;color:#1E232B;background:#D9B673;padding:3px 8px;border-radius:6px">PREMIUM</span><span style="font:600 9px 'Plus Jakarta Sans';color:rgba(255,255,255,.5)">trial · 26 days left</span></div>
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <div style="padding:9px 11px;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65)">📊 Dashboard</div>
+            <div style="padding:9px 11px;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65)">🏪 Profile &amp; Hours</div>
+            <div style="padding:9px 11px;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65)">📈 Analytics</div>
+            <div style="background:rgba(255,255,255,.09);border-left:3px solid #D9B673;border-radius:9px;padding:9px 11px;font:700 12.5px 'Plus Jakarta Sans';color:#fff">🌐 Languages</div>
+          </div>
+        </div>
+        <div style="flex:1;min-width:0;padding:22px 26px 28px">
+          <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px">
+            <div style="flex:1"><div style="font:400 24px 'Marcellus'">Languages</div><div style="font:500 12px 'Plus Jakarta Sans';color:#8A8170;margin-top:2px">AI translates your listing — you review and approve before it goes live.</div></div>
+            <button style="background:#1E232B;border:none;border-radius:11px;padding:9px 16px;cursor:pointer;color:#fff;font:700 12.5px 'Plus Jakarta Sans'">Approve all ✓</button>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:13px;padding:11px 15px;margin-bottom:14px">
+            <span style="font-size:16px">🌐</span>
+            <span style="font:500 12px 'Plus Jakarta Sans';color:#3B4149"><b>42% of your views</b> last month came from non-English browsers — 🇯🇵 214 · 🇰🇷 89 · 🇪🇸 41 · 🇫🇷 18</span>
+          </div>
+          <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center">
+            <span style="font:600 11px 'Plus Jakarta Sans';color:#8A8170;background:#F3EFE6;border-radius:18px;padding:8px 14px">🇺🇸 English · source</span>
+            <span style="color:#C9C2B2">→</span>
+            <sc-for list="{{ mlTabs }}" as="t" hint-placeholder-count="4">
+              <button data-lang="{{ t.id }}" onClick="{{ setMlLang }}" style="{{ t.style }}">{{ t.label }}<span style="width:7px;height:7px;border-radius:50%;background:{{ t.dot }}"></span></button>
+            </sc-for>
+          </div>
+          <div style="background:#fff;border:1px solid rgba(30,35,43,.08);border-radius:16px;overflow:hidden">
+            <div style="display:flex;align-items:center;gap:10px;padding:12px 18px;background:#FBF6EC;border-bottom:1px solid rgba(30,35,43,.07)">
+              <span style="font:700 12.5px 'Plus Jakarta Sans';color:#8A6A12">{{ mlStatus }}</span>
+              <span style="margin-left:auto;font:500 11px 'Plus Jakarta Sans';color:#A67C2E">{{ mlViews }}</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;padding:10px 18px;font:700 10px 'Plus Jakarta Sans';letter-spacing:.08em;color:#A79E8C;border-bottom:1px solid rgba(30,35,43,.06)"><span>ENGLISH · SOURCE</span><span>{{ mlColLabel }}</span></div>
+            <sc-for list="{{ mlFields }}" as="f" hint-placeholder-count="3">
+              <div style="padding:14px 18px;border-bottom:1px solid rgba(30,35,43,.06)">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span style="font:600 10.5px 'Plus Jakarta Sans';letter-spacing:.06em;color:#8A8170">{{ f.label }}</span><span style="{{ f.chipStyle }}">{{ f.chip }}</span></div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+                  <div style="background:#FBF8F1;border-radius:10px;padding:10px 12px;font:500 12px/1.6 'Plus Jakarta Sans';color:#5B646F">{{ f.src }}</div>
+                  <div style="background:#fff;border:1px solid rgba(30,35,43,.14);border-radius:10px;padding:10px 12px;font:500 12px/1.6 'Plus Jakarta Sans';color:#1E232B">{{ f.tr }}</div>
+                </div>
+              </div>
+            </sc-for>
+            <div style="display:flex;align-items:center;gap:12px;padding:13px 18px">
+              <span style="font:500 11.5px 'Plus Jakarta Sans';color:#8A8170">Your {{ mlName }} listing goes live right after you approve.</span>
+              <button style="margin-left:auto;background:#fff;border:1px solid rgba(30,35,43,.16);border-radius:10px;padding:8px 14px;cursor:pointer;font:700 12px 'Plus Jakarta Sans';color:#1E232B">Edit translations</button>
+              <button style="background:#0B6E86;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;color:#fff;font:700 12px 'Plus Jakarta Sans'">Approve &amp; publish {{ mlFlag }}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= 1h · DEALS MANAGER ================= -->
+    <div id="1h" style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:#1E232B;color:#D9B673;font:800 12px 'Plus Jakarta Sans';padding:5px 10px;border-radius:7px">1h</span><span style="font:800 12.5px 'Plus Jakarta Sans';letter-spacing:.12em;color:#8A8170">DEALS MANAGER · FREE = 1 SLOT, PREMIUM = 3 + SCHEDULING</span></div>
+      <div data-screen-label="1h Deals Manager" style="width:1240px;background:#FBF8F1;border-radius:20px;overflow:hidden;box-shadow:0 40px 90px -30px rgba(20,40,60,.45);display:flex">
+        <div style="width:216px;flex-shrink:0;background:linear-gradient(170deg,#1E232B,#252B34);color:#fff;padding:18px 14px">
+          <div style="display:flex;align-items:center;gap:9px;padding:0 6px 16px"><img src="uploads/808_logo_t.png" alt="" style="height:34px"/><span style="font:600 10px 'Plus Jakarta Sans';letter-spacing:.14em;color:#D9B673">FOR BUSINESS</span></div>
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <div style="padding:9px 11px;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65)">📊 Dashboard</div>
+            <div style="padding:9px 11px;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65)">🏪 Profile &amp; Hours</div>
+            <div style="background:rgba(255,255,255,.09);border-left:3px solid #D9B673;border-radius:9px;padding:9px 11px;font:700 12.5px 'Plus Jakarta Sans';color:#fff">🎟️ Deals</div>
+            <div style="padding:9px 11px;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.65)">📈 Analytics</div>
+            <div style="padding:9px 11px;font:500 12.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.4)">🌐 Languages 🔒</div>
+          </div>
+        </div>
+        <div style="flex:1;min-width:0;padding:22px 26px 28px">
+          <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
+            <div style="flex:1"><div style="font:400 24px 'Marcellus'">Deals</div><div style="font:500 12px 'Plus Jakarta Sans';color:#8A8170;margin-top:2px">Redeemable in the visitor app — you see every redemption here.</div></div>
+            <span style="font:600 11.5px 'Plus Jakarta Sans';color:#8A8170">1 of 1 free slots used</span>
+            <button style="background:#F3EFE6;border:none;border-radius:11px;padding:9px 16px;cursor:not-allowed;color:#B7AF9E;font:700 12.5px 'Plus Jakarta Sans'">＋ New deal</button>
+          </div>
+          <div style="border:1px dashed #C4692A;border-radius:16px;background:#fff;overflow:hidden;margin-bottom:14px">
+            <div style="display:flex;align-items:center;gap:11px;background:#C4692A;padding:12px 18px">
+              <span style="font-size:17px">🎟️</span>
+              <div style="flex:1"><div style="font:700 13.5px 'Plus Jakarta Sans';color:#fff">Free scoop of rice — with any poke bowl</div><div style="font:500 10.5px 'Plus Jakarta Sans';color:rgba(255,255,255,.85)">Slot 1 · Free plan</div></div>
+              <span style="font:700 10px 'Plus Jakarta Sans';color:#C4692A;background:#fff;padding:4px 11px;border-radius:14px">● ACTIVE · ends today</span>
+            </div>
+            <div style="display:flex;align-items:center;padding:14px 18px;gap:26px">
+              <div><div style="font:400 22px 'Marcellus'">1,204</div><div style="font:500 10.5px 'Plus Jakarta Sans';color:#A79E8C">redeemed</div></div>
+              <div><div style="font:400 22px 'Marcellus'">4,860</div><div style="font:500 10.5px 'Plus Jakarta Sans';color:#A79E8C">deal views</div></div>
+              <div><div style="font:400 22px 'Marcellus';color:#0B6E86">24.8%</div><div style="font:500 10.5px 'Plus Jakarta Sans';color:#A79E8C">redemption rate</div></div>
+              <div style="margin-left:auto;display:flex;gap:8px">
+                <button style="background:#fff;border:1px solid rgba(30,35,43,.16);border-radius:10px;padding:8px 15px;cursor:pointer;font:700 12px 'Plus Jakarta Sans'">Edit</button>
+                <button style="background:#fff;border:1px solid rgba(30,35,43,.16);border-radius:10px;padding:8px 15px;cursor:pointer;font:700 12px 'Plus Jakarta Sans'">Extend</button>
+                <button style="background:#fff;border:1px solid rgba(30,35,43,.16);border-radius:10px;padding:8px 15px;cursor:pointer;font:700 12px 'Plus Jakarta Sans';color:#B0592A">Pause</button>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;gap:12px;margin-bottom:14px">
+            <div style="flex:1;border:2px dashed rgba(30,35,43,.16);border-radius:15px;padding:18px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center">
+              <span style="font-size:18px">🔒</span>
+              <div style="font:700 13px 'Plus Jakarta Sans'">Deal slot 2 · Premium</div>
+              <div style="font:500 11px/1.5 'Plus Jakarta Sans';color:#8A8170">Schedule by day &amp; time — e.g. a weekday-only or happy-hour deal</div>
+            </div>
+            <div style="flex:1;border:2px dashed rgba(30,35,43,.16);border-radius:15px;padding:18px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center">
+              <span style="font-size:18px">🔒</span>
+              <div style="font:700 13px 'Plus Jakarta Sans'">Deal slot 3 · Premium</div>
+              <div style="font:500 11px/1.5 'Plus Jakarta Sans';color:#8A8170">Target visitors vs. locals, or itinerary planners on specific days</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;background:linear-gradient(110deg,#FBF0D6,#FDE3B4);border:1px solid #EFD9A0;border-radius:15px;padding:14px 18px">
+            <span style="font-size:20px">✨</span>
+            <div style="flex:1;font:500 12px/1.5 'Plus Jakarta Sans';color:#7A5A0F"><b>Premium deals can appear in the Right Now feed</b> and as itinerary suggestions — where visitors are already deciding what's next.</div>
+            <button style="background:#1E232B;border:none;border-radius:10px;padding:9px 16px;cursor:pointer;color:#fff;font:800 12px 'Plus Jakarta Sans';white-space:nowrap">Try free · 30 days</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= 1i · CLAIM ONBOARDING ================= -->
+    <div id="1i" style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:#1E232B;color:#D9B673;font:800 12px 'Plus Jakarta Sans';padding:5px 10px;border-radius:7px">1i</span><span style="font:800 12.5px 'Plus Jakarta Sans';letter-spacing:.12em;color:#8A8170">CLAIM YOUR LISTING · ONBOARDING (STEP 2 OF 4)</span></div>
+      <div data-screen-label="1i Claim Onboarding" style="width:880px;background:#FBF8F1;border-radius:20px;box-shadow:0 40px 90px -30px rgba(20,40,60,.45);padding:34px 54px 42px">
+        <div style="text-align:center;margin-bottom:6px"><img src="uploads/808_logo.png" alt="808eVentures" style="height:44px"/></div>
+        <div style="text-align:center;font:400 26px 'Marcellus'">Claim Ono Seafood</div>
+        <div style="text-align:center;font:500 12.5px 'Plus Jakarta Sans';color:#8A8170;margin-top:3px">Free to claim — takes about 3 minutes.</div>
+        <div style="display:flex;align-items:center;justify-content:center;gap:0;margin:22px 0 26px">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:5px;width:130px"><span style="width:30px;height:30px;border-radius:50%;background:#4E9A1C;color:#fff;font:700 13px 'Plus Jakarta Sans';display:flex;align-items:center;justify-content:center">✓</span><span style="font:600 10.5px 'Plus Jakarta Sans';color:#4E7D2E">Find your business</span></div>
+          <span style="width:70px;height:2px;background:#4E9A1C;margin-bottom:20px"></span>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:5px;width:130px"><span style="width:30px;height:30px;border-radius:50%;background:#1E232B;color:#D9B673;font:800 13px 'Marcellus';display:flex;align-items:center;justify-content:center">2</span><span style="font:700 10.5px 'Plus Jakarta Sans';color:#1E232B">Verify it's you</span></div>
+          <span style="width:70px;height:2px;background:rgba(30,35,43,.14);margin-bottom:20px"></span>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:5px;width:130px"><span style="width:30px;height:30px;border-radius:50%;background:#EEE7D9;color:#A79E8C;font:800 13px 'Marcellus';display:flex;align-items:center;justify-content:center">3</span><span style="font:600 10.5px 'Plus Jakarta Sans';color:#A79E8C">Basic info</span></div>
+          <span style="width:70px;height:2px;background:rgba(30,35,43,.14);margin-bottom:20px"></span>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:5px;width:130px"><span style="width:30px;height:30px;border-radius:50%;background:#EEE7D9;color:#A79E8C;font:800 13px 'Marcellus';display:flex;align-items:center;justify-content:center">4</span><span style="font:600 10.5px 'Plus Jakarta Sans';color:#A79E8C">Choose a plan</span></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:13px;background:#fff;border:1px solid rgba(30,35,43,.09);border-radius:14px;padding:13px 16px;margin-bottom:18px">
+          <img src="https://images.unsplash.com/photo-1553621042-f6e147245754?w=140&q=80&auto=format&fit=crop" alt="" style="width:52px;height:52px;border-radius:11px;object-fit:cover"/>
+          <div style="flex:1"><div style="font:700 14px 'Plus Jakarta Sans'">Ono Seafood</div><div style="font:500 11.5px 'Plus Jakarta Sans';color:#8A8170">747 Kapahulu Ave, Honolulu · Poke · ⭐ 4.9 (312 reviews)</div></div>
+          <span style="font:700 10.5px 'Plus Jakarta Sans';color:#4E9A1C;background:#EFF7E4;padding:4px 11px;border-radius:16px">✓ This is my business</span>
+        </div>
+        <div style="font:700 13.5px 'Plus Jakarta Sans';margin-bottom:10px">How would you like to verify?</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px">
+          <div style="display:flex;gap:12px;background:#fff;border:2px solid #0E8FA8;border-radius:14px;padding:14px 16px;cursor:pointer">
+            <span style="font-size:19px">📞</span>
+            <div style="flex:1"><div style="display:flex;align-items:center;gap:7px"><span style="font:700 13px 'Plus Jakarta Sans'">Phone call now</span><span style="font:700 9px 'Plus Jakarta Sans';color:#0B6E86;background:#EEF5F6;padding:2px 7px;border-radius:10px">FASTEST</span></div><div style="font:500 11px 'Plus Jakarta Sans';color:#8A8170;margin-top:2px">We call (808) 732-•••• with a code</div></div>
+            <span style="width:20px;height:20px;border-radius:50%;border:6px solid #0E8FA8;flex-shrink:0"></span>
+          </div>
+          <div style="display:flex;gap:12px;background:#fff;border:1px solid rgba(30,35,43,.12);border-radius:14px;padding:14px 16px;cursor:pointer">
+            <span style="font-size:19px">💬</span>
+            <div style="flex:1"><div style="font:700 13px 'Plus Jakarta Sans'">Text message</div><div style="font:500 11px 'Plus Jakarta Sans';color:#8A8170;margin-top:2px">Code sent to the business number</div></div>
+            <span style="width:20px;height:20px;border-radius:50%;border:1.5px solid rgba(30,35,43,.25);flex-shrink:0"></span>
+          </div>
+          <div style="display:flex;gap:12px;background:#fff;border:1px solid rgba(30,35,43,.12);border-radius:14px;padding:14px 16px;cursor:pointer">
+            <span style="font-size:19px">✉️</span>
+            <div style="flex:1"><div style="font:700 13px 'Plus Jakarta Sans'">Postcard</div><div style="font:500 11px 'Plus Jakarta Sans';color:#8A8170;margin-top:2px">Mailed to 747 Kapahulu Ave · 5–7 days</div></div>
+            <span style="width:20px;height:20px;border-radius:50%;border:1.5px solid rgba(30,35,43,.25);flex-shrink:0"></span>
+          </div>
+          <div style="display:flex;gap:12px;background:#fff;border:1px solid rgba(30,35,43,.12);border-radius:14px;padding:14px 16px;cursor:pointer">
+            <span style="font-size:19px">📄</span>
+            <div style="flex:1"><div style="font:700 13px 'Plus Jakarta Sans'">Business documents</div><div style="font:500 11px 'Plus Jakarta Sans';color:#8A8170;margin-top:2px">GET license or utility bill · reviewed in 1 day</div></div>
+            <span style="width:20px;height:20px;border-radius:50%;border:1.5px solid rgba(30,35,43,.25);flex-shrink:0"></span>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <span style="font:500 11px/1.5 'Plus Jakarta Sans';color:#A79E8C">🌺 Every claimed listing is also verified in person by the 808 team — that's what the "Verified Local" badge means.</span>
+          <button style="margin-left:auto;background:#1E232B;border:none;border-radius:12px;padding:12px 26px;cursor:pointer;color:#fff;font:800 13px 'Plus Jakarta Sans';white-space:nowrap">Call me now →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:2800,&quot;height&quot;:1500},&quot;premiumPrice&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:20,&quot;tsType&quot;:&quot;number&quot;,&quot;min&quot;:5,&quot;max&quot;:60,&quot;unit&quot;:&quot;$/mo&quot;,&quot;section&quot;:&quot;Pricing&quot;},&quot;trialDays&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:30,&quot;tsType&quot;:&quot;number&quot;,&quot;min&quot;:7,&quot;max&quot;:90,&quot;unit&quot;:&quot;days&quot;,&quot;section&quot;:&quot;Pricing&quot;}}">
+class Component extends DCLogic {
+  state = { mlLang: 'ja', advPreview: false, billing: 'monthly' };
+  setMlLang = (e) => this.setState({ mlLang: e.currentTarget.dataset.lang });
+  toggleAdvPreview = () => this.setState(s => ({ advPreview: !s.advPreview }));
+  setBilling = (e) => this.setState({ billing: e.currentTarget.dataset.bill });
+
+  mlData() {
+    return {
+      ja: { flag: '🇯🇵', name: 'Japanese', dot: '#C4692A', status: '🇯🇵 Japanese — AI-translated 2 min ago · ready for your review', views: '214 views from Japanese visitors last month', col: 'JAPANESE · AI DRAFT', fields: [
+        { label: 'BUSINESS DESCRIPTION', chip: 'AI ✓', src: 'A Kapahulu institution since 1996. Fish cut fresh each morning — spicy ahi and shoyu are what regulars line up for.', tr: '1996年創業、カパフルの老舗ポケ店。毎朝新鮮な魚をさばいています。常連客のお目当てはスパイシーアヒと醤油アヒ。' },
+        { label: 'KAMAʻĀINA TIP', chip: 'AI ✓', src: 'Cash only. Order the spicy ahi + shoyu combo and get there before noon — they sell out.', tr: '現金のみ。スパイシーアヒと醤油アヒのコンボがおすすめ。正午前には売り切れるのでお早めに。' },
+        { label: 'MENU HIGHLIGHTS', chip: 'AI ✓', src: 'Spicy Ahi Bowl $12 · Shoyu + Tako Combo $14 · Salmon Poke $11', tr: 'スパイシーアヒボウル $12 · 醤油＋タコのコンボ $14 · サーモンポケ $11' }
+      ]},
+      ko: { flag: '🇰🇷', name: 'Korean', dot: '#C4692A', status: '🇰🇷 Korean — AI-translated 2 min ago · ready for your review', views: '89 views from Korean visitors last month', col: 'KOREAN · AI DRAFT', fields: [
+        { label: 'BUSINESS DESCRIPTION', chip: 'AI ✓', src: 'A Kapahulu institution since 1996. Fish cut fresh each morning — spicy ahi and shoyu are what regulars line up for.', tr: '1996년부터 카파훌루를 지켜온 포케 명소. 매일 아침 신선한 생선을 손질합니다. 단골들은 스파이시 아히와 쇼유를 찾습니다.' },
+        { label: 'KAMAʻĀINA TIP', chip: 'AI ✓', src: 'Cash only. Order the spicy ahi + shoyu combo and get there before noon — they sell out.', tr: '현금 결제만 가능합니다. 스파이시 아히 + 쇼유 콤보를 추천해요. 정오 전에 매진되니 서두르세요.' },
+        { label: 'MENU HIGHLIGHTS', chip: 'AI ✓', src: 'Spicy Ahi Bowl $12 · Shoyu + Tako Combo $14 · Salmon Poke $11', tr: '스파이시 아히 볼 $12 · 쇼유 + 타코 콤보 $14 · 연어 포케 $11' }
+      ]},
+      es: { flag: '🇪🇸', name: 'Spanish', dot: '#4E9A1C', status: '🇪🇸 Spanish — approved · live on your listing', views: '41 views from Spanish-language visitors last month', col: 'SPANISH · LIVE', fields: [
+        { label: 'BUSINESS DESCRIPTION', chip: 'Live ✓', src: 'A Kapahulu institution since 1996. Fish cut fresh each morning — spicy ahi and shoyu are what regulars line up for.', tr: 'Una institución de Kapahulu desde 1996. Pescado fresco cortado cada mañana: el ahi picante y el shoyu son los favoritos de los habituales.' },
+        { label: 'KAMAʻĀINA TIP', chip: 'Edited', src: 'Cash only. Order the spicy ahi + shoyu combo and get there before noon — they sell out.', tr: 'Solo efectivo. Pide el combo de ahi picante + shoyu y llega antes del mediodía: se agota.' },
+        { label: 'MENU HIGHLIGHTS', chip: 'Live ✓', src: 'Spicy Ahi Bowl $12 · Shoyu + Tako Combo $14 · Salmon Poke $11', tr: 'Bol de Ahi Picante $12 · Combo Shoyu + Tako $14 · Poke de Salmón $11' }
+      ]},
+      fr: { flag: '🇫🇷', name: 'French', dot: '#B7AF9E', status: '🇫🇷 French — translating now · ready in about a minute', views: '18 views from French-language visitors last month', col: 'FRENCH · GENERATING…', fields: [
+        { label: 'BUSINESS DESCRIPTION', chip: '…', src: 'A Kapahulu institution since 1996. Fish cut fresh each morning — spicy ahi and shoyu are what regulars line up for.', tr: 'Traduction en cours…' },
+        { label: 'KAMAʻĀINA TIP', chip: '…', src: 'Cash only. Order the spicy ahi + shoyu combo and get there before noon — they sell out.', tr: 'Traduction en cours…' },
+        { label: 'MENU HIGHLIGHTS', chip: '…', src: 'Spicy Ahi Bowl $12 · Shoyu + Tako Combo $14 · Salmon Poke $11', tr: 'Traduction en cours…' }
+      ]}
+    };
+  }
+
+  renderVals() {
+    // languages
+    const L = this.mlData();
+    const cur = L[this.state.mlLang];
+    const mlTabs = ['ja', 'ko', 'es', 'fr'].map(k => ({
+      id: k, label: L[k].flag + ' ' + L[k].name, dot: L[k].dot,
+      style: this.state.mlLang === k
+        ? 'display:flex;align-items:center;gap:7px;background:#1E232B;color:#fff;border:1px solid #1E232B;border-radius:18px;padding:8px 14px;cursor:pointer;font:600 11.5px "Plus Jakarta Sans"'
+        : 'display:flex;align-items:center;gap:7px;background:#fff;color:#5B646F;border:1px solid rgba(30,35,43,.14);border-radius:18px;padding:8px 14px;cursor:pointer;font:500 11.5px "Plus Jakarta Sans"'
+    }));
+    const chipFor = (chip) => chip === 'Edited'
+      ? 'font:700 9px "Plus Jakarta Sans";color:#0B6E86;background:#EEF5F6;padding:2px 7px;border-radius:10px'
+      : (chip === '…'
+        ? 'font:700 9px "Plus Jakarta Sans";color:#8A8170;background:#F3EFE6;padding:2px 7px;border-radius:10px'
+        : 'font:700 9px "Plus Jakarta Sans";color:#4E9A1C;background:#EFF7E4;padding:2px 7px;border-radius:10px');
+    const mlFields = cur.fields.map(f => ({ ...f, chipStyle: chipFor(f.chip) }));
+
+    // analytics preview
+    const locked = !this.state.advPreview;
+    const advStyle = locked
+      ? { filter: 'blur(4px)', opacity: .55, pointerEvents: 'none' }
+      : { filter: 'none', opacity: 1 };
+    const sampleChipStyle = this.state.advPreview
+      ? { font: '700 9px "Plus Jakarta Sans"', letterSpacing: '.06em', color: '#8A6A12', background: '#FBF0D6', border: '1px solid #EFD9A0', padding: '3px 9px', borderRadius: '10px' }
+      : { display: 'none' };
+
+    // billing
+    const price = this.props.premiumPrice ?? 20;
+    const annual = Math.round(price * 0.8);
+    const monthly = this.state.billing === 'monthly';
+    const billTabs = [
+      { id: 'monthly', label: 'Monthly' },
+      { id: 'annual', label: 'Annual · save 20%' }
+    ].map(b => ({ ...b, style: this.state.billing === b.id
+      ? 'background:#1E232B;color:#fff;border:none;border-radius:9px;padding:8px 16px;cursor:pointer;font:700 12px "Plus Jakarta Sans"'
+      : 'background:none;color:#5B646F;border:none;border-radius:9px;padding:8px 16px;cursor:pointer;font:500 12px "Plus Jakarta Sans"' }));
+    const trial = this.props.trialDays ?? 30;
+
+    return {
+      mlTabs, mlFields, setMlLang: this.setMlLang,
+      mlStatus: cur.status, mlViews: cur.views, mlColLabel: cur.col, mlName: cur.name, mlFlag: cur.flag,
+      advLocked: locked, advStyle, sampleChipStyle,
+      toggleAdvPreview: this.toggleAdvPreview,
+      previewLabel: locked ? '👁 Preview with sample data' : 'Exit preview',
+      billTabs, setBilling: this.setBilling,
+      premPrice: '$' + (monthly ? price : annual),
+      billNote: monthly ? 'billed monthly' : 'billed annually',
+      trialCta: 'Start ' + trial + '-day free trial'
+    };
+  }
+}
+</script>
+</body>
+</html>
