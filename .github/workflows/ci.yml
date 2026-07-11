@@ -1,0 +1,65 @@
+# CI pipeline (slice-1 §CI): static → unit → db → e2e → lighthouse.
+# e2e and lighthouse stages arrive with checkpoints 3–5; lighthouse becomes
+# blocking at CP5. Migrations reach staging via CI only; seeds never run in prod.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+env:
+  APP_ENV: test
+
+jobs:
+  static:
+    name: Typecheck & lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      # CP2 adds the RLS drift gate here: regenerate policies + git diff --exit-code
+
+  unit:
+    name: Unit tests (no DB)
+    runs-on: ubuntu-latest
+    needs: static
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run test:unit
+
+  db:
+    name: DB tests (migrations + contract suites)
+    runs-on: ubuntu-latest
+    needs: static
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 2.100.1
+      - run: npm ci
+      - run: supabase start
+      - run: supabase db reset
+      # Reset twice: migrations must apply from scratch AND seeds must be idempotent.
+      - run: supabase db reset
+      - run: npm run test:db
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54332/postgres
+
+  # e2e (Playwright + axe) — added at CP3 with the admin publish journey.
+  # lighthouse — added at CP5; blocking from CP5 onward (slice-1 DoD #9).
