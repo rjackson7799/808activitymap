@@ -76,14 +76,18 @@ describe("RLS coverage", () => {
     expect(unprotected).toEqual([]);
   });
 
-  it("no policies exist yet (deny-all is fail-closed, not an accident)", async () => {
-    const policies = await sql`
-      select polname from pg_policy p
+  it("every public policy is generator-named — no strays (exact inventory: rls-matrix.gen suite)", async () => {
+    // CP2: policies exist now, all generated from db/rls (matrix ∧
+    // availability). The model-driven suite compares pg_policies against the
+    // manifest EXACTLY; here we pin the structural rule that makes the
+    // permissive-OR foot-gun impossible: nothing but {table}_{op} names.
+    const strays = await sql`
+      select c.relname, p.polname from pg_policy p
       join pg_class c on c.oid = p.polrelid
       join pg_namespace n on n.oid = c.relnamespace
-      where n.nspname = 'public'`;
-    // CP2 replaces this assertion with the generated-policy drift gate
-    expect(policies).toEqual([]);
+      where n.nspname = 'public'
+        and p.polname !~ ('^' || c.relname || '_(select|insert|update|delete)$')`;
+    expect(strays).toEqual([]);
   });
 });
 

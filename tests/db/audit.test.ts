@@ -92,13 +92,21 @@ describe("append-only", () => {
     });
   });
 
-  it("normal roles hold no grants on audit_log at all", async () => {
+  it("audit_log: authenticated may only SELECT (PRD §4 read row) — writes have no grant", async () => {
     await withRollback(async (tx) => {
       await tx.unsafe("set local role authenticated");
-      await expectErrorIn(tx, /permission denied/, (sp) => sp`select * from audit_log`);
+      // CP2: select is granted (RLS scopes rows per §4 — full read for
+      // publisher+, own-scope for others; see rls suites). A role-less JWT
+      // sees nothing.
+      const rows = await tx`select * from audit_log`;
+      expect(rows).toEqual([]);
       await expectErrorIn(tx, /permission denied/, (sp) =>
         sp`insert into audit_log (actor_source, action, target_table) values ('jwt', 'X', 'y')`,
       );
+      await expectErrorIn(tx, /permission denied/, (sp) =>
+        sp`update audit_log set action = 'X'`,
+      );
+      await expectErrorIn(tx, /permission denied/, (sp) => sp`delete from audit_log`);
     });
   });
 });
