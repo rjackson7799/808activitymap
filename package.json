@@ -21,9 +21,12 @@
     "db:stop": "supabase stop"
   },
   "dependencies": {
+    "@supabase/ssr": "0.12.0",
+    "@supabase/supabase-js": "2.110.2",
     "next": "16.2.10",
     "react": "19.2.7",
     "react-dom": "19.2.7",
+    "server-only": "0.0.1",
     "zod": "4.4.3"
   },
   "devDependencies": {
