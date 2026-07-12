@@ -1,4 +1,119 @@
 @import "tailwindcss";
 
-/* Design tokens (Marcellus + Plus Jakarta Sans, warm palette) are extracted
-   from the mockups in the public-pages checkpoint — see vault 06-design-system. */
+/*
+ * Design tokens — warm Hawaiian kama'āina editorial system, extracted from the
+ * mockups (design_sample/) into vault 06-design-system/design-tokens.md, which is
+ * the authority. Tailwind v4 CSS-first: @theme values below generate the utility
+ * classes (bg-*, text-*, border-*, font-*, rounded-*, shadow-*). NEVER hardcode a
+ * brand string — brand/domain flow through BRAND_NAME / PORTAL_DOMAIN (D27).
+ *
+ * Contrast note (WCAG 2.2 AA): the muted taupes (--color-label, --color-disabled)
+ * fail body-size contrast on cream — reserve them for large text / uppercase labels.
+ * Body-size muted text uses --color-muted (darkened from the mockups' #8A8170).
+ */
+@theme {
+  /* Type */
+  --font-serif: var(--font-marcellus), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-plus-jakarta), system-ui, -apple-system, sans-serif;
+
+  /* Ink + ocean teal */
+  --color-ink: #1e232b;
+  --color-ink-soft: #252b34;
+  --color-teal: #0e8fa8;
+  --color-teal-dark: #0b6e86;
+  --color-teal-bright: #1ca5c0;
+
+  /* Hawaiian terracotta + brass gold */
+  --color-terracotta: #c4692a;
+  --color-terracotta-deep: #b0592a;
+  --color-coral: #ff5a2c;
+  --color-gold: #d9b673;
+  --color-gold-light: #ffd37a;
+
+  /* Warm sand background family + surfaces */
+  --color-sand: #eee7d9;
+  --color-shell: #fbf8f1;
+  --color-field: #f3efe6;
+  --color-neutral: #f0ece2;
+  --color-surface: #ffffff;
+
+  /* Text tiers */
+  --color-body: #3b4149;
+  --color-secondary: #5b646f;
+  --color-muted: #6b6456;
+  --color-label: #8a8170;
+  --color-disabled: #b7af9e;
+
+  /* Hairline borders */
+  --color-hairline: rgba(30, 35, 43, 0.08);
+  --color-hairline-strong: rgba(30, 35, 43, 0.14);
+
+  /* Semantic (contrast-checked for text-on-bg use) */
+  --color-success: #4e7d2e;
+  --color-success-bg: #eff7e4;
+  --color-warning: #b0592a;
+  --color-warning-bg: #fbf0d6;
+  --color-error: #b23b3b;
+  --color-error-bg: #f6ded3;
+  --color-info: #0b6e86;
+  --color-info-bg: #eef5f6;
+
+  /* Radii */
+  --radius-badge: 0.5625rem; /* 9px */
+  --radius-field: 0.6875rem; /* 11px */
+  --radius-cta: 0.875rem; /* 14px */
+  --radius-card: 1.125rem; /* 18px */
+  --radius-chip: 1.25rem; /* 20px */
+
+  /* Shadows */
+  --shadow-card: 0 2px 10px -4px rgba(20, 40, 60, 0.12);
+  --shadow-lift: 0 6px 16px -6px rgba(0, 0, 0, 0.15);
+  --shadow-cta: 0 10px 20px -10px rgba(14, 143, 168, 0.8);
+}
+
+/* Signature gradients (design-tokens.md) — used sparingly on the public surface. */
+:root {
+  --gradient-ocean: linear-gradient(160deg, #1ca5c0, #0e8fa8 40%, #0b6e86);
+  --gradient-cta: linear-gradient(135deg, #0e8fa8, #0b6e86);
+  --gradient-photo: linear-gradient(135deg, #cde0dd, #e7dcc4);
+  --gradient-backdrop: radial-gradient(1200px 600px at 20% -5%, #f7f1e4, #eae1cf);
+}
+
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    color: var(--color-body);
+  }
+
+  /* Marcellus headings are opt-in via `font-serif` on the public surface (see
+     components/public/*), so the admin surface stays exactly as CP3 shipped it. */
+
+  /* Keep a clearly visible keyboard focus ring everywhere (WCAG 2.4.7).
+     Never remove outlines — this is additive to the browser default. */
+  :focus-visible {
+    outline: 2px solid var(--color-teal);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Photo placeholder — the mockups never use stock food imagery (PRD §8). */
+  .photo-placeholder {
+    background: var(--gradient-photo);
+  }
+  .surface-ocean {
+    background: var(--gradient-ocean);
+  }
+}
