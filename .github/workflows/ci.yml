@@ -65,6 +65,21 @@ jobs:
       - run: supabase db reset
       # Reset twice: migrations must apply from scratch AND seeds must be idempotent.
       - run: supabase db reset
+      # CP4: the public-read integration suite reads through the supabase-js SERVICE
+      # client (RLS bypassed — the read layer is the boundary), so it needs the API URL
+      # + service key, not just DATABASE_URL. Remap `supabase status` → app env names.
+      - name: Export Supabase env
+        run: |
+          eval "$(supabase status -o env)"
+          {
+            echo "NEXT_PUBLIC_SUPABASE_URL=$API_URL"
+            echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=$ANON_KEY"
+            echo "SUPABASE_SERVICE_ROLE_KEY=$SERVICE_ROLE_KEY"
+            echo "DATABASE_URL=$DB_URL"
+            echo "APP_ENV=test"
+            echo "BRAND_NAME=Portal (CI)"
+            echo "PORTAL_DOMAIN=localhost:3100"
+          } >> "$GITHUB_ENV"
       - run: npm run test:db
         env:
           DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54332/postgres
