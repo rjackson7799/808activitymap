@@ -619,6 +619,31 @@ export async function listEligibleListingParams(
   return params;
 }
 
+/**
+ * generateStaticParams source for listing ALIASES. Prerendering the romanized aliases
+ * lets them bake as static permanent redirects to the native-script canonical (single
+ * hop) — no on-demand rendering needed, so [locale]/listing stay dynamicParams=false
+ * (KO stays fenced). Re-gated: only aliases whose target is eligible in a served locale.
+ */
+export async function listAliasListingParams(
+  client: SupabaseClient,
+): Promise<{ locale: Locale; listingSlug: string }[]> {
+  const served = await getServedLocaleSet(client);
+  const { data } = await client
+    .from("slug_aliases")
+    .select("locale, alias_slug, target_id")
+    .eq("route_scope", "listing");
+  const params: { locale: Locale; listingSlug: string }[] = [];
+  for (const row of (data ?? []) as { locale: string; alias_slug: string; target_id: string }[]) {
+    const locale = row.locale as Locale;
+    if (!served.has(locale)) continue;
+    if (await isEligible(client, row.target_id, locale)) {
+      params.push({ locale, listingSlug: row.alias_slug });
+    }
+  }
+  return params;
+}
+
 /** generateStaticParams source for category pages. */
 export async function listEligibleCategoryParams(
   client: SupabaseClient,

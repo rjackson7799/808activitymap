@@ -46,6 +46,13 @@ describe("validateCategorySlug", () => {
     expect(validateCategorySlug("a b")).toMatchObject({ ok: false });
   });
 
+  it("rejects reserved route segments that would shadow the public URL scheme (CP4)", () => {
+    for (const reserved of ["spot", "Spot", "en", "ja", "ko", "admin", "login", "api", "c"]) {
+      expect(validateCategorySlug(reserved), reserved).toMatchObject({ ok: false });
+    }
+    expect(validateCategorySlug("cafes-coffee")).toMatchObject({ ok: true });
+  });
+
   it("returns the NFC-normalized value on success", () => {
     const nfd = "が";
     expect(validateCategorySlug(nfd)).toEqual({ ok: true, value: "が" });

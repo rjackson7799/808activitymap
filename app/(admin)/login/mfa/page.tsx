@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createBrowserClient } from "@supabase/ssr";
 
@@ -120,7 +121,7 @@ export default function MfaPage() {
 
       {step.kind === "error" ? (
         <p role="alert" style={{ color: "#b00020" }}>
-          {step.message} — <a href="/login">back to sign-in</a>
+          {step.message} — <Link href="/login">back to sign-in</Link>
         </p>
       ) : null}
 
