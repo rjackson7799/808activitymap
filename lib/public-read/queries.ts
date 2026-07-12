@@ -306,7 +306,8 @@ export async function getListingDTO(
     secondaryCategories = ((secRows ?? []) as unknown as SecRow[])
       .map((r) => r.category_locales[0])
       .filter((c): c is { label: string; slug: string } => Boolean(c))
-      .map((c) => ({ label: c.label, slug: c.slug }));
+      .map((c) => ({ label: c.label, slug: c.slug }))
+      .sort((a, b) => a.slug.localeCompare(b.slug)); // deterministic (schema goldens)
   }
 
   const { data: hoursRow } = await client

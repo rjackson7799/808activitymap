@@ -23,3 +23,19 @@ export function categoryPath(locale: Locale, slug: string): string {
 export function listingPath(locale: Locale, slug: string): string {
   return `${localePrefix(locale)}/spot/${slug}`;
 }
+
+/**
+ * Absolute URL for canonicals, hreflang, sitemaps, and JSON-LD. `origin` is derived from
+ * PORTAL_DOMAIN (never the request/staging host). Native-script path segments are
+ * percent-encoded here — the one place encoding happens.
+ */
+export function absoluteUrl(origin: string, path: string): string {
+  const base = origin.replace(/\/$/, "");
+  return `${base}${encodeURI(path)}`;
+}
+
+/** Normalize a PORTAL_DOMAIN value (with or without scheme) to an https origin. */
+export function toOrigin(portalDomain: string): string {
+  if (/^https?:\/\//.test(portalDomain)) return portalDomain.replace(/\/$/, "");
+  return `https://${portalDomain.replace(/\/$/, "")}`;
+}
