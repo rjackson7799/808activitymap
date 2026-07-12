@@ -58,13 +58,13 @@ export default async function ListingPublishPage({ params }: { params: Promise<{
               <span data-testid={`status-${ll.locale}`}>{ll.status}</span>
             </p>
             {ll.blockers.length > 0 ? (
-              <ul aria-label={`${ll.locale} publish blockers`} style={{ margin: "0.2rem 0", color: "#9a6a00" }}>
+              <ul aria-label={`${ll.locale} publish blockers`} style={{ margin: "0.2rem 0", color: "#92400e" }}>
                 {ll.blockers.map((b, i) => (
                   <li key={`${b.blocker_code}-${i}`}>{b.blocker_code}</li>
                 ))}
               </ul>
             ) : (
-              <p style={{ margin: "0.2rem 0", color: "#0a7d33" }}>Ready to publish.</p>
+              <p style={{ margin: "0.2rem 0", color: "#166534" }}>Ready to publish.</p>
             )}
             <LocaleControls listingId={view.id} locale={ll.locale} status={ll.status} />
           </div>

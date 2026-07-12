@@ -44,6 +44,10 @@ export default async function proxy(request: NextRequest) {
   return response;
 }
 
+// Match the admin index AND every subpath — `/admin/:path*` alone misses the
+// bare `/admin`, which would fall to the layout guard (a layout redirect
+// chained off a Server Action nav renders the target while leaving the URL on
+// /admin). Guarding /admin here keeps the aal1→/login/mfa bounce a clean 307.
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ["/admin", "/admin/:path*"],
 };

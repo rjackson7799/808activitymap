@@ -51,7 +51,7 @@ export function NewCategoryForm({ parents }: { parents: { id: string; label: str
         <p role="alert" style={{ color: "#b00020", margin: 0 }}>{state.error}</p>
       ) : null}
       {state.ok ? (
-        <p role="status" style={{ color: "#0a7d33", margin: 0 }}>Category created.</p>
+        <p role="status" style={{ color: "#166534", margin: 0 }}>Category created.</p>
       ) : null}
       <button type="submit" disabled={pending}>{pending ? "Creating…" : "Create category"}</button>
     </form>

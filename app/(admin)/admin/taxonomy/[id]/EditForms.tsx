@@ -32,7 +32,7 @@ export function FlagsForm({
         <input name="publicly_visible" type="checkbox" defaultChecked={category.publicly_visible} /> Publicly visible
       </label>
       {state.error ? <p role="alert" style={{ color: "#b00020", margin: 0 }}>{state.error}</p> : null}
-      {state.ok ? <p role="status" style={{ color: "#0a7d33", margin: 0 }}>Saved.</p> : null}
+      {state.ok ? <p role="status" style={{ color: "#166534", margin: 0 }}>Saved.</p> : null}
       <button type="submit" disabled={pending}>{pending ? "Saving…" : "Save settings"}</button>
     </form>
   );
@@ -71,7 +71,7 @@ export function LocaleForm({
         <p role="alert" style={{ color: "#b00020", margin: 0 }}>{state.error}</p>
       ) : null}
       {state.error && !state.field ? <p role="alert" style={{ color: "#b00020", margin: 0 }}>{state.error}</p> : null}
-      {state.ok ? <p role="status" style={{ color: "#0a7d33", margin: 0 }}>Saved {locale}.</p> : null}
+      {state.ok ? <p role="status" style={{ color: "#166534", margin: 0 }}>Saved {locale}.</p> : null}
       <button type="submit" disabled={pending}>{pending ? "Saving…" : `Save ${locale}`}</button>
     </form>
   );

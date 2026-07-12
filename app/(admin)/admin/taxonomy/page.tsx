@@ -63,14 +63,14 @@ function CategoryTree({ nodes }: { nodes: CategoryNode[] }) {
               <span
                 key={l}
                 title={n.localesByCode[l] ? `${l}: complete` : `${l}: missing`}
-                style={{ marginRight: "0.3rem", color: n.localesByCode[l] ? "#0a7d33" : "#9a6a00" }}
+                style={{ marginRight: "0.3rem", color: n.localesByCode[l] ? "#166534" : "#92400e" }}
               >
                 {l}:{n.localesByCode[l] ? "✓" : "–"}
               </span>
             ))}
           </span>{" "}
-          {n.active ? null : <span style={{ color: "#9a6a00" }}>(inactive)</span>}{" "}
-          {n.publicly_visible ? null : <span style={{ color: "#9a6a00" }}>(hidden)</span>}{" "}
+          {n.active ? null : <span style={{ color: "#92400e" }}>(inactive)</span>}{" "}
+          {n.publicly_visible ? null : <span style={{ color: "#92400e" }}>(hidden)</span>}{" "}
           <Link href={`/admin/taxonomy/${n.id}`}>Edit</Link>{" "}
           <ActiveToggle id={n.id} active={n.active} />
           {n.children.length > 0 ? <CategoryTree nodes={n.children} /> : null}

@@ -16,7 +16,12 @@ import { mapDbError } from "@/lib/errors";
  */
 
 const publisherAal2 = { sub: ACTOR.publisher, app_roles: ["publisher"], aal: "aal2" as const };
+// Used only inside rolled-back transactions, so it never leaves committed
+// (permanent, append-only) audit rows to pollute the actor assertion on re-runs.
 const NEW_CAT = "d1000000-0000-4000-8000-0000000000c1";
+// Committed then deleted by the superuser duplicate-slug test — distinct id so
+// its permanent null-actor audit rows never collide with NEW_CAT.
+const DUP_CAT = "d1000000-0000-4000-8000-0000000000c2";
 
 describe("taxonomy: publisher write path + audit", () => {
   it("publisher@aal2 creates a category + EN locale, each audited to the actor", async () => {
@@ -32,9 +37,10 @@ describe("taxonomy: publisher write path + audit", () => {
       const audits = await tx`
         select target_table, action, actor, actor_source
         from audit_log
-        where (target_table = 'categories' and target_id = ${NEW_CAT})
-           or (target_table = 'category_locales' and action = 'INSERT'
-               and after->>'category_id' = ${NEW_CAT})
+        where actor_source = 'jwt'
+          and ((target_table = 'categories' and target_id = ${NEW_CAT})
+            or (target_table = 'category_locales' and action = 'INSERT'
+                and after->>'category_id' = ${NEW_CAT}))
         order by target_table`;
       const tables = audits.map((a) => a.target_table);
       expect(tables).toContain("categories");
@@ -142,13 +148,13 @@ describe("taxonomy: concurrent slug creation resolves to one success + one clean
     // 'ramen'/'ramen' EN slug already exists in the seed
     let thrown: unknown;
     try {
-      await sql`insert into categories (id, sort) values (${NEW_CAT}, 200)`;
+      await sql`insert into categories (id, sort) values (${DUP_CAT}, 200)`;
       await sql`insert into category_locales (category_id, locale, label, slug)
-                values (${NEW_CAT}, 'en', 'Dup', 'ramen')`;
+                values (${DUP_CAT}, 'en', 'Dup', 'ramen')`;
     } catch (e) {
       thrown = e;
     } finally {
-      await sql`delete from categories where id = ${NEW_CAT}`;
+      await sql`delete from categories where id = ${DUP_CAT}`;
     }
     expect(thrown).toBeInstanceOf(Error);
     expect(mapDbError(thrown)).toMatchObject({ code: "duplicate_slug", field: "slug" });

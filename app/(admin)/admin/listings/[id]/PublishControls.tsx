@@ -11,7 +11,7 @@ import {
 } from "../actions";
 
 const errStyle = { color: "#b00020", marginLeft: "0.5rem" } as const;
-const okStyle = { color: "#0a7d33", marginLeft: "0.5rem" } as const;
+const okStyle = { color: "#166534", marginLeft: "0.5rem" } as const;
 
 type Action = (prev: ActionState, formData: FormData) => Promise<ActionState>;
 
@@ -33,7 +33,9 @@ function ActionForm({
       ))}
       <button type="submit" disabled={pending}>{pending ? "Working…" : label}</button>
       {state.error ? (
-        <span role="alert" data-testid="action-error" style={errStyle}>{state.error}</span>
+        <span role="alert" data-testid="action-error" data-error-code={state.code ?? "error"} style={errStyle}>
+          {state.error}
+        </span>
       ) : null}
       {state.ok ? <span role="status" style={okStyle}>Done.</span> : null}
     </form>
@@ -117,7 +119,9 @@ export function MenuApprovalControls({
             {pending ? "Recording…" : "Record vendor approval"}
           </button>
           {state.error ? (
-            <span role="alert" data-testid="action-error" style={errStyle}>{state.error}</span>
+            <span role="alert" data-testid="action-error" data-error-code={state.code ?? "error"} style={errStyle}>
+              {state.error}
+            </span>
           ) : null}
           {state.ok ? <span role="status" style={okStyle}>Approval recorded.</span> : null}
         </form>
