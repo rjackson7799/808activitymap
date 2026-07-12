@@ -383,6 +383,66 @@ export async function getListingDTO(
   };
 }
 
+export interface LocaleAlternate {
+  locale: Locale;
+  href: string;
+  /** true = the listing itself is published in this locale; false = a fallback link. */
+  available: boolean;
+}
+
+/**
+ * Per-served-locale alternates for a listing (CP4). Powers BOTH the language switcher and
+ * hreflang. When the listing is published in a locale → the listing URL (available). When
+ * not → a fallback to the localized primary-category page (or home) so the switcher is
+ * never a dead control / 404. hreflang consumers use only `available` entries.
+ */
+export async function getListingLocaleAlternates(
+  client: SupabaseClient,
+  listingId: string,
+): Promise<LocaleAlternate[]> {
+  const served = [...(await getServedLocaleSet(client))];
+  const { data: listing } = await client
+    .from("listings")
+    .select("primary_category_id")
+    .eq("id", listingId)
+    .maybeSingle();
+  const primaryCategoryId = (listing as { primary_category_id: string } | null)?.primary_category_id;
+
+  const out: LocaleAlternate[] = [];
+  for (const locale of served) {
+    if (await isEligible(client, listingId, locale)) {
+      const { data } = await client
+        .from("listing_locales")
+        .select("slug")
+        .eq("listing_id", listingId)
+        .eq("locale", locale)
+        .maybeSingle();
+      const slug = (data as { slug: string | null } | null)?.slug;
+      if (slug) {
+        out.push({ locale, href: listingPath(locale, slug), available: true });
+        continue;
+      }
+    }
+    // Fallback: the localized primary-category page if it is eligible in this locale, else home.
+    let href = homePath(locale);
+    if (primaryCategoryId) {
+      const byCategory = await eligibleByPrimaryCategory(client, locale);
+      if ((byCategory.get(primaryCategoryId) ?? []).length > 0) {
+        const { data: cat } = await client
+          .from("category_locales")
+          .select("slug")
+          .eq("category_id", primaryCategoryId)
+          .eq("locale", locale)
+          .maybeSingle();
+        const catSlug = (cat as { slug: string | null } | null)?.slug;
+        if (catSlug) href = categoryPath(locale, catSlug);
+      }
+    }
+    out.push({ locale, href, available: false });
+  }
+  return out;
+}
+
 /** Resolve a listing slug: canonical hit, single-hop alias redirect, or not found. */
 export async function resolveListingSlug(
   client: SupabaseClient,
@@ -548,7 +608,34 @@ export async function getCategoryDTO(
     (c): c is ListingCardDTO => c !== null,
   );
   cards.sort((a, b) => a.name.localeCompare(b.name));
-  return { slug: categorySlug, label, listings: cards };
+  return { id: resolved.categoryId, slug: categorySlug, label, listings: cards };
+}
+
+/** Per-served-locale alternates for a category page (language switcher + hreflang). */
+export async function getCategoryLocaleAlternates(
+  client: SupabaseClient,
+  categoryId: string,
+): Promise<LocaleAlternate[]> {
+  const served = [...(await getServedLocaleSet(client))];
+  const out: LocaleAlternate[] = [];
+  for (const locale of served) {
+    const byCategory = await eligibleByPrimaryCategory(client, locale);
+    if ((byCategory.get(categoryId) ?? []).length > 0) {
+      const { data } = await client
+        .from("category_locales")
+        .select("slug")
+        .eq("category_id", categoryId)
+        .eq("locale", locale)
+        .maybeSingle();
+      const slug = (data as { slug: string | null } | null)?.slug;
+      if (slug) {
+        out.push({ locale, href: categoryPath(locale, slug), available: true });
+        continue;
+      }
+    }
+    out.push({ locale, href: homePath(locale), available: false });
+  }
+  return out;
 }
 
 export async function getHomeDTO(client: SupabaseClient, locale: Locale): Promise<HomeDTO> {

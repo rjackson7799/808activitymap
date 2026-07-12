@@ -12,6 +12,20 @@ export function localePrefix(locale: Locale): string {
   return locale === DEFAULT_LOCALE ? "" : `/${locale}`;
 }
 
+/**
+ * Decode a route-param slug for DB lookup. Next delivers non-ASCII dynamic segments
+ * percent-encoded (e.g. JA native-script slugs), while slugs are stored decoded/NFC — so
+ * a page must decode before querying. Idempotent for ASCII (no `%` to decode) and safe
+ * against malformed sequences.
+ */
+export function decodeSlug(param: string): string {
+  try {
+    return decodeURIComponent(param);
+  } catch {
+    return param;
+  }
+}
+
 export function homePath(locale: Locale): string {
   return localePrefix(locale) || "/";
 }

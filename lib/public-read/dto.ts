@@ -119,6 +119,7 @@ export interface ListingCardDTO {
 }
 
 export interface CategoryDTO {
+  id: string;
   slug: string;
   label: string;
   listings: ListingCardDTO[];

@@ -22,6 +22,8 @@ export const getCategoryDTO = (locale: Locale, slug: string) => q.getCategoryDTO
 export const getHomeDTO = (locale: Locale) => q.getHomeDTO(db(), locale);
 export const getSitemapRows = () => q.getSitemapRows(db());
 export const resolveListingSlug = (locale: Locale, slug: string) => q.resolveListingSlug(db(), locale, slug);
+export const getListingLocaleAlternates = (listingId: string) => q.getListingLocaleAlternates(db(), listingId);
+export const getCategoryLocaleAlternates = (categoryId: string) => q.getCategoryLocaleAlternates(db(), categoryId);
 export const resolveCategorySlug = (locale: Locale, slug: string) => q.resolveCategorySlug(db(), locale, slug);
 export const listEligibleListingParams = () => q.listEligibleListingParams(db());
 export const listAliasListingParams = () => q.listAliasListingParams(db());
