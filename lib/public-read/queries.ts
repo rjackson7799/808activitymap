@@ -72,7 +72,28 @@ export async function getServedLocaleSet(client: SupabaseClient): Promise<Set<Lo
   return set;
 }
 
-/** Eligible (listing, locale) pairs, filtered to publicly-served locales. */
+/** Listing ids (from the given set) whose venue is in an excluded operational state. */
+async function excludedOperationalIds(client: SupabaseClient, listingIds: string[]): Promise<Set<string>> {
+  if (listingIds.length === 0) return new Set();
+  const { data } = await client
+    .from("listings")
+    .select("id, locations!inner(operational_status)")
+    .in("id", listingIds);
+  type Row = { id: string; locations: { operational_status: string } };
+  return new Set(
+    ((data ?? []) as unknown as Row[])
+      .filter((r) => EXCLUDED_OPERATIONAL.has(r.locations.operational_status))
+      .map((r) => r.id),
+  );
+}
+
+/**
+ * Eligible (listing, locale) pairs, filtered to publicly-served locales AND to venues NOT in
+ * an excluded operational state (owner decision 2026-07-12: suspended/disputed/permanently-
+ * closed venues do not appear anywhere on the public surface). The eligibility view does not
+ * gate operational_status, so this is the single app-layer chokepoint that keeps category /
+ * home / sitemap / static-params consistent with the listing page's own exclusion.
+ */
 export async function listEligiblePages(
   client: SupabaseClient,
 ): Promise<{ listingId: string; locale: Locale }[]> {
@@ -81,9 +102,11 @@ export async function listEligiblePages(
     .from("publishable_locale_pages")
     .select("listing_id, locale");
   if (error) throw new Error(`publishable_locale_pages read failed: ${error.message}`);
-  return (data ?? [])
+  const pages = (data ?? [])
     .map((r) => ({ listingId: r.listing_id as string, locale: r.locale as Locale }))
     .filter((r) => served.has(r.locale));
+  const excluded = await excludedOperationalIds(client, [...new Set(pages.map((p) => p.listingId))]);
+  return pages.filter((p) => !excluded.has(p.listingId));
 }
 
 function toHoursDTO(
@@ -426,7 +449,7 @@ export async function getListingLocaleAlternates(
     // Fallback: the localized primary-category page if it is eligible in this locale, else home.
     let href = homePath(locale);
     if (primaryCategoryId) {
-      const byCategory = await eligibleByPrimaryCategory(client, locale);
+      const byCategory = await eligibleByCategory(client, locale);
       if ((byCategory.get(primaryCategoryId) ?? []).length > 0) {
         const { data: cat } = await client
           .from("category_locales")
@@ -520,8 +543,13 @@ export async function resolveCategorySlug(
   return { kind: "redirect", to: categoryPath(locale, canonicalSlug) };
 }
 
-/** Primary-category listing ids that are eligible in this locale, keyed by category. */
-async function eligibleByPrimaryCategory(
+/**
+ * Eligible listing ids in this locale, keyed by EVERY category they are tagged to (primary
+ * OR secondary — owner decision 2026-07-12: a category shows any listing tagged to it). A
+ * listing appears under each of its categories; a category with no eligible tagged listing
+ * (e.g. cafés, whose only listing is draft) 404s.
+ */
+async function eligibleByCategory(
   client: SupabaseClient,
   locale: Locale,
 ): Promise<Map<string, string[]>> {
@@ -530,13 +558,13 @@ async function eligibleByPrimaryCategory(
   const byCategory = new Map<string, string[]>();
   if (ids.length === 0) return byCategory;
   const { data } = await client
-    .from("listings")
-    .select("id, primary_category_id")
-    .in("id", ids);
-  for (const row of (data ?? []) as { id: string; primary_category_id: string }[]) {
-    const list = byCategory.get(row.primary_category_id) ?? [];
-    list.push(row.id);
-    byCategory.set(row.primary_category_id, list);
+    .from("listing_categories")
+    .select("listing_id, category_id")
+    .in("listing_id", ids);
+  for (const row of (data ?? []) as { listing_id: string; category_id: string }[]) {
+    const list = byCategory.get(row.category_id) ?? [];
+    list.push(row.listing_id);
+    byCategory.set(row.category_id, list);
   }
   return byCategory;
 }
@@ -600,7 +628,7 @@ export async function getCategoryDTO(
   const label = (cat as { category_locales: { label: string }[] }).category_locales[0]?.label;
   if (!label) return null;
 
-  const byCategory = await eligibleByPrimaryCategory(client, locale);
+  const byCategory = await eligibleByCategory(client, locale);
   const listingIds = byCategory.get(resolved.categoryId) ?? [];
   if (listingIds.length === 0) return null; // zero-listing category ⇒ 404
 
@@ -619,7 +647,7 @@ export async function getCategoryLocaleAlternates(
   const served = [...(await getServedLocaleSet(client))];
   const out: LocaleAlternate[] = [];
   for (const locale of served) {
-    const byCategory = await eligibleByPrimaryCategory(client, locale);
+    const byCategory = await eligibleByCategory(client, locale);
     if ((byCategory.get(categoryId) ?? []).length > 0) {
       const { data } = await client
         .from("category_locales")
@@ -639,7 +667,7 @@ export async function getCategoryLocaleAlternates(
 }
 
 export async function getHomeDTO(client: SupabaseClient, locale: Locale): Promise<HomeDTO> {
-  const byCategory = await eligibleByPrimaryCategory(client, locale);
+  const byCategory = await eligibleByCategory(client, locale);
   const categories = [];
   for (const [categoryId, ids] of byCategory) {
     const { data: cat } = await client

@@ -4,7 +4,7 @@ loadTestEnv();
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { afterAll, describe, expect, it } from "vitest";
 import { sql } from "./helpers";
-import { CATEGORY, LISTING, MENU } from "./fixtures";
+import { CATEGORY, LISTING, LOC, MENU } from "./fixtures";
 import {
   getCategoryDTO,
   getHomeDTO,
@@ -182,8 +182,9 @@ describe("category eligibility (primary-only) + hidden taxonomy", () => {
     expect(await getCategoryDTO(client, "en", "cafes-coffee")).toBeNull();
   });
 
-  it("izakaya 404s (A attaches as a SECONDARY category, not primary)", async () => {
-    expect(await getCategoryDTO(client, "en", "izakaya")).toBeNull();
+  it("izakaya shows listing A (tagged as a secondary category — any-attachment rule)", async () => {
+    const cat = await getCategoryDTO(client, "en", "izakaya");
+    expect(cat?.listings.map((l) => l.slug)).toEqual(["aloha-ramen-hale"]);
   });
 
   it("hidden Activities + Surf Lessons never resolve", async () => {
@@ -204,7 +205,7 @@ describe("home + sitemap", () => {
     expect(slugs).toContain("ramen");
     expect(slugs).toContain("sushi");
     expect(slugs).not.toContain("cafes-coffee"); // only draft C
-    expect(slugs).not.toContain("izakaya"); // A is secondary only
+    expect(slugs).toContain("izakaya"); // A is tagged to izakaya (secondary) — any-attachment rule
     expect(slugs).not.toContain("activities"); // hidden
   });
 
@@ -242,6 +243,22 @@ describe("money never falls back (menu status gate)", () => {
     // Restoration verified so a shared-DB rerun isn't poisoned.
     const restored = await sql`select status from menu_version_locales where id = ${MENU.mvlJa}`;
     expect(restored[0]?.status).toBe("published");
+  });
+});
+
+describe("operational_status exclusion (owner decision 2026-07-12)", () => {
+  it("a suspended venue disappears from the whole public surface (eligibility, listing, category)", async () => {
+    try {
+      await sql`update public.locations set operational_status = 'suspended' where id = ${LOC.sushi}`;
+      const pages = await listEligiblePages(client);
+      expect(pages.some((p) => p.listingId === LISTING.sushi)).toBe(false); // gone from eligibility
+      expect(await getListingDTO(client, "en", LISTING.sushi)).toBeNull(); // listing 404
+      expect(await getCategoryDTO(client, "en", "sushi")).toBeNull(); // B was the only sushi listing → 404
+    } finally {
+      await sql`update public.locations set operational_status = 'active' where id = ${LOC.sushi}`;
+    }
+    const restored = await sql`select operational_status from public.locations where id = ${LOC.sushi}`;
+    expect(restored[0]?.operational_status).toBe("active");
   });
 });
 

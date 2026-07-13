@@ -55,7 +55,7 @@ test.describe("no forbidden content on any public page", () => {
 
   test("sitemap leaks nothing: no draft/hidden/secondary categories, no KO, no aliases, no canaries", async ({ request }) => {
     const sitemap = await (await request.get("/sitemap.xml")).text();
-    for (const forbidden of ["/ko", "/ja/spot/aloha-ramen-hale", "cafes-coffee", "izakaya", "activities", "surf-lessons", "kona-coffee", ...CANARIES]) {
+    for (const forbidden of ["/ko", "/ja/spot/aloha-ramen-hale", "cafes-coffee", "activities", "surf-lessons", "kona-coffee", ...CANARIES]) {
       expect(sitemap, `sitemap leaked "${forbidden}"`).not.toContain(forbidden);
     }
   });
@@ -67,7 +67,6 @@ test.describe("forbidden routes 404 (never serve draft/KO/hidden/secondary)", ()
     "/ko", // KO not served
     "/ko/ramen",
     "/cafes-coffee", // only draft C attaches → 404
-    "/izakaya", // A is a secondary attachment, not primary → 404
     "/activities", // hidden root
     "/surf-lessons", // hidden subtree
   ];

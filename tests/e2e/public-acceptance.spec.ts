@@ -39,7 +39,6 @@ test.describe("routing", () => {
     expect((await request.get("/spot/kona-coffee-corner", { maxRedirects: 0 })).status()).toBe(404);
     expect((await request.get("/ko", { maxRedirects: 0 })).status()).toBe(404);
     expect((await request.get("/cafes-coffee", { maxRedirects: 0 })).status()).toBe(404);
-    expect((await request.get("/izakaya", { maxRedirects: 0 })).status()).toBe(404);
     expect((await request.get("/activities", { maxRedirects: 0 })).status()).toBe(404);
   });
 });
