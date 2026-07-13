@@ -47,7 +47,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <SiteHeader locale={locale} brand={brand} alternates={alternates} notAvailableLabel={strings.otherLocaleNotAvailable} />
       <main className="mx-auto max-w-5xl px-6 py-12">
         <section className="rounded-card border border-hairline bg-surface p-8 shadow-card sm:p-12">
-          <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-label">{brand}</p>
+          <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-secondary">{brand}</p>
           <h1 className="mt-3 font-serif text-4xl leading-tight text-ink sm:text-5xl">{strings.browse}</h1>
         </section>
 

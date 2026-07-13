@@ -25,7 +25,7 @@
 
   /* Hawaiian terracotta + brass gold */
   --color-terracotta: #c4692a;
-  --color-terracotta-deep: #b0592a;
+  --color-terracotta-deep: #9c4c22; /* darkened from #B0592A so badge text hits AA on warning-bg */
   --color-coral: #ff5a2c;
   --color-gold: #d9b673;
   --color-gold-light: #ffd37a;
@@ -49,7 +49,7 @@
   --color-hairline-strong: rgba(30, 35, 43, 0.14);
 
   /* Semantic (contrast-checked for text-on-bg use) */
-  --color-success: #4e7d2e;
+  --color-success: #3f6a21; /* darkened from the mockups' #4E7D2E so badge text hits AA on success-bg */
   --color-success-bg: #eff7e4;
   --color-warning: #b0592a;
   --color-warning-bg: #fbf0d6;

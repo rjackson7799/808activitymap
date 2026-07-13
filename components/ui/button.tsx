@@ -17,7 +17,7 @@ const buttonVariants = cva(
         cta: "text-white shadow-cta [background:var(--gradient-cta)] hover:brightness-110",
         outline: "border border-hairline-strong bg-surface text-ink hover:bg-neutral",
         ghost: "text-ink hover:bg-neutral",
-        link: "text-teal underline-offset-4 hover:text-teal-dark hover:underline",
+        link: "text-teal-dark underline-offset-4 hover:text-ink hover:underline",
       },
       size: {
         sm: "h-8 px-3 text-[13px]",

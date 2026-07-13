@@ -16,7 +16,7 @@ export function ListingCard({ locale, listing }: { locale: Locale; listing: List
     >
       <div className="photo-placeholder aspect-[1.7/1] w-full" aria-hidden />
       <div className="p-4">
-        <h3 className="font-sans text-[15.5px] font-bold leading-snug text-ink">{listing.name}</h3>
+        <h2 className="font-sans text-[15.5px] font-bold leading-snug text-ink">{listing.name}</h2>
         <p className="mt-1 text-[12.5px] text-secondary">
           {[listing.primaryCategoryLabel, listing.priceBand, listing.neighborhood]
             .filter(Boolean)

@@ -104,11 +104,57 @@ test("admin publish journey: blocked publish + menu evidence → resolve → pub
 });
 
 /**
- * CP4 owns the public surface. These legs of DoD #4 cannot be exercised until
- * public pages + sitemaps + ISR revalidation exist. Kept as an explicit,
- * non-vacuous marker (fixme, not a silent skip) so the deferral is visible.
+ * CP4: the deferred public-visibility legs of DoD #4. Publishing/unpublishing goes
+ * through the admin UI (server actions) so the CP4 updateTag revalidation fires; the
+ * public surface is then polled (expect.toPass — tag invalidation propagates within the
+ * ISR window, it is not asserted once). The JA locale (ASCII slug e2e-ramen-house-ja) is
+ * used; the journey may have left it withdrawn, so we re-approve it via pg first.
  */
-test.fixme("published listing appears on the public surface + sitemap; unpublish removes it within the ISR window (CP4)", () => {
-  // CP4: assert the localized listing page renders, the sitemap lists it, and
-  // unpublish removes it within the ISR window.
+test("published listing appears on the public surface + sitemap; unpublish removes it within the ISR window", async ({
+  browser,
+  request,
+}) => {
+  const { publisher } = readState();
+  const pg = newPg();
+  const listingUrl = `/admin/listings/${FIXTURE.listing}`;
+  const publicPath = "/ja/spot/e2e-ramen-house-ja";
+  const ctx = await browser.newContext();
+  const page = await ctx.newPage();
+
+  try {
+    // Precondition: JA locale publishable (the journey above leaves it withdrawn).
+    await pg`update public.listing_locales set status = 'qa_approved'
+             where id = ${FIXTURE.llJa} and status <> 'published'`;
+
+    await signInWithMfa(page, publisher);
+    await page.goto(listingUrl);
+    await page.getByTestId("locale-ja").getByRole("button", { name: "Publish ja", exact: true }).click();
+    await expect(page.getByTestId("status-ja")).toHaveText("published");
+
+    // Public JA page renders + the sitemap lists it (within the ISR window).
+    await expect(async () => {
+      const res = await request.get(publicPath);
+      expect(res.status()).toBe(200);
+      expect(await res.text()).toContain("E2Eラーメンハウス");
+    }).toPass({ timeout: 20_000 });
+    await expect(async () => {
+      expect(await (await request.get("/sitemap.xml")).text()).toContain(publicPath);
+    }).toPass({ timeout: 20_000 });
+
+    // Unpublish → removed from the public page AND the sitemap within the ISR window.
+    await page.goto(listingUrl);
+    await page.getByTestId("locale-ja").getByRole("button", { name: "Unpublish ja" }).click();
+    await expect(page.getByTestId("status-ja")).toHaveText("withdrawn");
+
+    await expect(async () => {
+      const res = await request.get(publicPath);
+      expect(res.status()).toBe(404);
+    }).toPass({ timeout: 20_000 });
+    await expect(async () => {
+      expect(await (await request.get("/sitemap.xml")).text()).not.toContain(publicPath);
+    }).toPass({ timeout: 20_000 });
+  } finally {
+    await pg.end();
+    await ctx.close();
+  }
 });

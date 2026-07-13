@@ -157,7 +157,7 @@ export default async function ListingPage({
             <p>{addressLine}</p>
             {dto.phone ? (
               <p className="mt-2">
-                <a href={`tel:${dto.phone}`} className="text-teal hover:text-teal-dark">
+                <a href={`tel:${dto.phone}`} className="text-teal-dark underline-offset-2 hover:underline">
                   {dto.phone}
                 </a>
               </p>
@@ -167,7 +167,7 @@ export default async function ListingPage({
                 <a
                   href={`https://www.google.com/maps/search/?api=1&query=${dto.geo.lat},${dto.geo.lng}`}
                   rel="noopener noreferrer"
-                  className="font-semibold text-teal hover:text-teal-dark"
+                  className="font-semibold text-teal-dark underline-offset-2 hover:underline"
                 >
                   {strings.directions}
                 </a>

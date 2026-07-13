@@ -31,7 +31,16 @@ export default defineConfig({
     trace: "retain-on-failure",
     screenshot: "only-on-failure",
   },
-  projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
+  projects: [
+    // Default: JS on. Everything except the JS-free content pass.
+    { name: "chromium", use: { ...devices["Desktop Chrome"] }, testIgnore: /public-nojs\.spec\.ts/ },
+    // CP4 JS-free content pass — the public surface must render fully without JavaScript.
+    {
+      name: "chromium-nojs",
+      use: { ...devices["Desktop Chrome"], javaScriptEnabled: false },
+      testMatch: /public-nojs\.spec\.ts/,
+    },
+  ],
   webServer: {
     command: "npm run start:e2e",
     url: baseURL,
