@@ -1,11 +1,12 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { requireRole } from "@/lib/auth/require-role";
 import { AuthzError } from "@/lib/auth/claims";
 import { createSupabaseServerClient } from "@/lib/auth/server";
 import { mapAuthzError, mapDbError } from "@/lib/errors";
 import { isLocale } from "@/lib/locales";
+import { TAG_PUBLIC, TAG_SITEMAP, tagForListing } from "@/lib/public-read/tags";
 
 /**
  * Publish/unpublish + QA + menu-approval server actions (CP3). Publication
@@ -42,8 +43,13 @@ async function denyIfUnauthorized(): Promise<ActionState | null> {
 function revalidateListing(id: string) {
   revalidatePath("/admin/listings");
   revalidatePath(`/admin/listings/${id}`);
-  // NOTE: public-surface revalidation (ISR tags for /, /ja, listing pages,
-  // sitemaps) is CP4 — wired there behind the real tag scheme, not here.
+  // Public surface (CP4): invalidate the listing's own cached page/data, the sitemap, and
+  // the category/home aggregates. updateTag (Next 16, Server-Action-only) purges the tag
+  // on-demand with read-your-own-writes semantics, so the listing drops from the public
+  // surface on unpublish and refreshes on publish — no stale-while-revalidate delay.
+  updateTag(tagForListing(id));
+  updateTag(TAG_SITEMAP);
+  updateTag(TAG_PUBLIC);
 }
 
 export async function publishLocale(_prev: ActionState, formData: FormData): Promise<ActionState> {

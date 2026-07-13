@@ -30,7 +30,8 @@ import { HowWeKeepCurrent } from "@/components/public/HowWeKeepCurrent";
  * unknown → 404. All content renders server-side (JS-free); the only client bit is the
  * live open-now pill. JSON-LD is emitted from the same DTO (goldens in /lib/schema).
  */
-export const dynamicParams = false;
+export const dynamicParams = true;
+export const revalidate = 3600;
 
 export async function generateStaticParams() {
   const [canonical, aliases] = await Promise.all([

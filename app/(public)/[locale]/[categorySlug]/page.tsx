@@ -15,7 +15,8 @@ import { PublicFooter } from "@/components/public/PublicFooter";
 import { Breadcrumbs } from "@/components/public/Breadcrumbs";
 import { ListingCard } from "@/components/public/ListingCard";
 
-export const dynamicParams = false;
+export const dynamicParams = true;
+export const revalidate = 3600;
 
 export async function generateStaticParams() {
   return listEligibleCategoryParams();

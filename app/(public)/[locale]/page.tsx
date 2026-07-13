@@ -10,7 +10,8 @@ import type { LocaleAlternate } from "@/lib/public-read/queries";
 import { SiteHeader } from "@/components/public/SiteHeader";
 import { PublicFooter } from "@/components/public/PublicFooter";
 
-export const dynamicParams = false;
+export const dynamicParams = true;
+export const revalidate = 3600;
 
 async function homeAlternates(): Promise<LocaleAlternate[]> {
   const served = await getServedLocales();

@@ -10,9 +10,14 @@ import { getServedLocales } from "@/lib/public-read/server";
  * <html lang={locale}> — the reason multi-root exists: a single shared root can't set a
  * correct per-locale lang. The locale is gated against the runtime-served set
  * (locale_availability), NOT isLocale, so KO can't be reached at the route layer until
- * Slice 2 flips it on. dynamicParams=false 404s any unlisted locale.
+ * Slice 2 flips it on.
+ *
+ * dynamicParams=true (ISR): served locales are prerendered; the served-locale guard below
+ * runs before any child renders, so an unserved locale (KO) still 404s with no shell. true
+ * (not false) is required so the child listing/category segments can render NEW eligible
+ * pages on-demand between builds — a false parent disables the child fallback.
  */
-export const dynamicParams = false;
+export const dynamicParams = true;
 
 export async function generateStaticParams() {
   const locales = await getServedLocales();
