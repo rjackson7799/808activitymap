@@ -55,7 +55,9 @@ describe("row routing", () => {
                values ('listing_view', 'server', 'partition-test-session', 'en')`;
       const inDefault = await tx`select count(*)::int as c from events_default`;
       expect(inDefault[0]!.c).toBe(0);
-      const routed = await tx`select count(*)::int as c from events where name = 'listing_view'`;
+      const routed = await tx`select count(*)::int as c from events
+                              where name = 'listing_view'
+                                and session_id = 'partition-test-session'`;
       expect(routed[0]!.c).toBe(1);
     });
   });
