@@ -23,6 +23,7 @@ import { EditorialNote } from "@/components/public/EditorialNote";
 import { MenuDisplay } from "@/components/public/MenuDisplay";
 import { HoursTable } from "@/components/public/HoursTable";
 import { HowWeKeepCurrent } from "@/components/public/HowWeKeepCurrent";
+import { ShareButton } from "@/components/public/ShareButton";
 
 /**
  * Listing detail (CP4). Slug resolution: a romanized alias single-hops to the native

@@ -25,7 +25,7 @@ describe("audit coupling and coverage", () => {
       select t.tablename
       from pg_tables t
       where t.schemaname = 'public'
-        and t.tablename not in ('audit_log', 'events')      -- append-only log + telemetry
+        and t.tablename not in ('audit_log', 'events', 'rate_limits') -- append-only log + telemetry + rate counters
         and t.tablename not like 'events_%'                 -- partitions
         and not exists (
           select 1 from pg_trigger tr

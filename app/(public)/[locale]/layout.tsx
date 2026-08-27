@@ -4,6 +4,7 @@ import "@/app/globals.css";
 import { fontVariables } from "@/app/fonts";
 import { isLocale } from "@/lib/locales";
 import { getServedLocales } from "@/lib/public-read/server";
+import { AnalyticsListeners } from "@/components/public/AnalyticsListeners";
 
 /**
  * Root layout for the public (public)/[locale] tree (CP4 multi-root). Renders
@@ -37,7 +38,10 @@ export default async function PublicRootLayout({
 
   return (
     <html lang={locale} className={fontVariables}>
-      <body className="min-h-dvh bg-sand text-body antialiased">{children}</body>
+      <body className="min-h-dvh bg-sand text-body antialiased">
+        {children}
+        <AnalyticsListeners />
+      </body>
     </html>
   );
 }

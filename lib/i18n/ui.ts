@@ -28,6 +28,8 @@ export interface UiStrings {
   location: string;
   phone: string;
   directions: string;
+  share: string;
+  linkCopied: string;
   callThisPlace: string;
   aboutHeading: string;
   howWeKeepCurrent: string;
@@ -64,6 +66,8 @@ const en: UiStrings = {
   location: "Location",
   phone: "Phone",
   directions: "Directions",
+  share: "Share",
+  linkCopied: "Link copied",
   callThisPlace: "Call",
   aboutHeading: "About",
   howWeKeepCurrent: "How we keep this current",
@@ -100,6 +104,8 @@ const ja: UiStrings = {
   location: "所在地",
   phone: "電話",
   directions: "地図・経路",
+  share: "共有",
+  linkCopied: "リンクをコピーしました",
   callThisPlace: "電話する",
   aboutHeading: "紹介",
   howWeKeepCurrent: "情報の更新方法",

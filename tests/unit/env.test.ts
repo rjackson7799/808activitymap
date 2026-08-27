@@ -9,6 +9,9 @@ const FULL_PROD_ENV = {
   NEXT_PUBLIC_SUPABASE_ANON_KEY: "anon-key",
   SUPABASE_SERVICE_ROLE_KEY: "service-key",
   DATABASE_URL: "postgresql://user:pass@host:5432/db",
+  IP_HASH_PEPPER: "prod-pepper",
+  EVENTS_INTERNAL_TOKEN: "prod-internal-token",
+  CRON_SECRET: "prod-cron-secret",
 };
 
 describe("parseEnv — fail-closed contract", () => {
