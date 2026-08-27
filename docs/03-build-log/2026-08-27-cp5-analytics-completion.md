@@ -58,8 +58,21 @@
 - Final CP5 Playwright suite: 9 passed, including listing full-load/client-navigation behavior, directions, language, menu, successful/unsupported share paths, prefetch exclusion, and malformed slug handling.
 - Final typecheck, lint, and unit suite: passed; 14 unit files and 165 unit tests passed.
 
+### Staging configuration and deployment
+
+- Created and linked the replacement Supabase staging project `808ActivityMap Staging2026` in West US (North California), project ref `onimchorvakehgundrsd`.
+- Linked the repository to the Vercel project `honu-vibe/808activitymap-staging`; added Vercel's generated `.vercel` and `.env*` ignore rules so local project metadata and downloaded environment values cannot be committed.
+- Audited Vercel variable names, types, and Production/Preview scopes without printing values. Browser-exposed Supabase URL/publishable-key settings are non-sensitive; database, service-role, analytics, and cron credentials remain write-only Sensitive values. PostHog forwarding remains disabled and `SENTRY_DSN` remains unset.
+- Applied all 22 existing forward migrations to the fresh linked staging database. A post-push dry run reported the remote database up to date, and `supabase db lint --linked --level warning` reported no schema errors.
+- The first seeded-environment rebuild reached Supabase but failed closed because the fresh database had no required `app_config` rows. Applied the repository's idempotent `LOCAL/STAGING ONLY` `supabase/seed.sql`; no production data or environment was touched.
+- Redeployed merged commit `4167f99e7a68625a9d130a9b6e77ff77847b2da8`. Deployment `dpl_B1D3DQTmCdcir9rwj5ySBK4muxG6` completed Ready and received `https://808activitymap-staging.vercel.app` plus the project aliases.
+- Staging HTTP smoke checks passed: EN homepage 200, JA homepage 200, seeded EN listing 200, malformed listing 404, and unsupported GET on `/api/events` 405. The single seeded listing request may create one expected staging `listing_view` event.
+- Vercel Sensitive values are write-only and pull as the literal `[SENSITIVE]` placeholder. Their presence/type/scope can be audited locally, but their contents are verified only by successful build/runtime behavior; temporary audit files were deleted after every check.
+
 ## Rollback ledger
 
 - Behavioral/UI changes: revert their focused commit; no public route or closed-listing behavior is altered.
 - Database changes: use a new forward-only reversal migration; never edit a shipped migration.
 - Configuration changes: revert the focused configuration commit and remove the corresponding values from the environment only after the older deployment is restored.
+- Staging fixture data: delete only the deterministic staging seed rows in reverse dependency order through an explicit reviewed cleanup, or recreate the still-disposable staging project before real data exists.
+- Staging deployment: redeploy/promote a prior immutable Vercel deployment. The two failed pre-bootstrap deployments never became Ready; deployment `dpl_B1D3DQTmCdcir9rwj5ySBK4muxG6` is the first successful staging release.
