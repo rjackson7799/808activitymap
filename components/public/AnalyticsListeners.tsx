@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { emit } from "@/lib/analytics/client";
 
@@ -17,13 +17,19 @@ export function AnalyticsListeners() {
   // sections) is picked up and its listing_view fires (server capture skips
   // RSC navigations by design — ADR-005 — so the client enriches those).
   const pathname = usePathname();
+  const previousPathname = useRef<string | null>(null);
   useEffect(() => {
     const ctx = document.querySelector<HTMLElement>("[data-analytics-listing]");
     const listingId = ctx?.dataset.analyticsListing ?? null;
     const locale = document.documentElement.lang || null;
 
-    // Corroborating client listing_view (the server count is authoritative).
-    if (listingId) emit("listing_view", { listingId, locale });
+    // A full document load is already counted by the authoritative proxy
+    // capture. Emit only when the pathname actually changed in this mounted
+    // app, which identifies a normal client-side navigation. This avoids a
+    // hydration duplicate while still counting SPA visits to a listing.
+    const isClientNavigation = previousPathname.current !== null && previousPathname.current !== pathname;
+    previousPathname.current = pathname;
+    if (listingId && isClientNavigation) emit("listing_view", { listingId, locale });
 
     const onClick = (event: MouseEvent) => {
       const el = (event.target as HTMLElement | null)?.closest<HTMLElement>("[data-analytics]");

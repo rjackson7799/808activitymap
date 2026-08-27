@@ -4,7 +4,8 @@ import { parseVerifiedClaims } from "@/lib/auth/claims";
 import { env } from "@/config/env";
 import { DEFAULT_LOCALE, LOCALES, type Locale } from "@/lib/locales";
 import { postServerEvent } from "@/lib/analytics/server-capture";
-import { SESSION_COOKIE, SESSION_MAX_AGE_SECONDS } from "@/lib/analytics/session";
+import { isValidSessionId, SESSION_COOKIE, SESSION_MAX_AGE_SECONDS } from "@/lib/analytics/session";
+import { decodeSlug } from "@/lib/public-read/paths";
 
 /**
  * Proxy (Next 16 middleware). Three concerns, branched by pathname BEFORE any work:
@@ -80,25 +81,25 @@ function isDocumentNavigation(request: NextRequest): boolean {
  * If this is a listing document load, mint/refresh the sid cookie on `response`
  * and schedule the server capture. Mutates `response` (Set-Cookie); returns it.
  */
-function captureListing(
+function capturePublicAnalytics(
   request: NextRequest,
   event: NextFetchEvent,
   response: NextResponse,
   locale: Locale,
   localPath: string,
 ): NextResponse {
-  const match = localPath.match(LISTING_PATH);
-  if (!match || !isDocumentNavigation(request)) return response;
+  if (!isDocumentNavigation(request)) return response;
 
-  const slug = decodeURIComponent(match[1]!);
+  const match = localPath.match(LISTING_PATH);
+  const slug = match ? decodeSlug(match[1]!) : null;
   const existing = request.cookies.get(SESSION_COOKIE)?.value;
-  const isNewSession = !existing;
-  const sessionId = existing ?? crypto.randomUUID();
+  const isNewSession = !isValidSessionId(existing);
+  const sessionId = isNewSession ? crypto.randomUUID() : existing;
 
   // Sliding 30-min session window (refresh on each capture).
   response.cookies.set(SESSION_COOKIE, sessionId, {
     httpOnly: true,
-    secure: true,
+    secure: request.nextUrl.protocol === "https:",
     sameSite: "lax",
     path: "/",
     maxAge: SESSION_MAX_AGE_SECONDS,
@@ -108,13 +109,16 @@ function captureListing(
   const forwarded = {
     userAgent: request.headers.get("user-agent"),
     referer: request.headers.get("referer"),
+    landingQuery: request.nextUrl.search || null,
   };
   event.waitUntil(
     (async () => {
       if (isNewSession) {
         await postServerEvent(origin, { name: "session_start", locale, sessionId }, forwarded);
       }
-      await postServerEvent(origin, { name: "listing_view", slug, locale, sessionId }, forwarded);
+      if (slug) {
+        await postServerEvent(origin, { name: "listing_view", slug, locale, sessionId }, forwarded);
+      }
     })(),
   );
   return response;
@@ -140,7 +144,7 @@ export default async function proxy(request: NextRequest, event: NextFetchEvent)
   for (const locale of PREFIXED_LOCALES) {
     if (pathname === `/${locale}` || pathname.startsWith(`/${locale}/`)) {
       const response = NextResponse.next();
-      return captureListing(request, event, response, locale, pathname.slice(`/${locale}`.length));
+      return capturePublicAnalytics(request, event, response, locale, pathname.slice(`/${locale}`.length));
     }
   }
 
@@ -148,7 +152,7 @@ export default async function proxy(request: NextRequest, event: NextFetchEvent)
   const url = request.nextUrl.clone();
   url.pathname = pathname === "/" ? "/en" : `/en${pathname}`;
   const response = NextResponse.rewrite(url);
-  return captureListing(request, event, response, DEFAULT_LOCALE, pathname);
+  return capturePublicAnalytics(request, event, response, DEFAULT_LOCALE, pathname);
 }
 
 // Admin is NOT excluded (its guard must keep running); login IS excluded (served directly

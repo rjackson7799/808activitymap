@@ -9,7 +9,13 @@ import { isBot, isPrefetch } from "@/lib/analytics/filter";
 import { classifyReferrer } from "@/lib/analytics/referrer";
 import { clientIpFromHeaders, hashIp } from "@/lib/analytics/ip";
 import { rateLimitHit, recordEvent } from "@/lib/analytics/ingest-db";
-import { CONSENT_CLASS, SESSION_COOKIE, SESSION_FORWARD_HEADER } from "@/lib/analytics/session";
+import {
+  CONSENT_CLASS,
+  isValidSessionId,
+  SESSION_COOKIE,
+  SESSION_FORWARD_HEADER,
+  SESSION_MAX_AGE_SECONDS,
+} from "@/lib/analytics/session";
 
 /**
  * First-party analytics ingestion (CP5, TSD §8). POST only, Node runtime
@@ -25,9 +31,21 @@ import { CONSENT_CLASS, SESSION_COOKIE, SESSION_FORWARD_HEADER } from "@/lib/ana
 
 export const runtime = "nodejs";
 
-const NO_CONTENT = new NextResponse(null, { status: 204 });
-
 const uuidSchema = z.uuid();
+
+function noContent(request: NextRequest, sessionId?: string | null): NextResponse {
+  const response = new NextResponse(null, { status: 204 });
+  if (isValidSessionId(sessionId)) {
+    response.cookies.set(SESSION_COOKIE, sessionId, {
+      httpOnly: true,
+      secure: request.nextUrl.protocol === "https:",
+      sameSite: "lax",
+      path: "/",
+      maxAge: SESSION_MAX_AGE_SECONDS,
+    });
+  }
+  return response;
+}
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
@@ -50,7 +68,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     // 2. Silent drops: bots (UA denylist incl. "lighthouse"/"headless") and
     //    speculative prefetch/preload hits never become events.
     if (isPrefetch(request.headers) || isBot(userAgent, config.bot_filter)) {
-      return NO_CONTENT;
+      return noContent(request);
     }
 
     // 3. Dictionary validation (name implemented + source allowed + props).
@@ -59,7 +77,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     try {
       event = parseEventInput(body, { source });
     } catch {
-      return NO_CONTENT; // don't leak the schema to abusers
+      return noContent(request); // don't leak the schema to abusers
     }
 
     // Envelope fields (outside the dictionary props): locale, target, session.
@@ -72,9 +90,15 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const slug = isServer && typeof raw.slug === "string" ? raw.slug : null;
     // Client session = the httpOnly sid cookie (untamperable); server session =
     // the value the trusted proxy forwards.
-    const sessionId = isServer
+    const rawSessionId = isServer
       ? request.headers.get(SESSION_FORWARD_HEADER)
       : (request.cookies.get(SESSION_COOKIE)?.value ?? null);
+    const sessionId = isValidSessionId(rawSessionId) ? rawSessionId : null;
+
+    // PRD §16 requires locale on every event and a valid target on every
+    // listing-scoped event. Silently drop malformed client envelopes.
+    if (!locale) return noContent(request, sessionId);
+    if (event.listingScoped && !listingId && !slug) return noContent(request, sessionId);
 
     // 4. Rate limiting — client only, two dimensions (per-IP AND per-session).
     //    Fail-open: a limiter error never blocks ingestion.
@@ -106,7 +130,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     // 5. Referrer class is meaningful only on the server entry events, where the
     //    proxy forwards the real navigation Referer.
     const referrerClass = isServer
-      ? classifyReferrer(config.referrer_classification, { referer, userAgent })
+      ? classifyReferrer(config.referrer_classification, {
+          referer,
+          userAgent,
+          landingQuery: request.headers.get("x-events-query"),
+        })
       : null;
 
     // 6. Insert (fail-safe — errors are logged and swallowed).
@@ -122,11 +150,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       consentClass: CONSENT_CLASS,
     });
 
-    return NO_CONTENT;
+    return noContent(request, sessionId);
   } catch (error) {
     // Any unexpected failure: log, but never surface (analytics is best-effort).
     captureError(error, { where: "POST /api/events" });
-    return NO_CONTENT;
+    return noContent(request);
   }
 }
 

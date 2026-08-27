@@ -36,8 +36,10 @@ export function ShareButton({
       }
       return;
     }
+    const clipboard = navigator.clipboard;
+    if (!clipboard || typeof clipboard.writeText !== "function") return;
     try {
-      await navigator.clipboard?.writeText(url);
+      await clipboard.writeText(url);
       setCopied(true);
       emit("share_click", { listingId, locale, props: { method: "copy" } });
       window.setTimeout(() => setCopied(false), 2000);

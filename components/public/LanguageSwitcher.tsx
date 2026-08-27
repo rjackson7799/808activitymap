@@ -37,6 +37,9 @@ export function LanguageSwitcher({
             href={alt.href}
             hrefLang={alt.locale}
             title={alt.available ? undefined : notAvailableLabel}
+            data-analytics="language-switch"
+            data-from={current}
+            data-to={alt.locale}
             className="rounded-chip border border-hairline px-3 py-1 text-[12px] font-medium text-ink hover:bg-neutral"
           >
             {LOCALE_LABEL[alt.locale]}

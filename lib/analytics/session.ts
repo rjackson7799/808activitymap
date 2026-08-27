@@ -14,5 +14,11 @@ export const SESSION_MAX_AGE_SECONDS = 30 * 60;
 /** Header the proxy uses to forward the trusted server-origin session id. */
 export const SESSION_FORWARD_HEADER = "x-events-session";
 
+/** Session ids are server-minted UUIDs. Reject arbitrary cookie/header values. */
+export function isValidSessionId(value: string | null | undefined): value is string {
+  return value !== null && value !== undefined &&
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
+}
+
 /** consent_class stamped on every Slice-1 event. */
 export const CONSENT_CLASS = "functional";

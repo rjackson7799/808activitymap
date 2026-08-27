@@ -11,7 +11,7 @@ export function MenuDisplay({ menu, strings }: { menu: MenuDTO; strings: UiStrin
   return (
     <div className="flex flex-col gap-6">
       {menu.sections.map((section, sectionIndex) => (
-        <div key={sectionIndex}>
+        <div key={sectionIndex} data-analytics="menu-section">
           <h3 className="font-serif text-lg text-ink">{section.name}</h3>
           <ul className="mt-2 divide-y divide-hairline">
             {section.items.map((item, itemIndex) => (

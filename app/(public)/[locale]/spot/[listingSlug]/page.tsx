@@ -106,7 +106,10 @@ export default async function ListingPage({
   return (
     <>
       <SiteHeader locale={locale} brand={brand} alternates={alternates} notAvailableLabel={strings.otherLocaleNotAvailable} />
-      <main className="mx-auto max-w-3xl px-6 py-8">
+      <main
+        className="mx-auto max-w-3xl px-6 py-8"
+        data-analytics-listing={dto.id}
+      >
         <Breadcrumbs items={crumbs.map((c, i) => (i === crumbs.length - 1 ? { name: c.name } : { name: c.name, href: c.path }))} />
 
         <div className="mt-5">
@@ -118,7 +121,16 @@ export default async function ListingPage({
             <h1 className="font-serif text-4xl leading-tight text-ink">{dto.name}</h1>
             <p className="mt-2 text-[14px] text-secondary">{meta}</p>
           </div>
-          <OpenNowBadge hours={dto.hours} locale={locale} />
+          <div className="flex items-center gap-2">
+            <ShareButton
+              title={dto.name}
+              listingId={dto.id}
+              locale={locale}
+              label={strings.share}
+              copiedLabel={strings.linkCopied}
+            />
+            <OpenNowBadge hours={dto.hours} locale={locale} />
+          </div>
         </div>
 
         <div className="mt-4">
@@ -168,6 +180,8 @@ export default async function ListingPage({
                 <a
                   href={`https://www.google.com/maps/search/?api=1&query=${dto.geo.lat},${dto.geo.lng}`}
                   rel="noopener noreferrer"
+                  data-analytics="directions"
+                  data-provider="google"
                   className="font-semibold text-teal-dark underline-offset-2 hover:underline"
                 >
                   {strings.directions}

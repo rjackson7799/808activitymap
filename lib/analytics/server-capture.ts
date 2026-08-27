@@ -16,7 +16,7 @@ import { SESSION_FORWARD_HEADER } from "./session";
 export async function postServerEvent(
   origin: string,
   event: { name: "listing_view" | "session_start"; slug?: string; locale: string; sessionId: string },
-  forwarded: { userAgent: string | null; referer: string | null },
+  forwarded: { userAgent: string | null; referer: string | null; landingQuery: string | null },
 ): Promise<void> {
   const headers: Record<string, string> = {
     "content-type": "application/json",
@@ -25,6 +25,7 @@ export async function postServerEvent(
   };
   if (forwarded.userAgent) headers["x-events-ua"] = forwarded.userAgent;
   if (forwarded.referer) headers["x-events-referer"] = forwarded.referer;
+  if (forwarded.landingQuery) headers["x-events-query"] = forwarded.landingQuery;
 
   try {
     await fetch(`${origin}/api/events`, {
