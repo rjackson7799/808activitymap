@@ -142,7 +142,8 @@ describe("cron maintenance RPCs (CP5)", () => {
     const pristine = await sql`select events_default_count() as c`;
     expect(Number(pristine[0]!.c)).toBe(0);
     await withRollback(async (tx) => {
-      await tx`insert into events (name, source, ts) values ('listing_view', 'server', now() + interval '10 years')`;
+      await tx`insert into events (name, source, session_id, locale, ts)
+               values ('listing_view', 'server', 'default-count-session', 'en', now() + interval '10 years')`;
       const after = await tx`select events_default_count() as c`;
       expect(Number(after[0]!.c)).toBe(1);
     });
@@ -163,6 +164,26 @@ describe("cron maintenance RPCs (CP5)", () => {
   it("prune_rate_limits rejects a non-positive horizon", async () => {
     await withRollback(async (tx) => {
       await expectErrorIn(tx, /must be positive/, (sp) => sp`select prune_rate_limits(0)`);
+    });
+  });
+
+  it("prune_events deletes rows older than the retention horizon and keeps recent rows", async () => {
+    await withRollback(async (tx) => {
+      const oldId = "a1000000-0000-4000-8000-000000000001";
+      const recentId = "a1000000-0000-4000-8000-000000000002";
+      await tx`insert into events (id, name, source, session_id, locale, ts) values
+        (${oldId}, 'session_start', 'server', 'old-session', 'en', now() - interval '731 days'),
+        (${recentId}, 'session_start', 'server', 'recent-session', 'en', now())`;
+      const deleted = await tx`select prune_events(730) as n`;
+      expect(Number(deleted[0]!.n)).toBeGreaterThanOrEqual(1);
+      const rows = await tx`select id from events where id in (${oldId}, ${recentId}) order by id`;
+      expect(rows.map((row) => row.id)).toEqual([recentId]);
+    });
+  });
+
+  it("prune_events rejects a non-positive horizon", async () => {
+    await withRollback(async (tx) => {
+      await expectErrorIn(tx, /must be positive/, (sp) => sp`select prune_events(0)`);
     });
   });
 });

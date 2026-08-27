@@ -9,8 +9,9 @@ import { captureError, logEvent } from "@/lib/observability/log";
  * `GET` + `Authorization: Bearer $CRON_SECRET` (production deployments only).
  * It: (1) extends the monthly events partitions, (2) alerts if the
  * `events_default` catch-all is ever non-empty (partition creation fell
- * behind — migration 14), and (3) prunes hashed-IP/session rate-limit rows
- * past the `retention_days.ip_abuse` (90d) obligation.
+ * behind — migration 14), (3) prunes first-party events past
+ * `retention_days.events`, and (4) prunes hashed-IP/session rate-limit rows
+ * past `retention_days.ip_abuse` (90d).
  *
  * Excluded from the locale proxy by the matcher (`/api` is not rewritten).
  * Uses the service client — the maintenance RPCs are service_role-only.
@@ -42,6 +43,11 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     }
 
     const { retention_days } = await getAppConfig();
+    const { data: eventsPruned, error: eventPruneErr } = await db.rpc("prune_events", {
+      p_retain_days: retention_days.events,
+    });
+    if (eventPruneErr) throw eventPruneErr;
+
     const { data: pruned, error: pruneErr } = await db.rpc("prune_rate_limits", {
       p_retain_days: retention_days.ip_abuse,
     });
@@ -51,6 +57,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       ok: true,
       partitionsCreated: created ?? 0,
       eventsDefaultCount,
+      eventsPruned: eventsPruned ?? 0,
       rateLimitsPruned: pruned ?? 0,
     });
   } catch (error) {

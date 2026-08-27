@@ -1,7 +1,7 @@
 # CP5 Analytics and Observability Completion — 2026-08-27
 
-**Checkpoint:** CP5 analytics and observability  
-**Branch:** `codex/cp5-analytics-completion`  
+**Checkpoint:** CP5 analytics and observability
+**Branch:** `codex/cp5-analytics-completion`
 **Baseline:** `7928225fd437eb01ea5504e0c8306b666784bca1`
 
 ## Baseline inspection
@@ -26,15 +26,22 @@
 
 ### Database and retention
 
-- Pending.
+- Added a new forward-only analytics contract/retention migration; no shipped migration was edited.
+- Added `NOT VALID` constraints that enforce non-null locale/session and a non-empty market for new events without guessing values for legacy rows.
+- Added a service-role-only `prune_events` function and wired the authenticated daily partition cron to enforce `retention_days.events` alongside rate-limit retention.
+- Rolled the generated RLS policy migration forward because the generator requires its output to sort after every schema migration; policy semantics are unchanged.
 
 ### Configuration and observability
 
-- Pending.
+- Documented `IP_HASH_PEPPER`, `EVENTS_INTERNAL_TOKEN`, `CRON_SECRET`, and the optional/inactive `SENTRY_DSN` seam in `.env.example`.
+- PostHog forwarding remains disabled. No Sentry or other dependency was added.
 
 ### Tests and verification
 
-- Pending.
+- Added Playwright database assertions for full-load listing view (including no hydration duplicate), client-side listing navigation, direction click, EN→JA language switch, one-second menu visibility, and successful share copy.
+- Typecheck: passed after public analytics behavior change.
+- Lint: passed after public analytics behavior change.
+- Focused analytics/observability/env unit tests: 41 passed. The first sandboxed attempt was blocked by local worker spawn permissions; the approved local rerun passed.
 
 ## Rollback ledger
 

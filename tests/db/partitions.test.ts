@@ -51,7 +51,8 @@ describe("ensure_events_partitions", () => {
 describe("row routing", () => {
   it("a current event lands in the current month partition, not the default", async () => {
     await withRollback(async (tx) => {
-      await tx`insert into events (name, source) values ('listing_view', 'server')`;
+      await tx`insert into events (name, source, session_id, locale)
+               values ('listing_view', 'server', 'partition-test-session', 'en')`;
       const inDefault = await tx`select count(*)::int as c from events_default`;
       expect(inDefault[0]!.c).toBe(0);
       const routed = await tx`select count(*)::int as c from events where name = 'listing_view'`;
@@ -61,7 +62,8 @@ describe("row routing", () => {
 
   it("an event beyond the partition horizon lands in the default (the alert condition)", async () => {
     await withRollback(async (tx) => {
-      await tx`insert into events (name, source, ts) values ('listing_view', 'server', now() + interval '10 years')`;
+      await tx`insert into events (name, source, session_id, locale, ts)
+               values ('listing_view', 'server', 'partition-test-session', 'en', now() + interval '10 years')`;
       const inDefault = await tx`select count(*)::int as c from events_default`;
       expect(inDefault[0]!.c).toBe(1);
     });

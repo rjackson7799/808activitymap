@@ -97,6 +97,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     // PRD §16 requires locale on every event and a valid target on every
     // listing-scoped event. Silently drop malformed client envelopes.
+    if (!sessionId) return noContent(request);
     if (!locale) return noContent(request, sessionId);
     if (event.listingScoped && !listingId && !slug) return noContent(request, sessionId);
 
