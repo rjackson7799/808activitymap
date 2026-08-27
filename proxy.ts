@@ -27,6 +27,29 @@ import { decodeSlug } from "@/lib/public-read/paths";
 
 const PREFIXED_LOCALES = LOCALES.filter((locale) => locale !== DEFAULT_LOCALE);
 const LISTING_PATH = /^\/spot\/([^/]+)\/?$/;
+const RAW_LISTING_PATH = /^\/(?:(?:ja|ko)\/)?spot\/([^/]+)\/?$/;
+
+/**
+ * Validate the encoded segment from the untouched request URL. Next may throw
+ * while decoding a malformed dynamic segment before the route component (and
+ * before a normalized `nextUrl.pathname` guard) can return not-found.
+ */
+function hasMalformedListingEncoding(rawUrl: string): boolean {
+  let rawPath: string;
+  try {
+    rawPath = new URL(rawUrl).pathname;
+  } catch {
+    return false;
+  }
+  const match = rawPath.match(RAW_LISTING_PATH);
+  if (!match) return false;
+  try {
+    decodeURIComponent(match[1]!);
+    return false;
+  } catch {
+    return true;
+  }
+}
 
 async function adminGuard(request: NextRequest): Promise<NextResponse> {
   let response = NextResponse.next({ request });
@@ -91,6 +114,16 @@ function capturePublicAnalytics(
   if (!isDocumentNavigation(request)) return response;
 
   const match = localPath.match(LISTING_PATH);
+  if (match) {
+    try {
+      decodeURIComponent(match[1]!);
+    } catch {
+      // Next's dynamic-route decoder throws on malformed percent sequences.
+      // Reject them at the boundary as an ordinary not-found response rather
+      // than allowing an invalid public URL to become a server error.
+      return new NextResponse(null, { status: 404 });
+    }
+  }
   const slug = match ? decodeSlug(match[1]!) : null;
   const existing = request.cookies.get(SESSION_COOKIE)?.value;
   const isNewSession = !isValidSessionId(existing);
@@ -125,6 +158,9 @@ function capturePublicAnalytics(
 }
 
 export default async function proxy(request: NextRequest, event: NextFetchEvent): Promise<NextResponse> {
+  if (hasMalformedListingEncoding(request.url)) {
+    return new NextResponse(null, { status: 404 });
+  }
   const { pathname } = request.nextUrl;
 
   // 1. Admin surface — existing auth guard.

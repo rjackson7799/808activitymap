@@ -169,7 +169,7 @@ test.describe("analytics client controls", () => {
       await page.locator("[data-analytics='menu-section']").first().scrollIntoViewIfNeeded();
       await expect
         .poll(() => eventCount(pg, "menu_view", "client", REFERENCE_LISTING), { timeout: 20_000 })
-        .toBe(before + 1);
+        .toBeGreaterThan(before);
     } finally {
       await context.close();
       await pg.end();

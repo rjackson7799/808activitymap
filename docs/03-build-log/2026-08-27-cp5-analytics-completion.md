@@ -46,11 +46,17 @@
 - Full unit suite: 165 passed.
 - Typecheck: passed (final source/test state).
 - Lint: passed (final source/test state).
-- Production build: compilation and the build-time TypeScript phase passed; page-data collection could not complete because the local Supabase database was unavailable, so no deployable `BUILD_ID` was produced.
-- Local Supabase: unavailable. `127.0.0.1:54332` refused connections and no project Docker containers were running after the safe start attempt.
-- Database tests: attempted, but the runner could not get past connection setup without local Supabase; no DB assertions executed.
-- Playwright: all 9 CP5 analytics tests were discovered successfully. Execution remains unverified because global setup and the production test server require the unavailable local database.
+- Initial production build/DB/Playwright attempts were blocked because the local `portal` Supabase containers had stopped seven days earlier; no remote environment was contacted.
 - Cleanup: stopped only the Node/Vitest worker processes started by the failed local Supabase, build, and DB-test attempts; older user processes were left untouched.
+- Docker follow-up: restarted the existing stopped `portal` Supabase containers in place, preserving volumes, and applied both pending forward migrations locally without a reset.
+- Fixed a pre-existing partition-test isolation assumption: the routing assertion now counts only its unique session rather than all historical `listing_view` rows in a reused local database.
+- Production build completed successfully once the full local Supabase stack was healthy.
+- First CP5 Playwright run: 7 passed, 2 failed. Fixed the real malformed-percent slug 500 by returning 404 at the proxy boundary, and corrected the menu assertion to allow multiple simultaneously visible menu sections to emit valid events.
+- The normalized-path malformed-slug guard was still too late for Next's dynamic decoder. Moved the check to the untouched `request.url` at proxy entry so invalid encoded listing segments are rejected before `nextUrl` routing work.
+- Final database suite: 20 files passed, 304 tests passed (serialized to one worker because all files share the same local database).
+- Final production build: passed, including compilation, TypeScript, page-data collection, all 25 static pages, and final optimization.
+- Final CP5 Playwright suite: 9 passed, including listing full-load/client-navigation behavior, directions, language, menu, successful/unsupported share paths, prefetch exclusion, and malformed slug handling.
+- Final typecheck, lint, and unit suite: passed; 14 unit files and 165 unit tests passed.
 
 ## Rollback ledger
 
