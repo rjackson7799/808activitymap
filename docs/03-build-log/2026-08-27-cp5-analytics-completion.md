@@ -39,9 +39,12 @@
 ### Tests and verification
 
 - Added Playwright database assertions for full-load listing view (including no hydration duplicate), client-side listing navigation, direction click, EN→JA language switch, one-second menu visibility, and successful share copy.
+- Added browser regressions for unavailable clipboard support (no success label/event) and malformed percent-encoded listing slugs (404, never proxy error).
 - Typecheck: passed after public analytics behavior change.
 - Lint: passed after public analytics behavior change.
 - Focused analytics/observability/env unit tests: 41 passed. The first sandboxed attempt was blocked by local worker spawn permissions; the approved local rerun passed.
+- Full unit suite: 165 passed.
+- Local Supabase/DB/Playwright status: not yet verified because `127.0.0.1:54332` refused connections and no project Docker containers were running after the safe start attempt.
 
 ## Rollback ledger
 
