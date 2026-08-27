@@ -44,7 +44,13 @@
 - Lint: passed after public analytics behavior change.
 - Focused analytics/observability/env unit tests: 41 passed. The first sandboxed attempt was blocked by local worker spawn permissions; the approved local rerun passed.
 - Full unit suite: 165 passed.
-- Local Supabase/DB/Playwright status: not yet verified because `127.0.0.1:54332` refused connections and no project Docker containers were running after the safe start attempt.
+- Typecheck: passed (final source/test state).
+- Lint: passed (final source/test state).
+- Production build: compilation and the build-time TypeScript phase passed; page-data collection could not complete because the local Supabase database was unavailable, so no deployable `BUILD_ID` was produced.
+- Local Supabase: unavailable. `127.0.0.1:54332` refused connections and no project Docker containers were running after the safe start attempt.
+- Database tests: attempted, but the runner could not get past connection setup without local Supabase; no DB assertions executed.
+- Playwright: all 9 CP5 analytics tests were discovered successfully. Execution remains unverified because global setup and the production test server require the unavailable local database.
+- Cleanup: stopped only the Node/Vitest worker processes started by the failed local Supabase, build, and DB-test attempts; older user processes were left untouched.
 
 ## Rollback ledger
 
