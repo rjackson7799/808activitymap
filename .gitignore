@@ -36,3 +36,6 @@ tests/e2e/.auth/
 # logs
 npm-debug.log*
 *.log
+
+.vercel
+.env*
