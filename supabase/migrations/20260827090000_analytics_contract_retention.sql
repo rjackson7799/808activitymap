@@ -43,4 +43,3 @@ $$;
 
 revoke execute on function public.prune_events(integer) from public, anon, authenticated;
 grant execute on function public.prune_events(integer) to service_role;
-
