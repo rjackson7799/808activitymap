@@ -23,6 +23,8 @@ supabase/.temp/
 coverage/
 playwright-report/
 test-results/
+tests/e2e/.auth/
+.playwright/
 
 # misc
 .DS_Store

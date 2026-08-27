@@ -20,6 +20,16 @@ export const sql = postgres(DATABASE_URL, {
 export type Sql = typeof sql;
 export type TxSql = postgres.TransactionSql;
 
+/**
+ * A dedicated single-connection client for tests that need genuine concurrency
+ * with controlled commit ordering (e.g. the taxonomy unique-slug race), which
+ * the rollback-only `withClaims`/`withRollback` helpers cannot express. Caller
+ * MUST `.end()` it in a `finally`.
+ */
+export function newConnection() {
+  return postgres(DATABASE_URL, { max: 1, onnotice: () => {} });
+}
+
 export interface JwtClaims {
   sub?: string;
   role?: "authenticated" | "anon";

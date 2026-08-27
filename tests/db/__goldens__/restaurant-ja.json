@@ -1,0 +1,130 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Restaurant",
+  "name": "アロハ・ラーメン・ハレ",
+  "url": "https://example.portal/ja/spot/%E3%82%A2%E3%83%AD%E3%83%8F%E3%83%A9%E3%83%BC%E3%83%A1%E3%83%B3%E3%83%8F%E3%83%AC",
+  "inLanguage": "ja",
+  "image": [
+    "https://images.example/storage/v1/object/public/public-photos/seed/aloha-ramen-1.webp",
+    "https://images.example/storage/v1/object/public/public-photos/seed/aloha-ramen-2.webp"
+  ],
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "2250 Demo Ave Suite 101",
+    "addressLocality": "Honolulu",
+    "addressRegion": "HI",
+    "postalCode": "96815",
+    "addressCountry": "US"
+  },
+  "telephone": "+1-808-555-0101",
+  "priceRange": "$$",
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 21.27832,
+    "longitude": -157.829444
+  },
+  "servesCuisine": [
+    "ラーメン",
+    "居酒屋"
+  ],
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "https://schema.org/Monday",
+      "opens": "11:00",
+      "closes": "14:30"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "https://schema.org/Monday",
+      "opens": "17:00",
+      "closes": "22:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "https://schema.org/Tuesday",
+      "opens": "11:00",
+      "closes": "14:30"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "https://schema.org/Tuesday",
+      "opens": "17:00",
+      "closes": "22:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "https://schema.org/Wednesday",
+      "opens": "11:00",
+      "closes": "14:30"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "https://schema.org/Wednesday",
+      "opens": "17:00",
+      "closes": "22:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "https://schema.org/Thursday",
+      "opens": "11:00",
+      "closes": "14:30"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "https://schema.org/Thursday",
+      "opens": "17:00",
+      "closes": "22:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "https://schema.org/Friday",
+      "opens": "18:00",
+      "closes": "02:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "https://schema.org/Saturday",
+      "opens": "18:00",
+      "closes": "02:00"
+    }
+  ],
+  "hasMenu": {
+    "@type": "Menu",
+    "inLanguage": "ja",
+    "hasMenuSection": [
+      {
+        "@type": "MenuSection",
+        "name": "ラーメン",
+        "hasMenuItem": [
+          {
+            "@type": "MenuItem",
+            "name": "豚骨ラーメン",
+            "description": "18時間炊いた濃厚豚骨スープ。チャーシュー・味玉・きくらげ入り。"
+          },
+          {
+            "@type": "MenuItem",
+            "name": "辛味噌ラーメン",
+            "description": "自家製味噌にラー油と挽き肉を合わせた一杯。"
+          }
+        ]
+      },
+      {
+        "@type": "MenuSection",
+        "name": "サイドメニュー",
+        "hasMenuItem": [
+          {
+            "@type": "MenuItem",
+            "name": "餃子（5個）",
+            "description": "パリッと焼いた豚肉餃子。"
+          },
+          {
+            "@type": "MenuItem",
+            "name": "本日のポケ",
+            "description": "時価。スタッフにお尋ねください。"
+          }
+        ]
+      }
+    ]
+  }
+}

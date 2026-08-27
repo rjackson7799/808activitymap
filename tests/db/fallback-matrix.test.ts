@@ -1,14 +1,20 @@
 import { describe, expect, it } from "vitest";
 import { sql, withRollback } from "./helpers";
 import { LISTING, MENU } from "./fixtures";
+import {
+  formatMenuItemPrice,
+  resolveAltText,
+  resolveEditorialNote,
+  resolveSeo,
+} from "@/lib/public-read/fallback";
+import { provenanceFactLabel } from "@/lib/public-read/i18n";
 
 /**
  * Fallback-matrix suite (slice-1 §publication contract, ADR-008): one case
- * per matrix row per affected locale, at the layer where the rule is
- * DB-enforceable in CP1. Rows resolved in the read-model DTOs (photo-alt EN
- * fallback flagging, templated SEO derivation, editorial-note omission in
- * rendering) get their render-layer cases in CP4 with /lib/public-read —
- * marked .todo here so the suite stays the checklist.
+ * per matrix row per affected locale. DB-enforceable rows are checked against the
+ * eligibility view; rows resolved in the read-model DTOs are checked against the pure
+ * fallback engine here (CP4 delivered), with the full DTO-layer proof — feeding the
+ * machine_draft/KO canaries through every query fn — in tests/db/public-read.test.ts.
  */
 
 describe("Name — no implicit fallback (JA page requires JA name)", () => {
@@ -52,7 +58,11 @@ describe("Editorial note — optional, omitted (never EN prose on a JA page)", (
     expect(ja).toHaveLength(1);
   });
 
-  it.todo("CP4: listing DTO omits the editorial-note section entirely when absent in-locale");
+  it("CP4: the DTO resolver omits an absent editorial note (never EN prose)", () => {
+    expect(resolveEditorialNote(null)).toBeNull();
+    expect(resolveEditorialNote("   ")).toBeNull();
+    expect(resolveEditorialNote("close-of-shift favorite")).toBe("close-of-shift favorite");
+  });
 });
 
 describe("Menus — render in a locale iff locale status ∈ {approved, published}", () => {
@@ -90,11 +100,37 @@ describe("Money terms — never fall back, never fabricated (PRD §11)", () => {
     });
   });
 
-  it.todo("CP4: menu DTO renders locale price strings only from that locale's approved menu version");
+  it("CP4: menu prices are language-neutral amounts with localized chrome (no cross-locale value)", () => {
+    // The amount is identical across locales; only the label is translated. The DTO-layer
+    // gate (unapproved JA menu ⇒ no menu, no EN prices) is in public-read.test.ts.
+    expect(formatMenuItemPrice({ priceCents: 1650, currency: "USD", priceType: "fixed" }, "en")).toBe("$16.50");
+    expect(formatMenuItemPrice({ priceCents: 1650, currency: "USD", priceType: "fixed" }, "ja")).toBe("$16.50");
+    expect(formatMenuItemPrice({ priceCents: null, currency: "USD", priceType: "market" }, "ja")).toBe("時価");
+  });
 });
 
-describe("Deferred to CP4 read-model (documented, not forgotten)", () => {
-  it.todo("Photo alt text: QA'd EN fallback allowed, flagged in DTO data");
-  it.todo("SEO title/description: per-locale template composition, never EN prose");
-  it.todo("Provenance/verification labels render from i18n app strings, not content");
+describe("CP4 read-model resolvers (render-layer matrix rows)", () => {
+  it("Photo alt text: QA'd EN fallback allowed, flagged in DTO data", () => {
+    expect(resolveAltText("味玉入り豚骨ラーメン", "Tonkotsu ramen")).toEqual({ text: "味玉入り豚骨ラーメン", altIsEnFallback: false });
+    expect(resolveAltText(null, "Counter seating")).toEqual({ text: "Counter seating", altIsEnFallback: true });
+  });
+
+  it("SEO title/description: per-locale template composition, never EN prose on a JA page", () => {
+    const seo = resolveSeo({
+      localeTitle: null,
+      localeDescription: null,
+      name: "アロハ・ラーメン・ハレ",
+      categoryLabel: "ラーメン",
+      marketId: "oahu-waikiki",
+      locale: "ja",
+    });
+    expect(seo.title).toBe("アロハ・ラーメン・ハレ｜ワイキキのラーメン");
+    expect(seo.description).not.toMatch(/locals-verified/);
+  });
+
+  it("Provenance/verification labels render from i18n app strings, not content", () => {
+    expect(provenanceFactLabel("hours", "en")).toBe("Hours");
+    expect(provenanceFactLabel("hours", "ja")).toBe("営業時間");
+    expect(provenanceFactLabel("address", "ja")).toBe("所在地");
+  });
 });

@@ -1,12 +1,12 @@
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { AuthzError, STAFF_ROLES } from "@/lib/auth/claims";
 import { requireRole } from "@/lib/auth/require-role";
-import { signOut } from "../login/actions";
 
 /**
- * Minimal protected admin landing (CP2). Proves the boundary stack:
- * proxy (routing convenience) → requireRole at the handler → RLS at the DB.
- * The real admin surface (taxonomy CRUD, publish queue) arrives in CP3.
+ * Admin dashboard. Self-guards (the layout also guards — defense in depth;
+ * neither is the boundary: server actions + RLS + guarded fns are, ADR-001).
+ * The shell (nav, sign-out, <main> landmark) lives in the admin layout.
  */
 export default async function AdminPage() {
   let claims;
@@ -20,17 +20,21 @@ export default async function AdminPage() {
   }
 
   return (
-    <main style={{ maxWidth: 560, margin: "4rem auto", fontFamily: "system-ui" }}>
+    <>
       <h1>Admin</h1>
       <p>
         Signed in as <strong>{claims.email ?? claims.sub}</strong> — roles:{" "}
         <code>{claims.appRoles.join(", ") || "(none)"}</code> — session assurance:{" "}
         <code>{claims.aal}</code>
       </p>
-      <p>Slice 1 · CP2 security boundary. Taxonomy and publishing arrive with CP3.</p>
-      <form action={signOut}>
-        <button type="submit">Sign out</button>
-      </form>
-    </main>
+      <ul>
+        <li>
+          <Link href="/admin/taxonomy">Taxonomy</Link> — categories &amp; per-locale labels
+        </li>
+        <li>
+          <Link href="/admin/listings">Listings</Link> — publish, unpublish &amp; QA transitions
+        </li>
+      </ul>
+    </>
   );
 }

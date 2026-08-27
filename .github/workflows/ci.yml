@@ -65,9 +65,68 @@ jobs:
       - run: supabase db reset
       # Reset twice: migrations must apply from scratch AND seeds must be idempotent.
       - run: supabase db reset
+      # CP4: the public-read integration suite reads through the supabase-js SERVICE
+      # client (RLS bypassed — the read layer is the boundary), so it needs the API URL
+      # + service key, not just DATABASE_URL. Remap `supabase status` → app env names.
+      - name: Export Supabase env
+        run: |
+          eval "$(supabase status -o env)"
+          {
+            echo "NEXT_PUBLIC_SUPABASE_URL=$API_URL"
+            echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=$ANON_KEY"
+            echo "SUPABASE_SERVICE_ROLE_KEY=$SERVICE_ROLE_KEY"
+            echo "DATABASE_URL=$DB_URL"
+            echo "APP_ENV=test"
+            echo "BRAND_NAME=Portal (CI)"
+            echo "PORTAL_DOMAIN=localhost:3100"
+          } >> "$GITHUB_ENV"
       - run: npm run test:db
         env:
           DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54332/postgres
 
-  # e2e (Playwright + axe) — added at CP3 with the admin publish journey.
+  e2e:
+    name: E2E (admin publish journey + axe)
+    runs-on: ubuntu-latest
+    needs: static
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 2.100.1
+      - run: npm ci
+      - run: supabase start
+      - run: supabase db reset
+      # Remap `supabase status` names → the app's env names BEFORE the build:
+      # NEXT_PUBLIC_* is INLINED at `next build`, so the client MFA bundle
+      # would ship `undefined` if these aren't set first. env() is fail-closed
+      # and has no defaults for the keys, so they are mandatory.
+      - name: Export Supabase env
+        run: |
+          eval "$(supabase status -o env)"
+          {
+            echo "NEXT_PUBLIC_SUPABASE_URL=$API_URL"
+            echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=$ANON_KEY"
+            echo "SUPABASE_SERVICE_ROLE_KEY=$SERVICE_ROLE_KEY"
+            echo "DATABASE_URL=$DB_URL"
+            echo "APP_ENV=test"
+            echo "BRAND_NAME=Portal (CI)"
+            echo "PORTAL_DOMAIN=localhost:3100"
+          } >> "$GITHUB_ENV"
+      - run: npx playwright install --with-deps chromium
+      # --forbid-only so a stray test.only can't silently narrow the suite;
+      # the webServer runs `next build && next start` (CP3's only app build in CI).
+      - run: npm run test:e2e -- --forbid-only
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+  # NOTE (owner): add the `e2e` job to branch-protection REQUIRED checks so a
+  # red journey blocks merge (a job existing isn't the same as it gating).
   # lighthouse — added at CP5; blocking from CP5 onward (slice-1 DoD #9).
