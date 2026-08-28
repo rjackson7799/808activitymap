@@ -87,3 +87,19 @@
 
 - Before deployment: revert the focused operator-revocation commit.
 - After deployment: add a later migration restoring the prior claim-only `is_platform(text[])` definition from `20260710090003_markets_and_auth_helpers.sql`, dropping `revoke_platform_role(uuid, text, text)`, and applying a newly generated RLS migration that restores direct `user_roles` UPDATE/DELETE. Revert the handler live-check commit in the matching application release. Revoked sessions are intentionally irreversible and must not be recreated; affected operators sign in again.
+
+## Change 6 — verified, nonblocking MFA audit fallback
+
+- Added a forward-only, service-role-only audit verification function for application-managed TOTP INSERT/UPDATE/DELETE events. It accepts only scalar, allowlisted lifecycle fields, checks for the exact canonical trigger audit, and writes one minimal `actor_source=service` fallback row only when that event is absent.
+- The helper never stores QR data, TOTP secrets, codes, challenge IDs, tokens, or arbitrary JSON. Invalid lifecycle transitions raise; audit lookup/storage failures emit a generic database warning and return `failed` instead of blocking MFA.
+- Moved factor mutations from the browser into cookie-bound server actions. The actor comes from signature-verified claims; factor state comes from Supabase Auth responses rather than client input. Existing verified-factor challenges remain non-mutating and create no lifecycle audit.
+- Successful audit verification is bounded to 1.5 seconds. RPC errors, storage failures, and timeouts emit structured server logs containing only operation and factor UUID, while successful enrollment/verification continues unchanged.
+- Abandoned unverified-factor deletion is now checked instead of silently ignored. A real deletion error remains user-visible and prevents a conflicting enrollment attempt; only audit failures are nonblocking.
+- Strengthened the database drift check to prove the trigger is enabled, bound to `auth.mfa_factors`, invokes `public.audit_mfa_factor_change`, and covers row-level INSERT/UPDATE/DELETE—not merely that a trigger with the expected name exists.
+- Focused checks: 7 MFA action tests passed, covering existing-factor challenge, enroll/delete audit calls, secret exclusion, audit failure, timeout, mutation failure, successful verification, and rejected codes. Forty MFA/auth-hook/RLS database checks passed, including primary-audit idempotence, missing-event fallback, service-only execution, minimal snapshots, and invalid transition denial. Typecheck and lint passed; local database lint found no schema errors.
+- Full checks for this change: 193 unit tests and 325 database tests passed. Independent post-patch review found no surviving application-managed MFA audit bypass, privacy leak, or legitimate public-flow regression.
+
+### Rollback
+
+- Before deployment: revert the focused MFA-audit commit.
+- After deployment: deploy the prior browser-based MFA page first. Then add a later forward migration revoking and dropping `ensure_mfa_factor_audit(uuid, uuid, text, text, text, text, text)`. Leave existing append-only fallback audit rows intact. The original GoTrue trigger remains the primary audit path throughout.

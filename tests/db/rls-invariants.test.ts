@@ -417,8 +417,33 @@ describe("public surface unchanged (ADR-004) + structural pins", () => {
     expect(forced).toEqual([]);
   });
 
-  it("the MFA-factor audit trigger is installed (hosted drift would silence factor auditing)", async () => {
-    const rows = await sql`select tgname from pg_trigger where tgname = 'audit_mfa_factors'`;
-    expect(rows).toHaveLength(1);
+  it("the MFA-factor audit trigger is correctly bound and enabled for every factor mutation", async () => {
+    const rows = await sql`
+      select
+        t.tgname,
+        t.tgenabled,
+        t.tgtype,
+        pn.nspname as function_schema,
+        p.proname as function_name,
+        rn.nspname as relation_schema,
+        c.relname as relation_name
+      from pg_trigger t
+      join pg_proc p on p.oid = t.tgfoid
+      join pg_namespace pn on pn.oid = p.pronamespace
+      join pg_class c on c.oid = t.tgrelid
+      join pg_namespace rn on rn.oid = c.relnamespace
+      where t.tgname = 'audit_mfa_factors'
+        and not t.tgisinternal`;
+    expect(rows).toEqual([
+      expect.objectContaining({
+        tgname: "audit_mfa_factors",
+        tgenabled: "O",
+        tgtype: 29,
+        function_schema: "public",
+        function_name: "audit_mfa_factor_change",
+        relation_schema: "auth",
+        relation_name: "mfa_factors",
+      }),
+    ]);
   });
 });
