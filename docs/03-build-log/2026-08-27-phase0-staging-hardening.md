@@ -103,3 +103,27 @@
 
 - Before deployment: revert the focused MFA-audit commit.
 - After deployment: deploy the prior browser-based MFA page first. Then add a later forward migration revoking and dropping `ensure_mfa_factor_audit(uuid, uuid, text, text, text, text, text)`. Leave existing append-only fallback audit rows intact. The original GoTrue trigger remains the primary audit path throughout.
+
+## Read-only hosted verification
+
+- Queried the staging project without changing its database or dashboard configuration. Hosted migrations currently stop at `20260827120000`; none of this branch's forward migrations has been deployed.
+- Signup is currently enabled (`disable_signup=false`). This is a staging release blocker under the Phase 0 requirements until an authorized operator disables it in the hosted Auth settings.
+- Email confirmation is required (`mailer_autoconfirm=false`), and phone auto-confirm is also disabled.
+- Verified that the enabled `audit_mfa_factors` trigger is bound to `auth.mfa_factors`, covers row-level INSERT/UPDATE/DELETE, and invokes `public.audit_mfa_factor_change`.
+- Verified custom access-token hook function permissions: `supabase_auth_admin` can execute it, while `anon` and `authenticated` cannot. Hook activation itself was not observable through the read-only interfaces and remains a dashboard check.
+- Verified row-level security is enabled on all 32 hosted `public` relations and all 8 hosted `storage` relations examined.
+- Verified hosted PostgreSQL SSL is enabled. The effective `pg_hba` rules and broader network restrictions were not readable with the hosted role and remain dashboard checks.
+- The service-role Data API schema advertises the expected public relations and RPCs. Anonymous requests using the hosted legacy anonymous key were rejected at the API/key layer. The exact dashboard exposed-schema configuration remains a manual check.
+- Hosted security advisors still report baseline mutable-`search_path` and broadly executable SECURITY DEFINER helper warnings, plus expected no-policy notices for server-only partition/rate-limit tables. These are remaining hardening scope rather than changes introduced by this branch.
+- No hosted setting, secret, migration, function, policy, or data was changed.
+
+## Completed verification
+
+- Type checking passed.
+- Lint passed with no errors or warnings.
+- Unit tests passed: 193 tests.
+- Database tests passed: 325 tests.
+- Local database lint reported no schema errors.
+- Production build passed.
+- Playwright passed: 40 tests, including the real MFA journey, analytics counting and hostile callback cases, admin/public behavior, data-leakage checks, and no-JavaScript behavior.
+- Codex Security baseline-to-HEAD diff scan is the final pending verification step.
