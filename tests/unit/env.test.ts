@@ -78,7 +78,9 @@ describe("parseEnv — fail-closed contract", () => {
   );
 
   it("does not interpret a missing APP_ENV as local", () => {
-    const { APP_ENV: _, ...withoutAppEnv } = FULL_PROD_ENV;
+    const withoutAppEnv = Object.fromEntries(
+      Object.entries(FULL_PROD_ENV).filter(([key]) => key !== "APP_ENV"),
+    );
     expect(() => parseEnv(withoutAppEnv)).toThrow(/APP_ENV=unset/);
   });
 
