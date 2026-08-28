@@ -127,3 +127,9 @@
 - Production build passed.
 - Playwright passed: 40 tests, including the real MFA journey, analytics counting and hostile callback cases, admin/public behavior, data-leakage checks, and no-JavaScript behavior.
 - Codex Security diff scan `9f97e916-3bc5-47f5-9f03-342ee5498216` reviewed the exact product-change range from baseline `075fe64890488bb2f547d25c74bf443edbe46ddd` through `520de99d38957e85af9dc895659648fa64df4fd0`. It closed all 19 authoritative review items with zero reportable findings. One residual orphan-upload logging candidate was rejected because immutable fresh keys cannot overwrite/delete existing bytes or alter audited listing attachments, matching the baseline report's approved remediation design.
+
+## Deployment preparation
+
+- Added the approval-gated Phase 0 staging deployment runbook under `docs/05-runbooks/`.
+- The runbook separates read-only preflight, hosted settings/secrets, forward-only database migrations, immutable Git-backed application deployment, and stateful smoke verification into distinct approval gates.
+- It explicitly prohibits deployment from the current dirty working directory so the untracked `docs/specs/` directory cannot be copied to Vercel, and it preserves the existing immutable staging deployment as the application rollback target.
