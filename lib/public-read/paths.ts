@@ -26,6 +26,25 @@ export function decodeSlug(param: string): string {
   }
 }
 
+/**
+ * Detect malformed percent-encoding across the transport and framework decode
+ * boundaries. A browser-safe request may encode an already malformed segment
+ * (for example `%25E0%25A4%25A`); the first pass is valid, but the value Next
+ * subsequently decodes is not. Checking both passes keeps that request on the
+ * ordinary not-found path instead of allowing the router to raise a 500.
+ */
+export function hasMalformedPercentEncoding(param: string): boolean {
+  let value = param;
+  for (let pass = 0; pass < 2; pass += 1) {
+    try {
+      value = decodeURIComponent(value);
+    } catch {
+      return true;
+    }
+  }
+  return false;
+}
+
 export function homePath(locale: Locale): string {
   return localePrefix(locale) || "/";
 }

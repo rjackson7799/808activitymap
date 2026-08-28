@@ -179,8 +179,10 @@ accounts and do not delete unrelated staging data.
 - Operator revocation removes the chosen role, deletes all target sessions,
   audits the reason/session count, and makes a captured pre-revocation token fail
   a privileged operation.
-- Public EN/JA pages and a seeded listing return expected responses; malformed
-  listing encoding remains 404 and `/api/events` GET remains 405.
+- Public EN/JA pages and a seeded listing return expected responses. A raw
+  malformed URI rejected by the hosting edge may return 400; an encoded form
+  that reaches the application returns 404, and neither path returns 5xx.
+  `/api/events` GET remains 405.
 - Analytics creates the expected session/listing counts and never forwards the
   internal token across a redirect or request-supplied origin.
 - Auth, application, database, and audit logs contain no unexpected errors or
