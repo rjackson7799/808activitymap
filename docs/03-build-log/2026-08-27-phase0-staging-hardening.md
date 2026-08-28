@@ -126,4 +126,4 @@
 - Local database lint reported no schema errors.
 - Production build passed.
 - Playwright passed: 40 tests, including the real MFA journey, analytics counting and hostile callback cases, admin/public behavior, data-leakage checks, and no-JavaScript behavior.
-- Codex Security baseline-to-HEAD diff scan is the final pending verification step.
+- Codex Security diff scan `9f97e916-3bc5-47f5-9f03-342ee5498216` reviewed the exact product-change range from baseline `075fe64890488bb2f547d25c74bf443edbe46ddd` through `520de99d38957e85af9dc895659648fa64df4fd0`. It closed all 19 authoritative review items with zero reportable findings. One residual orphan-upload logging candidate was rejected because immutable fresh keys cannot overwrite/delete existing bytes or alter audited listing attachments, matching the baseline report's approved remediation design.
