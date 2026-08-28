@@ -52,3 +52,19 @@
 
 - Before deployment: revert the focused migration commit.
 - After deployment: add a later forward-only migration that drops the five replacement policies and recreates the definitions from `20260710090010_media.sql` verbatim. Do not edit or remove either shipped migration.
+
+## Change 4 — immutable and audited media mutation workflow
+
+- Added a forward-only migration removing authenticated public-photo overwrite/delete policies. New bytes require a fresh object key; existing objects and URL construction are unchanged.
+- Added an `aal2`-guarded `replace_listing_photo` function for `super_admin`, `publisher`, and `editor`. It locks the current attachment, validates an approved same-market public photo with complete rights, preserves position/market, and performs one audited pointer update.
+- Closed the ops insert-time moderation bypass: ops uploads must begin pending and ops can no longer attach listing media directly.
+- Updated the RLS source model and advanced its generated forward migration; no shipped migration was edited.
+- Added database coverage for immutability, key collisions, role/AAL enforcement, stale or unapproved replacements, audit before/after, and ops upload restrictions.
+- Independent review identified direct attachment update, mutable media-path, and missing-object bypasses. Added forward-only guards making replacement/removal function-owned, media identity immutable, and backing Storage-object presence mandatory.
+- Final focused checks: 19 RLS-model tests and 56 media/Storage/RLS/audit database tests passed.
+- Full unit suite: 182 passed across 15 files. Full database suite: 319 passed across 22 files. Typecheck and lint passed; local database lint reported no schema errors.
+
+### Rollback
+
+- Before deployment: revert the focused media-workflow commit.
+- After deployment: add a later migration restoring the two public-photo update/delete policies from `20260828090000_storage_write_mfa.sql`, dropping the replacement function and insert guard, and apply a newly generated RLS migration restoring the prior listing-media policies. Do not delete versioned objects. Reverse selected pointer changes through an explicitly audited repair using the audit snapshots; never infer or bulk-delete them.

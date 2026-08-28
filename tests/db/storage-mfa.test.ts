@@ -75,11 +75,11 @@ describe("direct Storage write MFA boundary", () => {
         await tx`insert into storage.objects (bucket_id, name)
           values ('evidence', ${evidence})`;
         expect(await tx`update storage.objects set metadata = '{"approved":true}'::jsonb
-          where bucket_id = 'public-photos' and name = ${photo} returning name`).toHaveLength(1);
+          where bucket_id = 'public-photos' and name = ${photo} returning name`).toEqual([]);
         await allowStorageApiDelete(tx);
         await assumeClaims(tx, [role], "aal2");
         expect(await tx`delete from storage.objects
-          where bucket_id = 'public-photos' and name = ${photo} returning name`).toHaveLength(1);
+          where bucket_id = 'public-photos' and name = ${photo} returning name`).toEqual([]);
       });
     });
   }
@@ -95,11 +95,11 @@ describe("direct Storage write MFA boundary", () => {
       await expectErrorIn(tx, DENIED, (sp) => sp`insert into storage.objects (bucket_id, name)
         values ('evidence', 'mfa/ops/evidence.pdf')`);
       expect(await tx`update storage.objects set metadata = '{"ops":true}'::jsonb
-        where bucket_id = 'public-photos' and name = ${photo} returning name`).toHaveLength(1);
+        where bucket_id = 'public-photos' and name = ${photo} returning name`).toEqual([]);
       await allowStorageApiDelete(tx);
       await assumeClaims(tx, ["ops_agent"], "aal1");
       expect(await tx`delete from storage.objects
-        where bucket_id = 'public-photos' and name = ${photo} returning name`).toHaveLength(1);
+        where bucket_id = 'public-photos' and name = ${photo} returning name`).toEqual([]);
     });
   });
 
@@ -114,8 +114,20 @@ describe("direct Storage write MFA boundary", () => {
       const name = "mfa/editor/cross-bucket.jpg";
       await seedObject(tx, "public-photos", name);
       await assumeClaims(tx, ["editor"], "aal2");
-      await expectErrorIn(tx, DENIED, (sp) => sp`update storage.objects
-        set bucket_id = 'evidence' where bucket_id = 'public-photos' and name = ${name}`);
+      expect(await tx`update storage.objects set bucket_id = 'evidence'
+        where bucket_id = 'public-photos' and name = ${name} returning name`).toEqual([]);
+    });
+  });
+
+  it("requires a fresh object key instead of overwriting an existing key", async () => {
+    await withRollback(async (tx) => {
+      await assumeClaims(tx, ["publisher"], "aal2");
+      await tx`insert into storage.objects (bucket_id, name)
+        values ('public-photos', 'immutable/version-1.jpg')`;
+      await expectErrorIn(tx, /duplicate key value|unique constraint/, (sp) =>
+        sp`insert into storage.objects (bucket_id, name)
+          values ('public-photos', 'immutable/version-1.jpg')`,
+      );
     });
   });
 });

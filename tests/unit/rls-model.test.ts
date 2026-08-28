@@ -84,7 +84,10 @@ describe("PRD §4 cells survive expansion (spot checks per row)", () => {
   it("Photos: ops_agent uploads but cannot moderate (no media update)", () => {
     expect(expectation("ops_agent", "media", "insert").outcome).toBe("allow");
     expect(expectation("ops_agent", "media", "update").outcome).toBe("deny-rls");
+    expect(expectation("ops_agent", "listing_media", "insert").outcome).toBe("deny-rls");
     expect(expectation("editor", "media", "update").outcome).toBe("allow");
+    expect(expectation("editor", "listing_media", "update").outcome).toBe("deny-grant");
+    expect(expectation("editor", "listing_media", "delete").outcome).toBe("deny-grant");
   });
 
   it("Taxonomy: publisher+ only; editor and ops denied", () => {
