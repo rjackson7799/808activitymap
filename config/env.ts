@@ -34,9 +34,37 @@ const baseSchema = z.object({
   // values. SENTRY_DSN is optional — the observability seam no-ops without it.
   IP_HASH_PEPPER: z.string().min(1),
   EVENTS_INTERNAL_TOKEN: z.string().min(1),
+  EVENTS_INGEST_ORIGIN: z.url(),
   CRON_SECRET: z.string().min(1),
   SENTRY_DSN: z.string().optional(),
 }).superRefine((value, context) => {
+  const ingestOrigin = new URL(value.EVENTS_INGEST_ORIGIN);
+  const isHttpOrigin = ingestOrigin.protocol === "http:" || ingestOrigin.protocol === "https:";
+  const isBareOrigin =
+    ingestOrigin.username === "" &&
+    ingestOrigin.password === "" &&
+    ingestOrigin.pathname === "/" &&
+    ingestOrigin.search === "" &&
+    ingestOrigin.hash === "";
+  if (!isHttpOrigin || !isBareOrigin) {
+    context.addIssue({
+      code: "custom",
+      path: ["EVENTS_INGEST_ORIGIN"],
+      message: "EVENTS_INGEST_ORIGIN must be a bare HTTP(S) origin without credentials, path, query, or fragment",
+    });
+  }
+
+  if (
+    (value.APP_ENV === "staging" || value.APP_ENV === "production") &&
+    ingestOrigin.protocol !== "https:"
+  ) {
+    context.addIssue({
+      code: "custom",
+      path: ["EVENTS_INGEST_ORIGIN"],
+      message: `EVENTS_INGEST_ORIGIN must use HTTPS in ${value.APP_ENV}`,
+    });
+  }
+
   if (value.APP_ENV !== "staging" && value.APP_ENV !== "production") return;
 
   for (const [key, devValue] of Object.entries(DEV_ONLY_SECRET_VALUES)) {
@@ -62,6 +90,7 @@ const DEV_DEFAULTS: Partial<Record<keyof Env, string>> = {
   // App-internal secrets get clearly-non-secret dev/test defaults (convenience
   // for local + CI); production still fail-closes (no default when APP_ENV=production).
   ...DEV_ONLY_SECRET_VALUES,
+  EVENTS_INGEST_ORIGIN: "http://127.0.0.1:3000",
   // Deliberately NO defaults for externally-provisioned keys/secrets even in dev:
   // NEXT_PUBLIC_SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY.
 };

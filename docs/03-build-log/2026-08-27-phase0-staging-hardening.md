@@ -23,3 +23,17 @@
 ### Rollback
 
 - Revert the focused secret-hardening commit. This change has no database migration or persisted-data effect.
+
+## Change 2 — trusted analytics callback destination
+
+- Removed the request-derived origin from the server-capture API and source path.
+- Added `EVENTS_INGEST_ORIGIN` as a server-only deployment-local origin. Hosted environments require HTTPS; credentials, paths, queries, fragments, and non-HTTP schemes are rejected.
+- Set the secret-bearing callback to `redirect: error`, preventing the internal token from following any redirect.
+- Preserved the existing session-start/listing-view call order, filtering, and counting logic.
+- Bound Playwright's production test server to its own callback origin and added hostile-metadata and redirect regression tests.
+- Focused environment/transport tests: 30 passed. Typecheck and lint passed.
+- Independent bypass/regression review found no concrete surviving route or legitimate regression; its full unit run passed 182 tests across 15 files.
+
+### Rollback
+
+- Revert the focused analytics-transport commit and remove `EVENTS_INGEST_ORIGIN` only after the prior deployment is restored. No database or public URL rollback is required.

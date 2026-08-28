@@ -138,7 +138,6 @@ function capturePublicAnalytics(
     maxAge: SESSION_MAX_AGE_SECONDS,
   });
 
-  const origin = request.nextUrl.origin;
   const forwarded = {
     userAgent: request.headers.get("user-agent"),
     referer: request.headers.get("referer"),
@@ -147,10 +146,10 @@ function capturePublicAnalytics(
   event.waitUntil(
     (async () => {
       if (isNewSession) {
-        await postServerEvent(origin, { name: "session_start", locale, sessionId }, forwarded);
+        await postServerEvent({ name: "session_start", locale, sessionId }, forwarded);
       }
       if (slug) {
-        await postServerEvent(origin, { name: "listing_view", slug, locale, sessionId }, forwarded);
+        await postServerEvent({ name: "listing_view", slug, locale, sessionId }, forwarded);
       }
     })(),
   );

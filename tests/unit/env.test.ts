@@ -11,6 +11,7 @@ const FULL_PROD_ENV = {
   DATABASE_URL: "postgresql://user:pass@host:5432/db",
   IP_HASH_PEPPER: "prod-pepper",
   EVENTS_INTERNAL_TOKEN: "prod-internal-token",
+  EVENTS_INGEST_ORIGIN: "https://example.com",
   CRON_SECRET: "prod-cron-secret",
 };
 
@@ -79,6 +80,30 @@ describe("parseEnv — fail-closed contract", () => {
   it("does not interpret a missing APP_ENV as local", () => {
     const { APP_ENV: _, ...withoutAppEnv } = FULL_PROD_ENV;
     expect(() => parseEnv(withoutAppEnv)).toThrow(/APP_ENV=unset/);
+  });
+
+  it.each([
+    "https://user:password@example.com",
+    "https://example.com/api/events",
+    "https://example.com?redirect=attacker.example",
+    "https://example.com#fragment",
+    "ftp://example.com",
+  ])("rejects a non-origin analytics destination: %s", (EVENTS_INGEST_ORIGIN) => {
+    expect(() => parseEnv({ ...FULL_PROD_ENV, EVENTS_INGEST_ORIGIN })).toThrow(
+      /EVENTS_INGEST_ORIGIN/,
+    );
+  });
+
+  it("requires HTTPS for the analytics destination in hosted environments", () => {
+    for (const APP_ENV of ["staging", "production"] as const) {
+      expect(() =>
+        parseEnv({
+          ...FULL_PROD_ENV,
+          APP_ENV,
+          EVENTS_INGEST_ORIGIN: "http://staging.example.com",
+        }),
+      ).toThrow(/EVENTS_INGEST_ORIGIN/);
+    }
   });
 
   it("rejects an unknown APP_ENV", () => {
