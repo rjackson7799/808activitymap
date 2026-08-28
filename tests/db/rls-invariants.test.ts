@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { expectErrorIn, sql, withClaims, withRollback, type TxSql } from "./helpers";
+import { expectErrorIn, setClaims, sql, withClaims, withRollback, type TxSql } from "./helpers";
 import { ACTOR, CATEGORY, LISTING, ORG } from "./fixtures";
 
 /**
@@ -210,10 +210,8 @@ describe("role management is super_admin-only (PRD §4 User/role management)", (
         insert into auth.users (instance_id, id, aud, role, email, encrypted_password, email_confirmed_at, created_at, updated_at)
         values ('00000000-0000-0000-0000-000000000000', '${probeUser}', 'authenticated', 'authenticated', 'role-probe@example.invalid', '', now(), now(), now())`);
 
-      const as = async (roles: string[], aal: string) => {
-        await tx`select set_config('request.jwt.claims', ${JSON.stringify({ role: "authenticated", sub: ACTOR.admin, app_roles: roles, aal })}, true)`;
-        await tx.unsafe("set local role authenticated");
-      };
+      const as = (roles: string[], aal: "aal1" | "aal2") =>
+        setClaims(tx, { sub: ACTOR.admin, app_roles: roles, aal }, true);
 
       await as(["publisher"], "aal2");
       await expectErrorIn(tx, /row-level security/, (sp) =>
@@ -267,16 +265,19 @@ describe("taxonomy mutation is publisher+-only (PRD §4 Taxonomy CRUD/merge)", (
 describe("record-external menu approval (PRD §4 Vendor approval of menu — '—' reading pinned)", () => {
   // Stage mvl ko at qa_approved, then attempt the approve edge per role.
   const stage = async (tx: TxSql) => {
-    await tx`select set_config('request.jwt.claims', ${JSON.stringify({ role: "authenticated", sub: ACTOR.admin, app_roles: ["editor"], aal: "aal2" })}, true)`;
+    await setClaims(tx, { sub: ACTOR.admin, app_roles: ["editor"], aal: "aal2" });
     await tx`select transition_menu_version_locale('92000000-0000-4000-8000-000000000003'::uuid, 'qa_pending')`;
-    await tx`select set_config('request.jwt.claims', ${JSON.stringify({ role: "authenticated", sub: ACTOR.reviewerJa, app_roles: ["language_reviewer_ko"], aal: "aal1" })}, true)`;
+    await setClaims(tx, { sub: ACTOR.reviewerJa, app_roles: ["language_reviewer_ko"], aal: "aal1" });
     await tx`select transition_menu_version_locale('92000000-0000-4000-8000-000000000003'::uuid, 'qa_approved')`;
   };
-  const approveAs = (tx: TxSql, roles: string[], aal: string) =>
-    tx`select set_config('request.jwt.claims', ${JSON.stringify({ role: "authenticated", sub: ACTOR.admin, app_roles: roles, aal })}, true)`.then(
-      () =>
-        tx`select transition_menu_version_locale('92000000-0000-4000-8000-000000000003'::uuid, 'approved', 'vendor_approved_external', 'f0000000-0000-4000-8000-000000000004'::uuid)`,
-    );
+  const approveAs = async (
+    tx: TxSql,
+    roles: string[],
+    aal: "aal1" | "aal2",
+  ) => {
+    await setClaims(tx, { sub: ACTOR.admin, app_roles: roles, aal });
+    return tx`select transition_menu_version_locale('92000000-0000-4000-8000-000000000003'::uuid, 'approved', 'vendor_approved_external', 'f0000000-0000-4000-8000-000000000004'::uuid)`;
+  };
 
   it("editor, ops_agent, publisher, super_admin may record external approval @aal2; reviewers may not", async () => {
     for (const roles of [["editor"], ["ops_agent"], ["publisher"], ["super_admin"]]) {
@@ -344,8 +345,7 @@ describe("audit log read scope (PRD §4: ✔ / ✔ / own scope…) — and audit
       await tx`update organizations set notes = 'audit probe' where id = ${ORG.ramen}`;
 
       const as = async (roles: string[], sub: string) => {
-        await tx`select set_config('request.jwt.claims', ${JSON.stringify({ role: "authenticated", sub, app_roles: roles, aal: "aal1" })}, true)`;
-        await tx.unsafe("set local role authenticated");
+        await setClaims(tx, { sub, app_roles: roles, aal: "aal1" }, true);
       };
 
       await as(["publisher"], ACTOR.publisher);

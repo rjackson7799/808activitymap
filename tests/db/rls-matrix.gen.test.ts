@@ -49,6 +49,16 @@ const P = {
   alias: "77000000-0000-4000-8000-000000000024",
   org2: "77000000-0000-4000-8000-000000000026",
 };
+const PROBE_SESSION = "77000000-0000-4000-8000-000000000099";
+const LIVE_DATABASE_ROLES = new Set([
+  "super_admin",
+  "publisher",
+  "editor",
+  "language_reviewer_ja",
+  "language_reviewer_ko",
+  "ops_agent",
+  "contributor",
+]);
 
 /** One row (or a locale-free "secondary parent") per live table. */
 async function seedProbeFamily(tx: TxSql): Promise<void> {
@@ -274,6 +284,7 @@ const claimsFor = (role: Role | null, aal: "aal1" | "aal2") =>
   JSON.stringify({
     role: "authenticated",
     sub: P.actor,
+    session_id: PROBE_SESSION,
     aal,
     app_roles: role ? [role] : [],
   });
@@ -288,6 +299,15 @@ async function withRoleProbe(
   await sql
     .begin(async (tx) => {
       await seedProbeFamily(tx as TxSql);
+      if (role && LIVE_DATABASE_ROLES.has(role)) {
+        await tx`
+          insert into public.user_roles (user_id, role)
+          values (${P.actor}::uuid, ${role})
+          on conflict (user_id, role) do nothing`;
+      }
+      await tx`
+        insert into auth.sessions (id, user_id)
+        values (${PROBE_SESSION}::uuid, ${P.actor}::uuid)`;
       await tx`select set_config('request.jwt.claims', ${claimsFor(role, aal)}, true)`;
       await tx.unsafe("set local role authenticated");
       await fn(tx as TxSql);

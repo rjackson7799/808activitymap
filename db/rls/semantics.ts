@@ -447,8 +447,14 @@ export const SEMANTICS: Record<Action, Partial<Record<Cell, Emission[]>>> = {
     "✔": [
       {
         tables: ["user_roles"],
-        ops: ["insert", "update", "delete"],
+        ops: ["insert"],
         predicate: { kind: "all" },
+        aal: "mfa",
+      },
+      {
+        tables: ["user_roles"],
+        ops: [],
+        predicate: { kind: "fnOwned", fn: "revoke_platform_role" },
         aal: "mfa",
       },
     ],

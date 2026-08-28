@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { expectErrorIn, withRollback, type TxSql } from "./helpers";
+import { expectErrorIn, setClaims, withRollback, type TxSql } from "./helpers";
 
 const ACTOR = "89000000-0000-4000-8000-000000000001";
 const DENIED = /row-level security policy|permission denied/;
@@ -9,13 +9,7 @@ async function assumeClaims(
   appRoles: string[],
   aal: "aal1" | "aal2",
 ): Promise<void> {
-  await tx.unsafe("reset role");
-  await tx`select set_config(
-    'request.jwt.claims',
-    ${JSON.stringify({ role: "authenticated", sub: ACTOR, app_roles: appRoles, aal })},
-    true
-  )`;
-  await tx.unsafe("set local role authenticated");
+  await setClaims(tx, { sub: ACTOR, app_roles: appRoles, aal }, true);
 }
 
 async function seedObject(tx: TxSql, bucket: string, name: string): Promise<void> {

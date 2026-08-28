@@ -68,3 +68,22 @@
 
 - Before deployment: revert the focused media-workflow commit.
 - After deployment: add a later migration restoring the two public-photo update/delete policies from `20260828090000_storage_write_mfa.sql`, dropping the replacement function and insert guard, and apply a newly generated RLS migration restoring the prior listing-media policies. Do not delete versioned objects. Reverse selected pointer changes through an explicitly audited repair using the audit snapshots; never infer or bulk-delete them.
+
+## Change 5 — atomic operator revocation and live authorization
+
+- Added a forward-only atomic revocation function restricted to a live `super_admin` session at `aal2`. It locks the target user, removes one selected platform role, deletes every target Auth session, and records the reason and revoked-session count in an explicit audit entry in the same transaction.
+- Changed the shared `is_platform` authorization helper to require the intersection of the signed JWT role, the current `user_roles` row, and a matching live `auth.sessions` row. A captured access token therefore stops satisfying database policies immediately after revocation even if its signature has not expired.
+- Changed the server-handler authorization boundary to perform the same live database check after verifying signed claims and before applying any requested MFA check. Lookup failures deny access.
+- Advanced the generated RLS migration so every existing policy consumes the live authorization helper without modifying any shipped migration.
+- Independent review found that the original generated role-management policies still allowed direct UPDATE/DELETE, bypassing session revocation. Added later forward-only correction migrations making all role removal/replacement function-owned while preserving direct `super_admin@aal2` INSERT grants. The revocation RPC accepts every current platform role so reviewer/contributor removal capability is preserved.
+- A successful revocation deliberately produces two complementary immutable audit rows: the generic `user_roles` DELETE snapshot and the explicit `operator_role_revoked` event carrying the reason and revoked-session count.
+- Updated the database harness to issue realistic test identities, roles, and sessions while keeping intentionally unavailable future roles inert.
+- Added unit coverage for successful live authorization, stale-token denial, lookup failure, claim mismatch, and function-owned role-removal grants. Added database coverage for atomic role/session deletion, denial without super-admin `aal2`, both audit layers, refreshed access-token claims, denial of an editor operation attempted with the captured token, direct UPDATE/DELETE/upsert denial, and continued direct role grants.
+- Focused checks: 23 role-model/handler unit tests passed; 53 role/RLS database checks passed after the forward correction, followed by 3 focused revocation tests.
+- Final full checks for this change: 186 unit tests and 322 database tests passed; typecheck and lint passed with no errors or warnings; database lint found no schema errors.
+- Independent post-patch review found no surviving authenticated removal/replacement route and no legitimate regression. Its own test launch was sandbox-blocked, while the parent-run focused and full suites above completed successfully.
+
+### Rollback
+
+- Before deployment: revert the focused operator-revocation commit.
+- After deployment: add a later migration restoring the prior claim-only `is_platform(text[])` definition from `20260710090003_markets_and_auth_helpers.sql`, dropping `revoke_platform_role(uuid, text, text)`, and applying a newly generated RLS migration that restores direct `user_roles` UPDATE/DELETE. Revert the handler live-check commit in the matching application release. Revoked sessions are intentionally irreversible and must not be recreated; affected operators sign in again.

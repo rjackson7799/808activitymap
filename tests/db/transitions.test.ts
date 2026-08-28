@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { expectErrorIn, withClaimsSuper, withRollback } from "./helpers";
+import { expectErrorIn, setClaims, withClaimsSuper, withRollback } from "./helpers";
 import { ACTOR, LISTING, MEDIA, MENU } from "./fixtures";
 
 /**
@@ -155,13 +155,13 @@ describe("transition_menu_version_locale — state machine + role matrix", () =>
       await tx`select transition_menu_version_locale(${MENU.mvlKo}::uuid, 'qa_pending')`;
 
       // ja reviewer must NOT approve ko (own-locale rule)
-      await tx`select set_config('request.jwt.claims', ${JSON.stringify({ role: "authenticated", sub: ACTOR.reviewerJa, app_roles: ["language_reviewer_ja"], aal: "aal1" })}, true)`;
+      await setClaims(tx, { sub: ACTOR.reviewerJa, app_roles: ["language_reviewer_ja"], aal: "aal1" });
       await expectErrorIn(tx, /permission_denied/, (sp) =>
         sp`select transition_menu_version_locale(${MENU.mvlKo}::uuid, 'qa_approved')`,
       );
 
       // ko reviewer approves ko
-      await tx`select set_config('request.jwt.claims', ${JSON.stringify({ role: "authenticated", sub: ACTOR.reviewerJa, app_roles: ["language_reviewer_ko"], aal: "aal1" })}, true)`;
+      await setClaims(tx, { sub: ACTOR.reviewerJa, app_roles: ["language_reviewer_ko"], aal: "aal1" });
       await tx`select transition_menu_version_locale(${MENU.mvlKo}::uuid, 'qa_approved')`;
       const row = await tx`select status from menu_version_locales where id = ${MENU.mvlKo}`;
       expect(row[0]!.status).toBe("qa_approved");
@@ -171,10 +171,10 @@ describe("transition_menu_version_locale — state machine + role matrix", () =>
   it("external vendor approval (D1) requires aal2 editor+, approval_type and evidence — then publisher publishes", async () => {
     await withClaimsSuper({ sub: ACTOR.admin, app_roles: ["editor"], aal: "aal2" }, async (tx) => {
       await tx`select transition_menu_version_locale(${MENU.mvlKo}::uuid, 'qa_pending')`;
-      await tx`select set_config('request.jwt.claims', ${JSON.stringify({ role: "authenticated", sub: ACTOR.reviewerJa, app_roles: ["language_reviewer_ko"], aal: "aal1" })}, true)`;
+      await setClaims(tx, { sub: ACTOR.reviewerJa, app_roles: ["language_reviewer_ko"], aal: "aal1" });
       await tx`select transition_menu_version_locale(${MENU.mvlKo}::uuid, 'qa_approved')`;
 
-      await tx`select set_config('request.jwt.claims', ${JSON.stringify({ role: "authenticated", sub: ACTOR.admin, app_roles: ["editor"], aal: "aal2" })}, true)`;
+      await setClaims(tx, { sub: ACTOR.admin, app_roles: ["editor"], aal: "aal2" });
 
       // approval_type is mandatory
       await expectErrorIn(tx, /approval_type required/, (sp) =>
@@ -196,7 +196,7 @@ describe("transition_menu_version_locale — state machine + role matrix", () =>
       await expectErrorIn(tx, /permission_denied/, (sp) =>
         sp`select transition_menu_version_locale(${MENU.mvlKo}::uuid, 'published')`,
       );
-      await tx`select set_config('request.jwt.claims', ${JSON.stringify({ role: "authenticated", sub: ACTOR.publisher, app_roles: ["publisher"], aal: "aal2" })}, true)`;
+      await setClaims(tx, { sub: ACTOR.publisher, app_roles: ["publisher"], aal: "aal2" });
       await tx`select transition_menu_version_locale(${MENU.mvlKo}::uuid, 'published')`;
       const published = await tx`select status from menu_version_locales where id = ${MENU.mvlKo}`;
       expect(published[0]!.status).toBe("published");
@@ -215,9 +215,9 @@ describe("transition_menu_version_locale — state machine + role matrix", () =>
   it("rejected returns to qa_pending (rework loop)", async () => {
     await withClaimsSuper({ sub: ACTOR.admin, app_roles: ["editor"], aal: "aal2" }, async (tx) => {
       await tx`select transition_menu_version_locale(${MENU.mvlKo}::uuid, 'qa_pending')`;
-      await tx`select set_config('request.jwt.claims', ${JSON.stringify({ role: "authenticated", sub: ACTOR.reviewerJa, app_roles: ["language_reviewer_ko"], aal: "aal1" })}, true)`;
+      await setClaims(tx, { sub: ACTOR.reviewerJa, app_roles: ["language_reviewer_ko"], aal: "aal1" });
       await tx`select transition_menu_version_locale(${MENU.mvlKo}::uuid, 'rejected')`;
-      await tx`select set_config('request.jwt.claims', ${JSON.stringify({ role: "authenticated", sub: ACTOR.admin, app_roles: ["editor"], aal: "aal2" })}, true)`;
+      await setClaims(tx, { sub: ACTOR.admin, app_roles: ["editor"], aal: "aal2" });
       await tx`select transition_menu_version_locale(${MENU.mvlKo}::uuid, 'qa_pending')`;
       const row = await tx`select status from menu_version_locales where id = ${MENU.mvlKo}`;
       expect(row[0]!.status).toBe("qa_pending");
@@ -231,16 +231,16 @@ describe("transition_menu_version_locale — §4 reconciliation (CP2, migration 
   // approval — approval_type='portal' is the vendor's own act (Slice 3).
 
   const stageKoToQaApproved = async (tx: Parameters<Parameters<typeof withClaimsSuper>[1]>[0]) => {
-    await tx`select set_config('request.jwt.claims', ${JSON.stringify({ role: "authenticated", sub: ACTOR.admin, app_roles: ["editor"], aal: "aal2" })}, true)`;
+    await setClaims(tx, { sub: ACTOR.admin, app_roles: ["editor"], aal: "aal2" });
     await tx`select transition_menu_version_locale(${MENU.mvlKo}::uuid, 'qa_pending')`;
-    await tx`select set_config('request.jwt.claims', ${JSON.stringify({ role: "authenticated", sub: ACTOR.reviewerJa, app_roles: ["language_reviewer_ko"], aal: "aal1" })}, true)`;
+    await setClaims(tx, { sub: ACTOR.reviewerJa, app_roles: ["language_reviewer_ko"], aal: "aal1" });
     await tx`select transition_menu_version_locale(${MENU.mvlKo}::uuid, 'qa_approved')`;
   };
 
   it("ops_agent records external vendor approval at aal2 (PRD §4 cell: 'record external')", async () => {
     await withClaimsSuper({ sub: ACTOR.admin, app_roles: ["ops_agent"], aal: "aal2" }, async (tx) => {
       await stageKoToQaApproved(tx);
-      await tx`select set_config('request.jwt.claims', ${JSON.stringify({ role: "authenticated", sub: ACTOR.admin, app_roles: ["ops_agent"], aal: "aal2" })}, true)`;
+      await setClaims(tx, { sub: ACTOR.admin, app_roles: ["ops_agent"], aal: "aal2" });
       await tx`select transition_menu_version_locale(${MENU.mvlKo}::uuid, 'approved', 'vendor_approved_external', ${MEDIA.ramenEvidenceEn}::uuid)`;
       const row = await tx`select status, approval_type, approved_by from menu_version_locales where id = ${MENU.mvlKo}`;
       expect(row[0]!.status).toBe("approved");
@@ -252,7 +252,7 @@ describe("transition_menu_version_locale — §4 reconciliation (CP2, migration 
   it("ops_agent without aal2 is rejected on the approve edge (uniform aal2, ADR-001)", async () => {
     await withClaimsSuper({ sub: ACTOR.admin, app_roles: ["ops_agent"], aal: "aal1" }, async (tx) => {
       await stageKoToQaApproved(tx);
-      await tx`select set_config('request.jwt.claims', ${JSON.stringify({ role: "authenticated", sub: ACTOR.admin, app_roles: ["ops_agent"], aal: "aal1" })}, true)`;
+      await setClaims(tx, { sub: ACTOR.admin, app_roles: ["ops_agent"], aal: "aal1" });
       await expect(
         tx`select transition_menu_version_locale(${MENU.mvlKo}::uuid, 'approved', 'vendor_approved_external', ${MEDIA.ramenEvidenceEn}::uuid)`,
       ).rejects.toThrow(/aal2_required/);
@@ -263,7 +263,7 @@ describe("transition_menu_version_locale — §4 reconciliation (CP2, migration 
     await withClaimsSuper({ sub: ACTOR.admin, app_roles: ["editor"], aal: "aal2" }, async (tx) => {
       await stageKoToQaApproved(tx);
       for (const role of ["editor", "ops_agent", "publisher", "super_admin"]) {
-        await tx`select set_config('request.jwt.claims', ${JSON.stringify({ role: "authenticated", sub: ACTOR.admin, app_roles: [role], aal: "aal2" })}, true)`;
+        await setClaims(tx, { sub: ACTOR.admin, app_roles: [role], aal: "aal2" });
         await expectErrorIn(tx, /approval_type.*vendor_approved_external/, (sp) =>
           sp`select transition_menu_version_locale(${MENU.mvlKo}::uuid, 'approved', 'portal', ${MEDIA.ramenEvidenceEn}::uuid)`,
         );
@@ -279,13 +279,17 @@ describe("transition_listing_locale — QA workflow (CP2, migration 16)", () => 
   // this fn is the only legal path for the pre-publication ladder. Publish/
   // withdraw stay owned by publish/unpublish_listing_locale. No `stale` edge:
   // D15/ADR-008 — serving locales never leave the serving set via status.
-  const publisherClaims = JSON.stringify({ role: "authenticated", sub: ACTOR.publisher, app_roles: ["publisher"], aal: "aal2" });
+  const publisherClaims = {
+    sub: ACTOR.publisher,
+    app_roles: ["publisher"],
+    aal: "aal2" as const,
+  };
 
   it("publisher@aal2 stages machine_draft; the ko reviewer walks qa_pending → qa_approved at aal1", async () => {
     await withClaimsSuper(publisherAal2, async (tx) => {
       // sushi/ko is not_started in seed
       await tx`select transition_listing_locale(${LISTING.sushi}::uuid, 'ko', 'machine_draft')`;
-      await tx`select set_config('request.jwt.claims', ${JSON.stringify({ role: "authenticated", sub: ACTOR.reviewerJa, app_roles: ["language_reviewer_ko"], aal: "aal1" })}, true)`;
+      await setClaims(tx, { sub: ACTOR.reviewerJa, app_roles: ["language_reviewer_ko"], aal: "aal1" });
       await tx`select transition_listing_locale(${LISTING.sushi}::uuid, 'ko', 'qa_pending')`;
       await tx`select transition_listing_locale(${LISTING.sushi}::uuid, 'ko', 'qa_approved')`;
       const row = await tx`select status from listing_locales where listing_id = ${LISTING.sushi} and locale = 'ko'`;
@@ -339,11 +343,11 @@ describe("transition_listing_locale — QA workflow (CP2, migration 16)", () => 
   it("vendor-review edges are publisher-only @aal2 (vendor flows arrive Slice 3)", async () => {
     await withClaimsSuper(publisherAal2, async (tx) => {
       // coffee/en is qa_approved in seed
-      await tx`select set_config('request.jwt.claims', ${JSON.stringify({ role: "authenticated", sub: ACTOR.reviewerJa, app_roles: ["language_reviewer_en"], aal: "aal1" })}, true)`;
+      await setClaims(tx, { sub: ACTOR.reviewerJa, app_roles: ["language_reviewer_en"], aal: "aal1" });
       await expectErrorIn(tx, /permission_denied/, (sp) =>
         sp`select transition_listing_locale(${LISTING.coffee}::uuid, 'en', 'vendor_review_pending')`,
       );
-      await tx`select set_config('request.jwt.claims', ${publisherClaims}, true)`;
+      await setClaims(tx, publisherClaims);
       await tx`select transition_listing_locale(${LISTING.coffee}::uuid, 'en', 'vendor_review_pending')`;
       await tx`select transition_listing_locale(${LISTING.coffee}::uuid, 'en', 'vendor_approved')`;
       const row = await tx`select status from listing_locales where listing_id = ${LISTING.coffee} and locale = 'en'`;

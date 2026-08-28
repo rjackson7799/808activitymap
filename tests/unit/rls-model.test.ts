@@ -101,6 +101,10 @@ describe("PRD §4 cells survive expansion (spot checks per row)", () => {
     expect(sa.outcome).toBe("allow");
     expect(sa.aal2Required).toBe(true);
     expect(expectation("publisher", "user_roles", "insert").outcome).toBe("deny-rls");
+    expect(expectation("super_admin", "user_roles", "update").outcome).toBe("deny-grant");
+    expect(expectation("super_admin", "user_roles", "delete").outcome).toBe("deny-grant");
+    const grants = model.grants.find((g) => g.table === "user_roles")!;
+    expect(grants.ops).toEqual({ select: "full", insert: "full" });
   });
 
   it("Audit log: publisher reads all; editor/reviewer/ops own scope; nobody writes", () => {

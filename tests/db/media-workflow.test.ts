@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { ACTOR, LISTING, MEDIA } from "./fixtures";
-import { expectErrorIn, withClaims, withRollback, type TxSql } from "./helpers";
+import { expectErrorIn, setClaims, withClaims, withRollback, type TxSql } from "./helpers";
 
 const NEW_MEDIA = "f9000000-0000-4000-8000-000000000001";
 const PENDING_MEDIA = "f9000000-0000-4000-8000-000000000002";
@@ -23,13 +23,11 @@ describe("immutable, audited listing-photo replacement", () => {
     it(`${role}@aal2 atomically replaces the pointer and writes before/after audit`, async () => {
       await withRollback(async (tx) => {
         await seedReplacement(tx, NEW_MEDIA);
-        await tx`select set_config('request.jwt.claims', ${JSON.stringify({
-          role: "authenticated",
-          sub: ACTOR.admin,
-          app_roles: [role],
-          aal: "aal2",
-        })}, true)`;
-        await tx.unsafe("set local role authenticated");
+        await setClaims(
+          tx,
+          { sub: ACTOR.admin, app_roles: [role], aal: "aal2" },
+          true,
+        );
 
         await tx`select replace_listing_photo(${LISTING.ramen}, ${MEDIA.ramenPhoto1}, ${NEW_MEDIA})`;
 
@@ -68,13 +66,11 @@ describe("immutable, audited listing-photo replacement", () => {
   it("rejects stale and unapproved replacements without changing the pointer", async () => {
     await withRollback(async (tx) => {
       await seedReplacement(tx, PENDING_MEDIA, "pending");
-      await tx`select set_config('request.jwt.claims', ${JSON.stringify({
-        role: "authenticated",
-        sub: ACTOR.admin,
-        app_roles: ["publisher"],
-        aal: "aal2",
-      })}, true)`;
-      await tx.unsafe("set local role authenticated");
+      await setClaims(
+        tx,
+        { sub: ACTOR.admin, app_roles: ["publisher"], aal: "aal2" },
+        true,
+      );
 
       await expectErrorIn(tx, /not approved/, (sp) =>
         sp`select replace_listing_photo(${LISTING.ramen}, ${MEDIA.ramenPhoto1}, ${PENDING_MEDIA})`,
@@ -99,13 +95,11 @@ describe("immutable, audited listing-photo replacement", () => {
           '{"license":"permissioned","granted_by":"fixture"}'::jsonb,
           'approved', 'oahu-waikiki'
         )`;
-      await tx`select set_config('request.jwt.claims', ${JSON.stringify({
-        role: "authenticated",
-        sub: ACTOR.admin,
-        app_roles: ["publisher"],
-        aal: "aal2",
-      })}, true)`;
-      await tx.unsafe("set local role authenticated");
+      await setClaims(
+        tx,
+        { sub: ACTOR.admin, app_roles: ["publisher"], aal: "aal2" },
+        true,
+      );
       await expectErrorIn(tx, /Storage object is missing/, (sp) =>
         sp`select replace_listing_photo(${LISTING.ramen}, ${MEDIA.ramenPhoto1}, ${NEW_MEDIA})`,
       );
