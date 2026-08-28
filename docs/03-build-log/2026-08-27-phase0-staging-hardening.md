@@ -37,3 +37,18 @@
 ### Rollback
 
 - Revert the focused analytics-transport commit and remove `EVENTS_INGEST_ORIGIN` only after the prior deployment is restored. No database or public URL rollback is required.
+
+## Change 3 — direct Storage write MFA
+
+- Added a new forward-only migration replacing only the five Storage write policies; the original migration remains untouched.
+- `super_admin`, `publisher`, and `editor` now require `aal2` for direct photo, menu-source, and evidence mutations.
+- Preserved the existing ops-only photo/menu behavior at `aal1`. Mixed privileged+ops JWTs cannot use that exception to bypass MFA.
+- Kept public photo reads, private bucket reads, bucket definitions, and service-role behavior unchanged.
+- Added direct `storage.objects` tests for privileged aal1 denial/aal2 success, the ops-only exception, the mixed-role case, evidence denial, and cross-bucket update denial.
+- Applied the migration to local Supabase without resetting data. Focused Storage tests: 6 passed; local database lint reported no schema errors.
+- Independent bypass/regression review found no concrete issue; its full database run passed 310 tests across 21 files.
+
+### Rollback
+
+- Before deployment: revert the focused migration commit.
+- After deployment: add a later forward-only migration that drops the five replacement policies and recreates the definitions from `20260710090010_media.sql` verbatim. Do not edit or remove either shipped migration.
