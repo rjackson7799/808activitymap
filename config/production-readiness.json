@@ -31,8 +31,8 @@
     "productionSupabaseVerified": false,
     "productionSecretsVerified": false,
     "domainDnsVerified": false,
-    "branchProtectionVerified": false,
-    "environmentProtectionVerified": false
+    "branchProtectionVerified": true,
+    "environmentProtectionVerified": true
   },
   "reliability": {
     "dailyBackupsVerified": false,

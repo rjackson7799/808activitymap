@@ -34,7 +34,7 @@ Evidence lives in `config/production-readiness.json`. Update a value only after 
 - The linked `808activitymap-staging` Vercel project uses Node 24 and remains a staging resource.
 - The linked Supabase resource is `808ActivityMap Staging2026`; no dedicated production project exists.
 - Staging blocks indexing and currently exposes two listings in EN and JA, with no KO URLs.
-- `main` has no branch protection or repository ruleset. GitHub Preview and Production environments exist but have no protection rules.
+- `main` requires PRs, current successful results from all four CI jobs, resolved conversations, and applies protections to admins; force-push and deletion are disabled. The GitHub Production environment is restricted to protected branches and requires approval by the repository owner.
 - The homepage hardening gate passed at performance 0.98, accessibility 1.00, best practices 1.00, LCP 2,417ms, and 210,872 bytes. This is not a substitute for the required full-photo reference-listing run.
 
 ## Final rehearsal
