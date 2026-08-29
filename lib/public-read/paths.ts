@@ -38,6 +38,15 @@ export function listingPath(locale: Locale, slug: string): string {
   return `${localePrefix(locale)}/spot/${slug}`;
 }
 
+export function trustPath(locale: Locale): string {
+  return `${localePrefix(locale)}/trust`;
+}
+
+export function reportChangePath(locale: Locale, listingId?: string): string {
+  const base = `${localePrefix(locale)}/report-change`;
+  return listingId ? `${base}?listing=${encodeURIComponent(listingId)}` : base;
+}
+
 /**
  * Absolute URL for canonicals, hreflang, sitemaps, and JSON-LD. `origin` is derived from
  * PORTAL_DOMAIN (never the request/staging host). Native-script path segments are

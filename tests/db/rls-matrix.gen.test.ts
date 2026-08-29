@@ -48,6 +48,7 @@ const P = {
   item2: "77000000-0000-4000-8000-000000000023",
   alias: "77000000-0000-4000-8000-000000000024",
   org2: "77000000-0000-4000-8000-000000000026",
+  changeRequest: "77000000-0000-4000-8000-000000000027",
 };
 
 /** One row (or a locale-free "secondary parent") per live table. */
@@ -71,6 +72,8 @@ async function seedProbeFamily(tx: TxSql): Promise<void> {
       ('${P.loc3}', '${P.org}', '{"street":"3 Probe Way"}'::jsonb);
     insert into public.listings (id, location_id) values
       ('${P.listing}', '${P.loc}'), ('${P.listing2}', '${P.loc2}');
+    insert into public.change_requests (id, target_id, base_version, diff, sla_due_at) values
+      ('${P.changeRequest}', '${P.listing}', 1, '{"field":"hours","details":"Probe correction details."}'::jsonb, now() + interval '48 hours');
     insert into public.listing_locales (listing_id, locale, name) values
       ('${P.listing}', 'ja', 'プローブ'), ('${P.listing}', 'ko', '프로브');
     insert into public.categories (id, market_id) values
@@ -151,6 +154,11 @@ const PROBES: Record<string, WriteProbes> = {
     update: (l) => `update category_locales set label = label where category_id = '${P.cat}' and locale = '${l}'`,
     insert: (l) => `insert into category_locales (category_id, locale, label, slug) values ('${P.cat2}', '${l}', 'probe', 'probe-c2-${l}')`,
     del: `delete from category_locales where category_id = '${P.cat}' and locale = 'ko'`,
+  },
+  change_requests: {
+    update: `update change_requests set assignee = assignee where id = '${P.changeRequest}'`,
+    insert: `insert into change_requests (target_id, base_version, diff, sla_due_at) values ('${P.listing}', 1, '{"field":"hours","details":"Inserted probe correction."}'::jsonb, now() + interval '48 hours')`,
+    del: `delete from change_requests where id = '${P.changeRequest}'`,
   },
   hours_exceptions: {
     update: `update hours_exceptions set reason = reason where id = '${P.hoursEx}'`,

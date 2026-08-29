@@ -35,6 +35,7 @@ export const LIVE_TABLES: readonly TableName[] = [
   "audit_log",
   "categories",
   "category_locales",
+  "change_requests",
   "hours_exceptions",
   "hours_sets",
   "listing_categories",

@@ -119,8 +119,8 @@ export const EVENT_REGISTRY = {
     listingScoped: false,
   },
   report_change: {
-    status: "planned", // Slice 3 — correction flow
-    source: CLIENT,
+    status: "implemented", // Phase 0 — emitted server-side after a stored correction
+    source: SERVER,
     props: z.strictObject({}),
     listingScoped: true,
   },

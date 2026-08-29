@@ -107,4 +107,31 @@ test.describe("journey + structured data + a11y", () => {
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
     await expect(page.getByRole("link", { name: "Directions" }).first()).toBeVisible();
   });
+
+  test("trust and correction flow is localized, mobile-safe, accessible, and stores a report", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/trust");
+    await expect(page.getByRole("heading", { level: 1, name: /keep information trustworthy/i })).toBeVisible();
+    expect((await new AxeBuilder({ page }).analyze()).violations, "axe on trust page").toEqual([]);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+
+    await page.goto("/spot/aloha-ramen-hale");
+    await page.getByRole("link", { name: "Report a change" }).first().click();
+    await expect(page.getByRole("heading", { level: 1, name: "Report a change" })).toBeVisible();
+    await page.getByLabel("What needs updating?").selectOption("hours");
+    await page.getByLabel("What should we know?").fill("The weekday closing time is now 8 p.m.; staff confirmed this today.");
+    await page.getByLabel("Email (optional)").fill("visitor@example.com");
+    const submission = page.waitForResponse((response) => response.url().endsWith("/api/change-requests"));
+    await page.getByRole("button", { name: "Send report" }).click();
+    const submissionResponse = await submission;
+    expect(submissionResponse.status(), await submissionResponse.text()).toBe(201);
+    await expect(page.getByRole("status")).toContainText("review queue");
+    expect((await new AxeBuilder({ page }).analyze()).violations, "axe after correction submission").toEqual([]);
+
+    await page.goto("/ja/trust");
+    await expect(page.locator("html")).toHaveAttribute("lang", "ja");
+    await expect(page.getByRole("heading", { level: 1, name: "正確な情報を保つために" })).toBeVisible();
+    expect(await page.evaluate(() => getComputedStyle(document.querySelector("h1")!).fontFamily)).toContain("Noto Sans JP");
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  });
 });

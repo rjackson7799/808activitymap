@@ -520,6 +520,22 @@ const STAFF_ROLES: Role[] = [
  */
 export const EXTRA_SURFACES: ExtraSurface[] = [
   {
+    description: "All staff can read the correction queue for operational triage",
+    roles: STAFF_ROLES,
+    tables: ["change_requests"],
+    ops: ["select"],
+    predicate: { kind: "all" },
+    aal: "none",
+  },
+  {
+    description: "Correction assignment and resolution are owned by guarded functions",
+    roles: ["super_admin", "publisher", "editor"],
+    tables: ["change_requests"],
+    ops: [],
+    predicate: { kind: "fnOwned", fn: "assign_change_request / resolve_change_request" },
+    aal: "mfa",
+  },
+  {
     description:
       "Staff read: every platform role reads all live content tables (working visibility; anon/vendors get nothing)",
     roles: STAFF_ROLES,

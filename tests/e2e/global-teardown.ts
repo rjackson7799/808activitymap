@@ -12,6 +12,7 @@ export default async function globalTeardown() {
   const env = e2eEnv();
   const pg = postgres(env.databaseUrl, { max: 1, onnotice: () => {} });
   try {
+    await pg`delete from public.change_requests where reporter_email = 'visitor@example.com'`;
     await teardownPublishFixture(pg);
   } finally {
     await pg.end();

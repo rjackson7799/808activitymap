@@ -16,7 +16,7 @@ import {
  */
 
 describe("event dictionary — status gate", () => {
-  it("declares the implemented Slice-1 set", () => {
+  it("declares the implemented public foundation set", () => {
     expect(new Set(IMPLEMENTED_EVENTS)).toEqual(
       new Set<EventName>([
         "session_start",
@@ -25,6 +25,7 @@ describe("event dictionary — status gate", () => {
         "language_switch",
         "share_click",
         "direction_click",
+        "report_change",
       ]),
     );
   });

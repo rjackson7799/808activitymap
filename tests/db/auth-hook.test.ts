@@ -134,7 +134,7 @@ describe("security-event audit (TSD §17)", () => {
         from audit_log
         where target_table = 'user_roles'
           and coalesce(after->>'user_id', before->>'user_id') = ${USER}
-        order by at`;
+        order by at, id`;
       expect(rows.map((r) => [r.action, r.role])).toEqual([
         ["INSERT", "ops_agent"],
         ["DELETE", "ops_agent"],

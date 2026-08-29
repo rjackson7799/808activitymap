@@ -77,7 +77,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           ))}
         </ul>
       </main>
-      <PublicFooter brand={brand} strings={strings} />
+      <PublicFooter brand={brand} strings={strings} locale={locale} />
     </>
   );
 }
