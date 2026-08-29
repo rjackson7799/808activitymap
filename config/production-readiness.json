@@ -1,0 +1,52 @@
+{
+  "lastAuditedAt": "2026-08-29",
+  "brand": {
+    "approved": false,
+    "name": "",
+    "domain": ""
+  },
+  "content": {
+    "permissionedListings": 2,
+    "publishedByLocale": {
+      "en": 2,
+      "ja": 2,
+      "ko": 0
+    },
+    "foundingVendorKoCoveragePercent": 0,
+    "seededListingKoMenuCoveragePercent": 0,
+    "referenceListingPhotoCount": 0
+  },
+  "people": {
+    "koReviewerConfirmed": false,
+    "koReviewerBackupConfirmed": false,
+    "backupPublisherConfirmed": false
+  },
+  "publicTrust": {
+    "trustPageVerified": false,
+    "reportChangeFlowVerified": false,
+    "llmsTxtVerified": false
+  },
+  "infrastructure": {
+    "productionVercelVerified": false,
+    "productionSupabaseVerified": false,
+    "productionSecretsVerified": false,
+    "domainDnsVerified": false,
+    "branchProtectionVerified": false,
+    "environmentProtectionVerified": false
+  },
+  "reliability": {
+    "dailyBackupsVerified": false,
+    "pitrPlanVerified": false,
+    "restoreDrillDate": null,
+    "monitoringVerified": false,
+    "rollbackVerified": false
+  },
+  "performance": {
+    "referenceListingVerified": false,
+    "lighthousePerformance": 0.98,
+    "lighthouseAccessibility": 1,
+    "lighthouseBestPractices": 1,
+    "lcpMs": 2417,
+    "pageWeightBytes": 210872
+  }
+}
