@@ -52,7 +52,7 @@ export function ShareButton({
     <button
       type="button"
       onClick={onShare}
-      className="rounded-chip border border-hairline px-3 py-1 text-[12px] font-medium text-ink hover:bg-neutral"
+      className="min-h-9 rounded-cta border border-hairline px-3 text-[12px] font-semibold text-ink hover:bg-neutral"
     >
       {copied ? copiedLabel : label}
     </button>

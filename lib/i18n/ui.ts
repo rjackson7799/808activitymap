@@ -8,6 +8,10 @@ import type { Locale } from "@/lib/locales";
  */
 export interface UiStrings {
   browse: string;
+  browseIntro: string;
+  categoryIntro: (category: string, count: number) => string;
+  viewDetails: string;
+  skipToContent: string;
   home: string;
   languageLabel: string;
   open: string;
@@ -32,6 +36,8 @@ export interface UiStrings {
   linkCopied: string;
   callThisPlace: string;
   aboutHeading: string;
+  aboutTitle: (name: string) => string;
+  localTipLabel: string;
   howWeKeepCurrent: string;
   verifiedByTeam: string;
   verifiedOn: (date: string) => string;
@@ -46,6 +52,10 @@ export interface UiStrings {
 
 const en: UiStrings = {
   browse: "Browse Waikīkī",
+  browseIntro: "Locals-verified places, current details, and approved menus for choosing with confidence.",
+  categoryIntro: (category, count) => `${count} verified ${category.toLowerCase()} ${count === 1 ? "place" : "places"} to explore.`,
+  viewDetails: "View details",
+  skipToContent: "Skip to content",
   home: "Home",
   languageLabel: "Language",
   open: "Open",
@@ -70,6 +80,8 @@ const en: UiStrings = {
   linkCopied: "Link copied",
   callThisPlace: "Call",
   aboutHeading: "About",
+  aboutTitle: (name) => `About ${name}`,
+  localTipLabel: "Kama‘āina knows",
   howWeKeepCurrent: "How we keep this current",
   verifiedByTeam: "Verified in person by our local team",
   verifiedOn: (date) => `verified ${date}`,
@@ -84,6 +96,10 @@ const en: UiStrings = {
 
 const ja: UiStrings = {
   browse: "ワイキキを見る",
+  browseIntro: "地元で確認した店舗情報と承認済みメニューで、安心してお店を選べます。",
+  categoryIntro: (category, count) => `${category}の確認済み店舗 ${count}件をご紹介します。`,
+  viewDetails: "詳細を見る",
+  skipToContent: "本文へ移動",
   home: "ホーム",
   languageLabel: "言語",
   open: "営業中",
@@ -108,6 +124,8 @@ const ja: UiStrings = {
   linkCopied: "リンクをコピーしました",
   callThisPlace: "電話する",
   aboutHeading: "紹介",
+  aboutTitle: (name) => `${name}について`,
+  localTipLabel: "地元からのひとこと",
   howWeKeepCurrent: "情報の更新方法",
   verifiedByTeam: "地元チームが現地で確認しています",
   verifiedOn: (date) => `${date}に確認`,
@@ -121,7 +139,18 @@ const ja: UiStrings = {
 };
 
 // KO mirrors EN copy until Slice 2 localizes it; never served pre-flip.
-const ko: UiStrings = { ...en, home: "홈", browse: "와이키키 둘러보기", languageLabel: "언어" };
+const ko: UiStrings = {
+  ...en,
+  home: "홈",
+  browse: "와이키키 둘러보기",
+  browseIntro: "현지에서 확인한 장소 정보와 승인된 메뉴로 안심하고 선택하세요.",
+  categoryIntro: (category, count) => `확인된 ${category} 장소 ${count}곳을 둘러보세요.`,
+  viewDetails: "자세히 보기",
+  skipToContent: "본문으로 건너뛰기",
+  languageLabel: "언어",
+  localTipLabel: "현지인의 한마디",
+  aboutTitle: (name) => `${name} 소개`,
+};
 
 const STRINGS: Record<Locale, UiStrings> = { en, ja, ko };
 

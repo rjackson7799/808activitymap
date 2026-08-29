@@ -80,9 +80,24 @@
 }
 
 @layer base {
+  html {
+    background: var(--gradient-backdrop);
+  }
+
+  html[lang="ja"] {
+    --font-serif: var(--font-noto-jp), system-ui, sans-serif;
+    --font-sans: var(--font-noto-jp), system-ui, sans-serif;
+  }
+
+  html[lang="ko"] {
+    --font-serif: var(--font-noto-kr), system-ui, sans-serif;
+    --font-sans: var(--font-noto-kr), system-ui, sans-serif;
+  }
+
   body {
     font-family: var(--font-sans);
     color: var(--color-body);
+    background: var(--gradient-backdrop);
   }
 
   /* Marcellus headings are opt-in via `font-serif` on the public surface (see
@@ -115,5 +130,18 @@
   }
   .surface-ocean {
     background: var(--gradient-ocean);
+  }
+
+  .public-page {
+    min-height: calc(100dvh - 4.25rem);
+    background: var(--color-shell);
+  }
+
+  .eyebrow {
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-terracotta-deep);
   }
 }

@@ -1,5 +1,6 @@
 import type { HoursDTO, HoursDay } from "@/lib/public-read/dto";
 import type { UiStrings } from "@/lib/i18n/ui";
+import { cn } from "@/lib/utils";
 
 /**
  * Weekly hours table (CP4). Server-rendered — this is JS-free CONTENT (a visitor can read
@@ -15,20 +16,20 @@ function formatDay(day: HoursDay | undefined, strings: UiStrings): string {
   return day.spans.map((s) => `${s.open}–${s.close}`).join(", ");
 }
 
-export function HoursTable({ hours, strings }: { hours: HoursDTO; strings: UiStrings }) {
+export function HoursTable({ hours, strings, inverse = false }: { hours: HoursDTO; strings: UiStrings; inverse?: boolean }) {
   if (hours.unknown) {
-    return <p className="text-[13.5px] text-secondary">{strings.hoursUnknown}</p>;
+    return <p className={cn("text-[13.5px]", inverse ? "text-white/80" : "text-secondary")}>{strings.hoursUnknown}</p>;
   }
   return (
     <div>
       <table className="w-full text-[13.5px]">
         <tbody>
           {DAYS.map((day) => (
-            <tr key={day} className="border-b border-hairline last:border-0">
-              <th scope="row" className="py-1.5 text-left font-medium text-ink">
+            <tr key={day} className={cn("border-b last:border-0", inverse ? "border-white/15" : "border-hairline")}>
+              <th scope="row" className={cn("py-1.5 text-left font-medium", inverse ? "text-white" : "text-ink")}>
                 {strings.weekdays[day]}
               </th>
-              <td className="py-1.5 text-right tabular-nums text-secondary">
+              <td className={cn("py-1.5 text-right tabular-nums", inverse ? "text-white/80" : "text-secondary")}>
                 {formatDay(hours.weekly[day], strings)}
               </td>
             </tr>
@@ -36,10 +37,10 @@ export function HoursTable({ hours, strings }: { hours: HoursDTO; strings: UiStr
         </tbody>
       </table>
       {hours.sellsOutEarly ? (
-        <p className="mt-2 text-[12.5px] font-medium text-terracotta-deep">{strings.sellsOutEarly}</p>
+        <p className={cn("mt-2 text-[12.5px] font-medium", inverse ? "text-white" : "text-terracotta-deep")}>{strings.sellsOutEarly}</p>
       ) : null}
       {hours.appointmentOnly ? (
-        <p className="mt-2 text-[12.5px] text-secondary">{strings.appointmentOnly}</p>
+        <p className={cn("mt-2 text-[12.5px]", inverse ? "text-white/85" : "text-secondary")}>{strings.appointmentOnly}</p>
       ) : null}
     </div>
   );

@@ -24,6 +24,7 @@ import { MenuDisplay } from "@/components/public/MenuDisplay";
 import { HoursTable } from "@/components/public/HoursTable";
 import { HowWeKeepCurrent } from "@/components/public/HowWeKeepCurrent";
 import { ShareButton } from "@/components/public/ShareButton";
+import { MapPin, Phone } from "lucide-react";
 
 /**
  * Listing detail (CP4). Slug resolution: a romanized alias single-hops to the native
@@ -105,96 +106,127 @@ export default async function ListingPage({
 
   return (
     <>
-      <SiteHeader locale={locale} brand={brand} alternates={alternates} notAvailableLabel={strings.otherLocaleNotAvailable} />
+      <SiteHeader
+        locale={locale}
+        brand={brand}
+        alternates={alternates}
+        notAvailableLabel={strings.otherLocaleNotAvailable}
+        languageLabel={strings.languageLabel}
+      />
       <main
-        className="mx-auto max-w-3xl px-6 py-8"
+        id="main-content"
+        className="public-page pb-24 sm:pb-12"
         data-analytics-listing={dto.id}
       >
-        <Breadcrumbs items={crumbs.map((c, i) => (i === crumbs.length - 1 ? { name: c.name } : { name: c.name, href: c.path }))} />
+        <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
+          <Breadcrumbs items={crumbs.map((c, i) => (i === crumbs.length - 1 ? { name: c.name } : { name: c.name, href: c.path }))} />
 
-        <div className="mt-5">
-          <PhotoGallery photos={dto.photos} />
-        </div>
-
-        <div className="mt-6 flex flex-wrap items-start justify-between gap-3">
-          <div className="min-w-0">
-            <h1 className="font-serif text-4xl leading-tight text-ink">{dto.name}</h1>
-            <p className="mt-2 text-[14px] text-secondary">{meta}</p>
+          <div className="mt-5">
+            <PhotoGallery photos={dto.photos} />
           </div>
-          <div className="flex items-center gap-2">
-            <ShareButton
-              title={dto.name}
-              listingId={dto.id}
-              locale={locale}
-              label={strings.share}
-              copiedLabel={strings.linkCopied}
-            />
-            <OpenNowBadge hours={dto.hours} locale={locale} />
-          </div>
-        </div>
 
-        <div className="mt-4">
-          <TrustBadges provenance={dto.provenance} operationalStatus={dto.operationalStatus} strings={strings} />
-        </div>
+          <div className="mt-7 grid gap-8 lg:grid-cols-[minmax(0,1fr)_19rem] lg:items-start">
+            <div className="min-w-0">
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <h1 className="font-serif text-3xl leading-tight text-ink sm:text-[2.5rem]">{dto.name}</h1>
+                  <p className="mt-2 text-[12px] font-semibold text-secondary">{meta}</p>
+                </div>
+                <OpenNowBadge hours={dto.hours} locale={locale} />
+              </div>
 
-        {dto.editorialNote ? (
-          <section className="mt-8">
-            <h2 className="font-serif text-xl text-ink">{strings.aboutHeading}</h2>
-            <div className="mt-3">
-              <EditorialNote note={dto.editorialNote} />
+              <div className="mt-4">
+                <TrustBadges provenance={dto.provenance} operationalStatus={dto.operationalStatus} strings={strings} />
+              </div>
+
+              {dto.editorialNote ? (
+                <section className="mt-9">
+                  <h2 className="font-serif text-[1.3125rem] text-ink">{strings.aboutTitle(dto.name)}</h2>
+                  <div className="mt-4">
+                    <EditorialNote note={dto.editorialNote} label={strings.localTipLabel} />
+                  </div>
+                </section>
+              ) : null}
+
+              <section className="mt-10">
+                <h2 className="font-serif text-[1.3125rem] text-ink">{strings.menu}</h2>
+                <div className="mt-4 rounded-card border border-hairline bg-surface p-5 shadow-card sm:p-6">
+                  {dto.menu ? (
+                    <MenuDisplay menu={dto.menu} strings={strings} />
+                  ) : (
+                    <p className="text-[14px] text-secondary">{strings.menuComingSoon(latestVerified)}</p>
+                  )}
+                </div>
+              </section>
+
+              <div className="mt-10">
+                <HowWeKeepCurrent provenance={dto.provenance} strings={strings} />
+              </div>
             </div>
-          </section>
-        ) : null}
 
-        <section className="mt-10">
-          <h2 className="font-serif text-2xl text-ink">{strings.menu}</h2>
-          <div className="mt-4">
-            {dto.menu ? (
-              <MenuDisplay menu={dto.menu} strings={strings} />
-            ) : (
-              <p className="text-[14px] text-secondary">{strings.menuComingSoon(latestVerified)}</p>
-            )}
+            <aside className="flex flex-col gap-4 lg:sticky lg:top-24">
+              <div className="rounded-card border border-hairline bg-surface p-4 shadow-card">
+                <div className="flex flex-wrap items-center gap-2">
+                  <ShareButton
+                    title={dto.name}
+                    listingId={dto.id}
+                    locale={locale}
+                    label={strings.share}
+                    copiedLabel={strings.linkCopied}
+                  />
+                  {dto.phone ? (
+                    <a href={`tel:${dto.phone}`} className="inline-flex min-h-9 items-center gap-2 rounded-cta border border-hairline px-3 text-[12px] font-semibold text-ink hover:bg-neutral">
+                      <Phone size={15} aria-hidden />
+                      {strings.callThisPlace}
+                    </a>
+                  ) : null}
+                </div>
+              </div>
+
+              <section className="surface-ocean rounded-card p-5 text-white shadow-lift">
+                <h2 className="font-serif text-xl text-white">{strings.hours}</h2>
+                <div className="mt-3">
+                  <HoursTable hours={dto.hours} strings={strings} inverse />
+                </div>
+                <div className="my-5 h-px bg-white/20" />
+                <h2 className="font-serif text-xl text-white">{strings.location}</h2>
+                <p className="mt-3 text-[13.5px] leading-relaxed text-white/85">{addressLine}</p>
+                {dto.geo ? (
+                  <p className="mt-4">
+                    <a
+                      href={`https://www.google.com/maps/search/?api=1&query=${dto.geo.lat},${dto.geo.lng}`}
+                      rel="noopener noreferrer"
+                      data-analytics="directions"
+                      data-provider="google"
+                      className="inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-cta bg-white px-4 text-[12.5px] font-bold text-teal-dark transition hover:bg-shell"
+                    >
+                      <MapPin size={16} aria-hidden />
+                      {strings.directions}
+                    </a>
+                  </p>
+                ) : null}
+              </section>
+            </aside>
           </div>
-        </section>
+        </div>
+      </main>
 
-        <section className="mt-10">
-          <h2 className="font-serif text-2xl text-ink">{strings.hours}</h2>
-          <div className="mt-4 rounded-card border border-hairline bg-surface p-5 shadow-card">
-            <HoursTable hours={dto.hours} strings={strings} />
-          </div>
-        </section>
-
-        <section className="mt-10">
-          <h2 className="font-serif text-2xl text-ink">{strings.location}</h2>
-          <div className="mt-4 rounded-card border border-hairline bg-surface p-5 text-[14px] text-body shadow-card">
-            <p>{addressLine}</p>
-            {dto.phone ? (
-              <p className="mt-2">
-                <a href={`tel:${dto.phone}`} className="text-teal-dark underline-offset-2 hover:underline">
-                  {dto.phone}
-                </a>
-              </p>
-            ) : null}
-            {dto.geo ? (
-              <p className="mt-3">
+      {dto.geo ? (
+        <div className="fixed inset-x-0 bottom-0 z-10 border-t border-hairline bg-white/95 p-3 pb-[max(.75rem,env(safe-area-inset-bottom))] backdrop-blur sm:hidden">
+          <div className="mx-auto max-w-md">
                 <a
                   href={`https://www.google.com/maps/search/?api=1&query=${dto.geo.lat},${dto.geo.lng}`}
                   rel="noopener noreferrer"
                   data-analytics="directions"
                   data-provider="google"
-                  className="font-semibold text-teal-dark underline-offset-2 hover:underline"
+                  className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-cta bg-ink px-4 text-[13px] font-bold text-white"
                 >
+                  <MapPin size={16} aria-hidden />
                   {strings.directions}
                 </a>
-              </p>
-            ) : null}
           </div>
-        </section>
-
-        <div className="mt-10">
-          <HowWeKeepCurrent provenance={dto.provenance} strings={strings} />
         </div>
-      </main>
+      ) : null}
       <PublicFooter brand={brand} strings={strings} />
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(restaurantLd) }} />
