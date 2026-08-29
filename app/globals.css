@@ -85,13 +85,14 @@
   }
 
   html[lang="ja"] {
-    --font-serif: var(--font-noto-jp), system-ui, sans-serif;
-    --font-sans: var(--font-noto-jp), system-ui, sans-serif;
+    --font-serif: "Noto Sans JP", "Yu Gothic", "Hiragino Kaku Gothic ProN", system-ui, sans-serif;
+    --font-sans: "Noto Sans JP", "Yu Gothic", "Hiragino Kaku Gothic ProN", system-ui, sans-serif;
   }
 
   html[lang="ko"] {
-    --font-serif: var(--font-noto-kr), system-ui, sans-serif;
-    --font-sans: var(--font-noto-kr), system-ui, sans-serif;
+    /* KO remains unserved until Slice 2; do not ship its webfont on EN/JA. */
+    --font-serif: "Noto Sans KR", system-ui, sans-serif;
+    --font-sans: "Noto Sans KR", system-ui, sans-serif;
   }
 
   body {

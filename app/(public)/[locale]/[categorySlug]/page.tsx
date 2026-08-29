@@ -82,6 +82,7 @@ export default async function CategoryPage({
         </div>
       </main>
       <PublicFooter brand={brand} strings={strings} />
+      <script src="/image-fallback.js" defer />
     </>
   );
 }

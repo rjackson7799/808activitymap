@@ -4,7 +4,7 @@
   "private": true,
   "description": "Multilingual locals-verified discovery portal (brand TBD, D27)",
   "engines": {
-    "node": ">=22.0.0 <23"
+    "node": ">=24.0.0 <25"
   },
   "scripts": {
     "dev": "next dev",
@@ -15,6 +15,7 @@
     "test:unit": "vitest run --project unit",
     "test:db": "vitest run --project db",
     "test:e2e": "playwright test",
+    "test:lighthouse": "node scripts/lighthouse-budget.mjs",
     "start:e2e": "next build && next start -p 3100",
     "test": "vitest run",
     "rls:generate": "tsx db/rls/generate.ts",
@@ -30,7 +31,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.548.0",
-    "next": "16.2.10",
+    "next": "16.3.3",
     "react": "19.2.7",
     "react-dom": "19.2.7",
     "server-only": "0.0.1",
@@ -44,8 +45,10 @@
     "@types/node": "26.1.1",
     "@types/react": "19.2.17",
     "@types/react-dom": "19.2.3",
+    "chrome-launcher": "1.2.1",
     "eslint": "9.39.5",
-    "eslint-config-next": "16.2.10",
+    "eslint-config-next": "16.3.3",
+    "lighthouse": "13.4.1",
     "postgres": "3.4.9",
     "tailwindcss": "4.3.2",
     "tsx": "4.23.0",

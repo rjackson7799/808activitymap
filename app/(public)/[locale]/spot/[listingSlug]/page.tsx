@@ -231,6 +231,8 @@ export default async function ListingPage({
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(restaurantLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbLd) }} />
+      <script src="/image-fallback.js" defer />
+      <script src="/public-enhancements.js" defer />
     </>
   );
 }

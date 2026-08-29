@@ -4,8 +4,8 @@ import "@/app/globals.css";
 import { fontVariables } from "@/app/fonts";
 import { isLocale } from "@/lib/locales";
 import { getServedLocales } from "@/lib/public-read/server";
-import { AnalyticsListeners } from "@/components/public/AnalyticsListeners";
 import { ui } from "@/lib/i18n/ui";
+import { AnalyticsListeners } from "@/components/public/AnalyticsListeners";
 
 /**
  * Root layout for the public (public)/[locale] tree (CP4 multi-root). Renders

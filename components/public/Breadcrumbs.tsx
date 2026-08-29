@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 /**
  * Breadcrumb trail (CP4). Pairs with the BreadcrumbList JSON-LD (/lib/schema). The last
  * item is the current page (no link, aria-current).
@@ -11,9 +9,9 @@ export function Breadcrumbs({ items }: { items: { name: string; href?: string }[
         {items.map((item, index) => (
           <li key={index} className="flex items-center gap-1.5">
             {item.href ? (
-              <Link href={item.href} className="hover:text-teal-dark">
+              <a href={item.href} className="hover:text-teal-dark">
                 {item.name}
-              </Link>
+              </a>
             ) : (
               <span aria-current="page" className="text-ink">
                 {item.name}

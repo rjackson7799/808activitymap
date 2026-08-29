@@ -13,6 +13,7 @@ export function ListingCard({ locale, listing, viewDetailsLabel }: { locale: Loc
   return (
     <Link
       href={listingPath(locale, listing.slug)}
+      prefetch={false}
       className="group grid h-full overflow-hidden rounded-card border border-hairline bg-surface shadow-card transition hover:-translate-y-0.5 hover:shadow-lift sm:grid-cols-[9rem_1fr]"
     >
       <div className="photo-placeholder relative aspect-[1.7/1] w-full overflow-hidden sm:aspect-auto sm:min-h-32">

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import type { Locale } from "@/lib/locales";
 import type { LocaleAlternate } from "@/lib/public-read/queries";
 import { homePath } from "@/lib/public-read/paths";
@@ -24,9 +23,12 @@ export function SiteHeader({
   return (
     <header className="sticky top-0 z-10 h-[4.25rem] border-b border-hairline bg-white/95 backdrop-blur">
       <div className="mx-auto flex h-full max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
-        <Link href={homePath(locale)} className="rounded-sm font-serif text-lg tracking-tight text-ink sm:text-xl">
+        <a
+          href={homePath(locale)}
+          className="rounded-sm font-serif text-lg tracking-tight text-ink sm:text-xl"
+        >
           {brand}
-        </Link>
+        </a>
         <LanguageSwitcher
           current={locale}
           alternates={alternates}
