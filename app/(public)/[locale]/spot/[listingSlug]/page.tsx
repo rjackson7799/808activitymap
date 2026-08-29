@@ -3,6 +3,7 @@ import { notFound, permanentRedirect } from "next/navigation";
 import { env } from "@/config/env";
 import { isLocale } from "@/lib/locales";
 import { ui } from "@/lib/i18n/ui";
+import { trustUi } from "@/lib/i18n/trust";
 import {
   getListingDTO,
   getListingLocaleAlternates,
@@ -10,7 +11,7 @@ import {
   listEligibleListingParams,
   resolveListingSlug,
 } from "@/lib/public-read/server";
-import { categoryPath, decodeSlug, homePath, listingPath, toOrigin } from "@/lib/public-read/paths";
+import { categoryPath, decodeSlug, homePath, listingPath, reportChangePath, toOrigin } from "@/lib/public-read/paths";
 import { localeAlternatesMeta } from "@/lib/public-read/metadata";
 import { breadcrumbJsonLd, restaurantJsonLd } from "@/lib/schema";
 import { SiteHeader } from "@/components/public/SiteHeader";
@@ -161,6 +162,7 @@ export default async function ListingPage({
 
               <div className="mt-10">
                 <HowWeKeepCurrent provenance={dto.provenance} strings={strings} />
+                <p className="mt-4 text-[12.5px]"><a href={reportChangePath(locale, dto.id)} className="font-semibold text-teal-dark underline underline-offset-4">{trustUi(locale).reportLink}</a></p>
               </div>
             </div>
 
@@ -227,7 +229,7 @@ export default async function ListingPage({
           </div>
         </div>
       ) : null}
-      <PublicFooter brand={brand} strings={strings} />
+      <PublicFooter brand={brand} strings={strings} locale={locale} />
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(restaurantLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbLd) }} />

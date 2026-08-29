@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import postgres from "postgres";
 
 /**
@@ -35,7 +36,72 @@ export interface JwtClaims {
   role?: "authenticated" | "anon";
   aal?: "aal1" | "aal2";
   app_roles?: string[];
+  session_id?: string;
   [key: string]: unknown;
+}
+
+async function prepareLiveIdentity(
+  tx: TxSql,
+  claims: JwtClaims,
+): Promise<JwtClaims> {
+  if (!claims.sub) return claims;
+
+  const sessionId = claims.session_id ?? randomUUID();
+  await tx`
+    insert into auth.users (
+      instance_id, id, aud, role, email, encrypted_password,
+      email_confirmed_at, created_at, updated_at
+    ) values (
+      '00000000-0000-0000-0000-000000000000',
+      ${claims.sub}::uuid,
+      'authenticated',
+      'authenticated',
+      ${`db-test-${claims.sub}@example.invalid`},
+      '',
+      now(),
+      now(),
+      now()
+    )
+    on conflict (id) do nothing`;
+
+  const databaseRoles = new Set([
+    "super_admin",
+    "publisher",
+    "editor",
+    "language_reviewer_ja",
+    "language_reviewer_ko",
+    "ops_agent",
+    "contributor",
+  ]);
+  for (const appRole of (claims.app_roles ?? []).filter((role) =>
+    databaseRoles.has(role),
+  )) {
+    await tx`
+      insert into public.user_roles (user_id, role)
+      values (${claims.sub}::uuid, ${appRole})
+      on conflict (user_id, role) do nothing`;
+  }
+
+  await tx`
+    insert into auth.sessions (id, user_id)
+    values (${sessionId}::uuid, ${claims.sub}::uuid)
+    on conflict (id) do nothing`;
+
+  return { ...claims, session_id: sessionId };
+}
+
+/** Set realistic claims, including the corresponding live Auth session/roles. */
+export async function setClaims(
+  tx: TxSql,
+  claims: JwtClaims,
+  switchToJwtRole = false,
+): Promise<void> {
+  await tx.unsafe("reset role");
+  const { role = "authenticated", ...rest } = claims;
+  const liveClaims = await prepareLiveIdentity(tx, rest);
+  const payload = JSON.stringify({ role, ...liveClaims });
+  await tx`select set_config('request.jwt.claims', ${payload}, true)`;
+  if (switchToJwtRole) await tx.unsafe(`set local role ${role}`);
 }
 
 /**
@@ -48,12 +114,10 @@ export async function withClaims<T>(
   fn: (tx: TxSql) => Promise<T>,
 ): Promise<T> {
   const { role = "authenticated", ...rest } = claims;
-  const payload = JSON.stringify({ role, ...rest });
   let result!: T;
   await sql
     .begin(async (tx) => {
-      await tx`select set_config('request.jwt.claims', ${payload}, true)`;
-      await tx.unsafe(`set local role ${role}`);
+      await setClaims(tx as TxSql, { role, ...rest }, true);
       result = await fn(tx as TxSql);
       throw new Rollback();
     })
@@ -72,11 +136,10 @@ export async function withClaimsSuper<T>(
   claims: JwtClaims,
   fn: (tx: TxSql) => Promise<T>,
 ): Promise<T> {
-  const payload = JSON.stringify({ role: "authenticated", ...claims });
   let result!: T;
   await sql
     .begin(async (tx) => {
-      await tx`select set_config('request.jwt.claims', ${payload}, true)`;
+      await setClaims(tx as TxSql, claims);
       result = await fn(tx as TxSql);
       throw new Rollback();
     })

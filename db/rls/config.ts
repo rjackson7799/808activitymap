@@ -13,7 +13,7 @@
  *    every future schema migration therefore requires a bump + regenerate.
  */
 
-export const OUTPUT_MIGRATION = "20260827120000_rls_policies.sql";
+export const OUTPUT_MIGRATION = "20260829120000_rls_policies.sql";
 
 /** Tables that exist as of CP1/CP2 (migrations 1–17) + CP5 (rate_limits). */
 export const CURRENT_TABLES = [
@@ -21,6 +21,7 @@ export const CURRENT_TABLES = [
   "audit_log",
   "categories",
   "category_locales",
+  "change_requests",
   "events",
   "hours_exceptions",
   "hours_sets",
@@ -52,7 +53,6 @@ export const CURRENT_TABLES = [
  * mask keeps them out of the generated output until they exist.
  */
 export const FUTURE_TABLES = [
-  "change_requests", // Slice 3 (P0-7)
   "claims", // Slice 3
   "deal_locales", // Slice 7
   "deals", // Slice 7

@@ -25,6 +25,7 @@ test("admin pages are axe-clean; taxonomy form is keyboard-operable with visible
     "/admin",
     "/admin/taxonomy",
     "/admin/listings",
+    "/admin/change-requests",
     `/admin/listings/${FIXTURE.listing}`,
     "/login/mfa", // reachable with a session — challenge UI must be a11y-clean too
   ];

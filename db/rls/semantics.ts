@@ -301,16 +301,22 @@ export const SEMANTICS: Record<Action, Partial<Record<Cell, Emission[]>>> = {
       },
       {
         tables: ["listing_media"],
-        ops: ["insert", "update", "delete"],
+        ops: ["insert"],
         predicate: { kind: "all" },
+        aal: "mfa",
+      },
+      {
+        tables: ["listing_media"],
+        ops: [],
+        predicate: { kind: "fnOwned", fn: "replace_listing_photo" },
         aal: "mfa",
       },
     ],
     "✔/✖": [
-      // upload only: no media UPDATE (moderation_status/rights stay out of
-      // reach), attachment insert only
+      // upload only: media begins pending (migration guard); attachment and
+      // moderation remain privileged workflows.
       {
-        tables: ["media", "listing_media"],
+        tables: ["media"],
         ops: ["insert"],
         predicate: { kind: "all" },
         aal: "none",
@@ -441,8 +447,14 @@ export const SEMANTICS: Record<Action, Partial<Record<Cell, Emission[]>>> = {
     "✔": [
       {
         tables: ["user_roles"],
-        ops: ["insert", "update", "delete"],
+        ops: ["insert"],
         predicate: { kind: "all" },
+        aal: "mfa",
+      },
+      {
+        tables: ["user_roles"],
+        ops: [],
+        predicate: { kind: "fnOwned", fn: "revoke_platform_role" },
         aal: "mfa",
       },
     ],
@@ -519,6 +531,22 @@ const STAFF_ROLES: Role[] = [
  * prose.
  */
 export const EXTRA_SURFACES: ExtraSurface[] = [
+  {
+    description: "All staff can read the correction queue for operational triage",
+    roles: STAFF_ROLES,
+    tables: ["change_requests"],
+    ops: ["select"],
+    predicate: { kind: "all" },
+    aal: "none",
+  },
+  {
+    description: "Correction assignment and resolution are owned by guarded functions",
+    roles: ["super_admin", "publisher", "editor"],
+    tables: ["change_requests"],
+    ops: [],
+    predicate: { kind: "fnOwned", fn: "assign_change_request / resolve_change_request" },
+    aal: "mfa",
+  },
   {
     description:
       "Staff read: every platform role reads all live content tables (working visibility; anon/vendors get nothing)",
