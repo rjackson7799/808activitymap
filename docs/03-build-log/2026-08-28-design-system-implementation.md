@@ -27,5 +27,7 @@ Apply `docs/design.md` to the shared public foundation and current public screen
 - Staging Preview deployment attempted from immutable commit `364a9fd7cb0148a7ef194efae3996673eb818238`.
 - Vercel deployment `dpl_BpvgoF4R1sWreGur4bn1RA1ZLic1` failed during page-data collection before publication: the remote builder reported the hosted Supabase JWT as issued in the future.
 - A clean local Vercel prebuild using the pulled Preview configuration also failed before upload because the Preview-scoped Supabase service credential was rejected as an invalid API key.
-- No production target, alias, database, hosted setting, or secret was changed. The temporary clean checkout and its downloaded Preview environment file were removed.
-- Staging review remains blocked until the Preview Supabase service credential is corrected or rotated under the staging runbook's hosted-settings approval gate.
+- After explicit approval, the Preview-only `SUPABASE_SERVICE_ROLE_KEY` was replaced with the current legacy service-role key from Supabase staging and preserved as a Sensitive Vercel variable. No Production-scoped variable was changed.
+- Immutable implementation commit `364a9fd7cb0148a7ef194efae3996673eb818238` deployed successfully as Preview deployment `dpl_B8XHHS2v7N3SRgGjtbc3MvBoapwU`; Vercel reported target `preview` and status `Ready`.
+- Read-only hosted smoke checks passed: EN home, JA home with `lang="ja"`, seeded listing plus JSON-LD, staging `noindex`, unknown listing `404`, and `GET /api/events` `405`.
+- No production target, alias, database, or Production-scoped secret was changed. Temporary clean checkouts and downloaded Preview environment files were removed.
