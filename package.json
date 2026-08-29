@@ -16,6 +16,7 @@
     "test:db": "vitest run --project db",
     "test:e2e": "playwright test",
     "test:lighthouse": "node scripts/lighthouse-budget.mjs",
+    "release:check": "node scripts/production-readiness.mjs",
     "start:e2e": "next build && next start -p 3100",
     "test": "vitest run",
     "rls:generate": "tsx db/rls/generate.ts",
