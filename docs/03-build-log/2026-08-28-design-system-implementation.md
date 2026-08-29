@@ -24,4 +24,8 @@ Apply `docs/design.md` to the shared public foundation and current public screen
 - Responsive assertions passed at 390×844 and 1440×900 with no horizontal overflow.
 - Japanese H1 resolved to Noto Sans JP; the mobile Japanese layout was visually inspected.
 - Desktop listing detail was visually inspected. Unavailable seed photo URLs now preserve the warm placeholder without broken-image glyphs, and a two-photo mosaic fills both columns.
-- Staging deployment pending.
+- Staging Preview deployment attempted from immutable commit `364a9fd7cb0148a7ef194efae3996673eb818238`.
+- Vercel deployment `dpl_BpvgoF4R1sWreGur4bn1RA1ZLic1` failed during page-data collection before publication: the remote builder reported the hosted Supabase JWT as issued in the future.
+- A clean local Vercel prebuild using the pulled Preview configuration also failed before upload because the Preview-scoped Supabase service credential was rejected as an invalid API key.
+- No production target, alias, database, hosted setting, or secret was changed. The temporary clean checkout and its downloaded Preview environment file were removed.
+- Staging review remains blocked until the Preview Supabase service credential is corrected or rotated under the staging runbook's hosted-settings approval gate.
