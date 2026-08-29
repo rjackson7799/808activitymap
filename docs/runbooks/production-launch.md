@@ -31,6 +31,7 @@ Evidence lives in `config/production-readiness.json`. Update a value only after 
 ## Verified baseline
 
 - Merged `main` CI is green.
+- `808eventures` is the provisional staging brand. Final D27 approval and the production domain remain open.
 - The linked `808activitymap-staging` Vercel project uses Node 24 and remains a staging resource.
 - The linked Supabase resource is `808ActivityMap Staging2026`; no dedicated production project exists.
 - Staging blocks indexing and currently exposes two listings in EN and JA, with no KO URLs.
