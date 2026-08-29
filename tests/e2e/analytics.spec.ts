@@ -145,6 +145,7 @@ test.describe("analytics client controls", () => {
         where name = 'language_switch' and source = 'client'
           and props->>'from' = 'en' and props->>'to' = 'ja'`;
       const before = beforeRows[0]!.c as number;
+      await page.locator('summary[aria-label="Language"]').click();
       await page.getByRole("link", { name: "日本語" }).click();
       await expect(page).toHaveURL(/\/ja\/spot\//);
       await expect.poll(async () => {
