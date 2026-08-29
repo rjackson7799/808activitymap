@@ -10,6 +10,7 @@ import {
 } from "@/lib/public-read/server";
 import { categoryPath, decodeSlug, homePath, toOrigin } from "@/lib/public-read/paths";
 import { localeAlternatesMeta } from "@/lib/public-read/metadata";
+import { breadcrumbJsonLd, categoryItemListJsonLd, serializeJsonLd } from "@/lib/schema";
 import { SiteHeader } from "@/components/public/SiteHeader";
 import { PublicFooter } from "@/components/public/PublicFooter";
 import { Breadcrumbs } from "@/components/public/Breadcrumbs";
@@ -54,6 +55,12 @@ export default async function CategoryPage({
 
   const [alternates, strings] = [await getCategoryLocaleAlternates(category.id), ui(locale)];
   const brand = env().BRAND_NAME;
+  const origin = toOrigin(env().PORTAL_DOMAIN);
+  const breadcrumbsLd = breadcrumbJsonLd([
+    { name: strings.home, path: homePath(locale) },
+    { name: category.label, path: categoryPath(locale, category.slug) },
+  ], { origin });
+  const itemListLd = categoryItemListJsonLd(category, { origin, locale });
 
   return (
     <>
@@ -82,6 +89,8 @@ export default async function CategoryPage({
         </div>
       </main>
       <PublicFooter brand={brand} strings={strings} locale={locale} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbsLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(itemListLd) }} />
       <script src="/image-fallback.js" defer />
     </>
   );

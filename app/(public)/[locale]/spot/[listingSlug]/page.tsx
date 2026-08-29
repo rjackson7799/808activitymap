@@ -13,7 +13,7 @@ import {
 } from "@/lib/public-read/server";
 import { categoryPath, decodeSlug, homePath, listingPath, reportChangePath, toOrigin } from "@/lib/public-read/paths";
 import { localeAlternatesMeta } from "@/lib/public-read/metadata";
-import { breadcrumbJsonLd, restaurantJsonLd } from "@/lib/schema";
+import { breadcrumbJsonLd, restaurantJsonLd, serializeJsonLd } from "@/lib/schema";
 import { SiteHeader } from "@/components/public/SiteHeader";
 import { PublicFooter } from "@/components/public/PublicFooter";
 import { Breadcrumbs } from "@/components/public/Breadcrumbs";
@@ -42,11 +42,6 @@ export async function generateStaticParams() {
     listAliasListingParams(),
   ]);
   return [...canonical, ...aliases];
-}
-
-function jsonLd(node: Record<string, unknown>): string {
-  // Escape `<` so a stray "</script>" in data can't break out of the tag.
-  return JSON.stringify(node).replace(/</g, "\\u003c");
 }
 
 export async function generateMetadata({
@@ -231,8 +226,8 @@ export default async function ListingPage({
       ) : null}
       <PublicFooter brand={brand} strings={strings} locale={locale} />
 
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(restaurantLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(restaurantLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbLd) }} />
       <script src="/image-fallback.js" defer />
       <script src="/public-enhancements.js" defer />
     </>

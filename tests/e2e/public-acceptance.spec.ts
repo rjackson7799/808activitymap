@@ -54,6 +54,28 @@ test.describe("canonical + hreflang", () => {
     expect(html).toContain('hrefLang="ja"');
     expect(html).toContain('hrefLang="x-default"');
   });
+
+  test("discovery endpoints expose the canonical sitemap and branded llms.txt", async ({ request }) => {
+    const robots = await request.get("/robots.txt");
+    expect(robots.status()).toBe(200);
+    // The E2E server is intentionally non-production and must remain unindexable.
+    expect(await robots.text()).toContain("Disallow: /");
+
+    const sitemap = await request.get("/sitemap.xml");
+    expect(sitemap.status()).toBe(200);
+    const sitemapXml = await sitemap.text();
+    expect(sitemapXml).toContain("/spot/aloha-ramen-hale");
+    expect(sitemapXml).toContain("/ja/spot/");
+    expect(sitemapXml).not.toContain("/ko/");
+
+    const llms = await request.get("/llms.txt");
+    expect(llms.status()).toBe(200);
+    expect(llms.headers()["content-type"]).toContain("text/plain");
+    const llmsText = await llms.text();
+    expect(llmsText).toContain(`# ${process.env.BRAND_NAME}`);
+    expect(llmsText).toContain("/trust");
+    expect(llmsText).toContain("/sitemap.xml");
+  });
 });
 
 test.describe("journey + structured data + a11y", () => {
@@ -66,6 +88,9 @@ test.describe("journey + structured data + a11y", () => {
     // Category
     await expect(page).toHaveURL(/\/ramen$/);
     expect((await new AxeBuilder({ page }).analyze()).violations, "axe on category").toEqual([]);
+    const categoryLd = await page.locator('script[type="application/ld+json"]').allTextContents();
+    expect(categoryLd.some((node) => node.includes('"@type":"ItemList"'))).toBe(true);
+    expect(categoryLd.some((node) => node.includes('"@type":"BreadcrumbList"'))).toBe(true);
     await page.getByRole("link", { name: /Aloha Ramen Hale/ }).first().click();
 
     // Listing

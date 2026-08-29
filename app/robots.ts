@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { env } from "@/config/env";
+import { buildRobotsPolicy } from "@/lib/discovery/robots";
 import { getAppConfig } from "@/lib/public-read/server";
 import { toOrigin } from "@/lib/public-read/paths";
 
@@ -12,20 +13,13 @@ import { toOrigin } from "@/lib/public-read/paths";
 export const revalidate = 3600;
 
 export default async function robots(): Promise<MetadataRoute.Robots> {
-  const origin = toOrigin(env().PORTAL_DOMAIN);
+  const config = env();
+  const origin = toOrigin(config.PORTAL_DOMAIN);
 
-  if (env().APP_ENV !== "production") {
-    return { rules: [{ userAgent: "*", disallow: "/" }] };
+  if (config.APP_ENV !== "production") {
+    return buildRobotsPolicy({ appEnv: config.APP_ENV, origin });
   }
 
   const allowlist = (await getAppConfig()).robots_allowlist;
-  return {
-    rules: [
-      { userAgent: "*", allow: "/" },
-      // Documented AI crawlers explicitly welcomed (findable + citable).
-      ...allowlist.map((userAgent) => ({ userAgent, allow: "/" })),
-    ],
-    sitemap: `${origin}/sitemap.xml`,
-    host: origin,
-  };
+  return buildRobotsPolicy({ appEnv: config.APP_ENV, origin, allowlist });
 }
