@@ -14,6 +14,22 @@ describe("permissioned seed dossier", () => {
   it("validates a first-party unconfirmed draft", () => expect(dossierSchema.parse(valid).verification.confirmed).toBe(false));
   it("rejects insecure source URLs", () => expect(() => dossierSchema.parse({ ...valid, source: { website: "http://example.com" } })).toThrow());
   it("requires evidence for confirmed verification", () => expect(() => dossierSchema.parse({ ...valid, verification: { confirmed: true } })).toThrow());
+  it("accepts an optional reviewed Japanese block with an explicit canonical slug", () => {
+    const parsed = dossierSchema.parse({
+      ...valid,
+      locales: {
+        ...valid.locales,
+        ja: { name: "サンプルカフェ", slug: "サンプルカフェ", editorial_note: "確認済みです。", seo_title: "サンプルカフェ", seo_desc: "サンプルです。" },
+      },
+    });
+    expect(parsed.locales.ja?.slug).toBe("サンプルカフェ");
+  });
+  it("requires an explicit canonical slug for Japanese follow-on content", () => {
+    expect(() => dossierSchema.parse({
+      ...valid,
+      locales: { ...valid.locales, ja: { name: "サンプルカフェ", editorial_note: "確認済みです。", seo_title: "サンプル", seo_desc: "サンプルです。" } },
+    })).toThrow();
+  });
   it("creates stable, entity-specific UUIDs", () => {
     expect(deterministicUuid("sample-cafe", "listing")).toBe(deterministicUuid("sample-cafe", "listing"));
     expect(deterministicUuid("sample-cafe", "listing")).not.toBe(deterministicUuid("sample-cafe", "location"));

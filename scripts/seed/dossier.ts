@@ -38,7 +38,10 @@ export const dossierSchema = z.object({
     file: z.string().trim().min(1), license: z.string().trim().min(1),
     granted_by: z.string().trim().min(1), alt: z.string().trim().min(1),
   })).default([]),
-  locales: z.object({ en: locale }),
+  locales: z.object({
+    en: locale,
+    ja: locale.extend({ slug: z.string().trim().min(1) }).optional(),
+  }),
   source: z.object({ website: z.url().refine((url) => new URL(url).protocol === "https:", "website must use HTTPS") }),
   verification: z.discriminatedUnion("confirmed", [
     z.object({ confirmed: z.literal(false) }),

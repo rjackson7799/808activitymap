@@ -6,6 +6,7 @@ This runbook creates Phase 0 listing drafts from a business's own website and up
 
 - Use local or staging only until production infrastructure is explicitly approved.
 - A `load` never publishes. It leaves the English locale in `qa_pending` for review.
+- A `stage-ja` never serves translated copy. It leaves Japanese in `machine_draft` until a reviewer submits and approves it.
 - Publishing remains a separate MFA-gated admin action after `check` is clean.
 - Do not add self-service claims, menus, deals, or machine translation to a dossier.
 
@@ -53,10 +54,51 @@ This runbook creates Phase 0 listing drafts from a business's own website and up
 
     The command checks readiness again immediately before invoking the existing MFA-gated publication function. It cannot force publication past a blocker.
 
+## Japanese follow-on
+
+Add `locales.ja` only after the English dossier is confirmed. Japanese requires an explicit native canonical slug and complete reviewed SEO/editorial fields:
+
+```yaml
+locales:
+  en: # existing reviewed English block
+    # ...
+  ja:
+    name: サンプルカフェ
+    slug: サンプルカフェ
+    editorial_note: 現地で確認済みです。
+    seo_title: サンプルカフェ
+    seo_desc: ワイキキのサンプルカフェです。
+```
+
+Use the authenticated identity appropriate to each step. A publisher or super-admin with MFA stages and publishes; a Japanese reviewer may perform the review transitions with their own account.
+
+1. Stage non-serving translated copy:
+
+   `npm run seed:listings -- stage-ja path/to/dossier.yaml`
+
+2. Submit the machine draft for review:
+
+   `npm run seed:listings -- submit-ja path/to/dossier.yaml`
+
+3. After human Japanese review, record approval:
+
+   `npm run seed:listings -- approve-ja path/to/dossier.yaml`
+
+4. Confirm the locale-specific publication contract is clean:
+
+   `npm run seed:listings -- check-ja path/to/dossier.yaml`
+
+5. Publish Japanese with a fresh readiness check:
+
+   `npm run seed:listings -- publish-ja path/to/dossier.yaml`
+
+Staging is idempotent when the dossier content is unchanged. Once review begins, changed content is rejected instead of silently overwriting approved or published Japanese copy; revisions must return through a reviewed editorial workflow.
+
 ## Expected blockers
 
 - An unconfirmed dossier reports missing approved provenance and usually missing photo/QA blockers.
 - A confirmed dossier still reports `locale_status_insufficient` until English QA approval.
+- Japanese reports `locale_status_insufficient` until the staged machine draft completes Japanese QA.
 - Missing or unmoderated photos, incomplete rights, unknown categories, expired provenance, and incomplete core fields remain blocking.
 
 ## Safety and recovery
