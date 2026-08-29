@@ -29,6 +29,12 @@ locales:
     editorial_note: Replace this fictional example with reviewed first-party copy.
     seo_title: Sample Cafe
     seo_desc: Fictional dossier used only to demonstrate validation.
+  ja:
+    name: サンプルカフェ
+    slug: サンプルカフェ
+    editorial_note: 検証専用の架空の掲載情報です。
+    seo_title: サンプルカフェ
+    seo_desc: ドシエ検証専用の架空のカフェです。
 source:
   website: https://example.com
 verification:
