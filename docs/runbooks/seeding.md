@@ -20,17 +20,22 @@ This runbook creates Phase 0 listing drafts from a business's own website and up
 ## Workflow
 
 1. Build a pursuit list from founder knowledge or an authoritative public registry; do not import third-party listing content.
-2. Draft the dossier from the business's own HTTPS website. Keep `verification.confirmed: false`.
-3. Validate without authentication or writes:
+2. Keep one dossier per listing in an access-controlled operations directory. Before any database work, run the read-only launch audit:
+
+   `npm run seed:inventory -- path/to/dossiers`
+
+   The audit recursively validates YAML dossiers and local evidence files. The first pre-visit run is expected to report confirmation and media blockers; `READY` is required only before the final confirmed launch batch. It blocks on inventory outside the 25–40 launch target, invalid or duplicate IDs/slugs, missing in-person confirmation, missing licensed photos, missing Japanese content, and missing or unsupported photo/permission files. It performs no authentication, uploads, or database writes. Use `npm run --silent seed:inventory:json -- path/to/dossiers` for a durable machine-readable report; sanitized output may be attached to a release review, but private paths and agreement details must not be committed.
+3. Draft the dossier from the business's own HTTPS website. Keep `verification.confirmed: false`.
+4. Validate without authentication or writes:
 
    `npm run seed:listings -- load path/to/dossier.yaml --dry-run`
 
-4. Load the unconfirmed draft into local or staging:
+5. Load the unconfirmed draft into local or staging:
 
    `npm run seed:listings -- load path/to/dossier.yaml`
 
-5. Confirm name, address, coordinates, phone, hours, category, and editorial framing in person. Obtain the signed permission form and licensed original photo files.
-6. Add photos and replace the verification block with:
+6. Confirm name, address, coordinates, phone, hours, category, and editorial framing in person. Obtain the signed permission form and licensed original photo files.
+7. Add photos and replace the verification block with:
 
    ```yaml
    verification:
@@ -40,15 +45,15 @@ This runbook creates Phase 0 listing drafts from a business's own website and up
      verified_at: 2026-08-29T20:00:00Z
    ```
 
-7. Run the dry run again, then `load`. Files use content-addressed immutable Storage paths; the relational dossier upsert is atomic and deterministic.
-8. Review the English locale, then record QA approval through the same MFA-gated state machine used by the admin application:
+8. Rerun the inventory audit and the dossier dry run, then `load`. Files use content-addressed immutable Storage paths; the relational dossier upsert is atomic and deterministic.
+9. Review the English locale, then record QA approval through the same MFA-gated state machine used by the admin application:
 
    `npm run seed:listings -- approve-en path/to/dossier.yaml`
-9. Check publication readiness:
+10. Check publication readiness:
 
    `npm run seed:listings -- check path/to/dossier.yaml`
 
-10. Publish only when `check` reports `READY`:
+11. Publish only when `check` reports `READY`:
 
     `npm run seed:listings -- publish path/to/dossier.yaml`
 
