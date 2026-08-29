@@ -1,14 +1,7 @@
-"use client";
-
-import { useState } from "react";
-import { emit } from "@/lib/analytics/client";
-
 /**
- * Share control (CP5). Progressive enhancement: uses the native Web Share
- * sheet where available, else copies the current URL to the clipboard. Emits
- * share_click{method} with the method actually used. Rendered as a real
- * <button> — with JS off it is simply inert (share is an enhancement, never
- * core content, so the JS-free pass is unaffected).
+ * Server-rendered share control. The dependency-free public enhancement script
+ * adds native-share/clipboard behavior and analytics; with JS off it remains a
+ * harmless inert button because sharing is not core content.
  */
 export function ShareButton({
   title,
@@ -23,38 +16,18 @@ export function ShareButton({
   label: string;
   copiedLabel: string;
 }) {
-  const [copied, setCopied] = useState(false);
-
-  const onShare = async () => {
-    const url = window.location.href;
-    if (typeof navigator !== "undefined" && typeof navigator.share === "function") {
-      try {
-        await navigator.share({ title, url });
-        emit("share_click", { listingId, locale, props: { method: "native" } });
-      } catch {
-        // user dismissed the share sheet — no event
-      }
-      return;
-    }
-    const clipboard = navigator.clipboard;
-    if (!clipboard || typeof clipboard.writeText !== "function") return;
-    try {
-      await clipboard.writeText(url);
-      setCopied(true);
-      emit("share_click", { listingId, locale, props: { method: "copy" } });
-      window.setTimeout(() => setCopied(false), 2000);
-    } catch {
-      // clipboard blocked — nothing to do
-    }
-  };
-
   return (
     <button
       type="button"
-      onClick={onShare}
+      data-public-share
+      data-title={title}
+      data-listing-id={listingId}
+      data-locale={locale}
+      data-label={label}
+      data-copied-label={copiedLabel}
       className="min-h-9 rounded-cta border border-hairline px-3 text-[12px] font-semibold text-ink hover:bg-neutral"
     >
-      {copied ? copiedLabel : label}
+      {label}
     </button>
   );
 }

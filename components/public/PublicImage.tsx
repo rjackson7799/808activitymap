@@ -1,12 +1,7 @@
-"use client";
-
-import Image from "next/image";
-import { useState } from "react";
-
 /**
- * Public-photo renderer with a quiet failure mode. Approved media can still be
- * temporarily unavailable at its CDN URL; in that case the parent's warm photo
- * placeholder remains visible instead of exposing a broken-image glyph.
+ * Server-rendered public photo. Approved uploads are already WebP/AVIF; the
+ * fixed intrinsic ratio prevents layout shift while the parent supplies the
+ * warm design-system placeholder behind the image.
  */
 export function PublicImage({
   src,
@@ -21,19 +16,19 @@ export function PublicImage({
   sizes: string;
   className?: string;
 }) {
-  const [failed, setFailed] = useState(false);
-  if (failed) return null;
-
   return (
-    <Image
+    // eslint-disable-next-line @next/next/no-img-element -- approved media is already optimized; avoiding next/image hydration is intentional.
+    <img
+      data-public-image
       src={src}
       alt={alt}
-      fill
-      priority={priority}
-      unoptimized
+      width={1200}
+      height={800}
+      loading={priority ? "eager" : "lazy"}
+      fetchPriority={priority ? "high" : "auto"}
+      decoding="async"
       sizes={sizes}
-      className={className}
-      onError={() => setFailed(true)}
+      className={`absolute inset-0 h-full w-full ${className ?? ""}`}
     />
   );
 }
