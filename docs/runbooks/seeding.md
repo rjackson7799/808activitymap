@@ -40,12 +40,18 @@ This runbook creates Phase 0 listing drafts from a business's own website and up
    ```
 
 7. Run the dry run again, then `load`. Files use content-addressed immutable Storage paths; the relational dossier upsert is atomic and deterministic.
-8. Review the English locale and advance it through the existing QA workflow.
+8. Review the English locale, then record QA approval through the same MFA-gated state machine used by the admin application:
+
+   `npm run seed:listings -- approve-en path/to/dossier.yaml`
 9. Check publication readiness:
 
    `npm run seed:listings -- check path/to/dossier.yaml`
 
-10. Publish only when `check` reports `READY`, using the existing MFA-gated admin workflow.
+10. Publish only when `check` reports `READY`:
+
+    `npm run seed:listings -- publish path/to/dossier.yaml`
+
+    The command checks readiness again immediately before invoking the existing MFA-gated publication function. It cannot force publication past a blocker.
 
 ## Expected blockers
 

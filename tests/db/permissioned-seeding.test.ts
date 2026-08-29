@@ -52,6 +52,14 @@ describe("permissioned dossier loader", () => {
       expect(rows).toEqual([{ approval_status: "approved", evidence_media_id: evidence }]);
       const media = await tx`select moderation_status, rights->>'license' as license from media where id=${photo}`;
       expect(media).toEqual([{ moderation_status: "approved", license: "agreement" }]);
+
+      await tx`select transition_listing_locale(${ids.listing}::uuid, 'en', 'qa_approved')`;
+      expect(await tx`select * from can_publish_listing_locale(${ids.listing}::uuid, 'en')`).toEqual([]);
+      await tx`select publish_listing_locale(${ids.listing}::uuid, 'en')`;
+      const published = await tx`select publication_status from listings where id=${ids.listing}`;
+      const locale = await tx`select status from listing_locales where listing_id=${ids.listing} and locale='en'`;
+      expect(published).toEqual([{ publication_status: "published" }]);
+      expect(locale).toEqual([{ status: "published" }]);
     });
   });
 });

@@ -7,8 +7,8 @@ import { deterministicUuid, normalizeHours, readDossier } from "./dossier";
 async function main(): Promise<void> {
 const [command, dossierPath, ...flags] = process.argv.slice(2);
 const dryRun = flags.includes("--dry-run") || process.env.npm_config_dry_run === "true";
-if (!command || !dossierPath || !["load", "check"].includes(command)) {
-  throw new Error("Usage: npm run seed:listings -- <load|check> <dossier.yaml> [--dry-run]");
+if (!command || !dossierPath || !["load", "check", "approve-en", "publish"].includes(command)) {
+  throw new Error("Usage: npm run seed:listings -- <load|check|approve-en|publish> <dossier.yaml> [--dry-run]");
 }
 
 const { dossier, directory } = readDossier(dossierPath);
@@ -46,11 +46,38 @@ const client = await authenticatedClient();
 if (command === "check") {
   const result = await client.rpc("can_publish_listing_locale", { p_listing_id: ids.listing, p_locale: "en" });
   if (result.error) {
-    if (result.error.message.includes("not found")) console.log("BLOCKED  not_loaded");
+    if (result.error.message.includes("not found")) {
+      console.log("BLOCKED  not_loaded");
+      process.exit(2);
+    }
     else throw result.error;
   } else if (result.data.length === 0) console.log("READY  publication contract has no blockers");
   else for (const blocker of result.data) console.log(`BLOCKED  ${blocker.blocker_code} — ${JSON.stringify(blocker.detail)}`);
   process.exit(result.data?.length ? 2 : 0);
+}
+
+if (command === "approve-en") {
+  if (!dossier.verification.confirmed) throw new Error("English QA approval requires a confirmed dossier");
+  const approved = await client.rpc("transition_listing_locale", {
+    p_listing_id: ids.listing, p_locale: "en", p_to_status: "qa_approved",
+  });
+  if (approved.error) throw approved.error;
+  console.log(`APPROVED  ${dossier.external_ref} — English locale is qa_approved`);
+  process.exit(0);
+}
+
+if (command === "publish") {
+  if (!dossier.verification.confirmed) throw new Error("Publication requires a confirmed dossier");
+  const readiness = await client.rpc("can_publish_listing_locale", { p_listing_id: ids.listing, p_locale: "en" });
+  if (readiness.error) throw readiness.error;
+  if (readiness.data.length > 0) {
+    for (const blocker of readiness.data) console.log(`BLOCKED  ${blocker.blocker_code} — ${JSON.stringify(blocker.detail)}`);
+    process.exit(2);
+  }
+  const published = await client.rpc("publish_listing_locale", { p_listing_id: ids.listing, p_locale: "en" });
+  if (published.error) throw published.error;
+  console.log(`PUBLISHED  ${dossier.external_ref} — English locale is live`);
+  process.exit(0);
 }
 
 async function upload(bucket: string, item: { path: string; data: Buffer; contentType: string }) {
