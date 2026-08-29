@@ -44,24 +44,34 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
   return (
     <>
-      <SiteHeader locale={locale} brand={brand} alternates={alternates} notAvailableLabel={strings.otherLocaleNotAvailable} />
-      <main className="mx-auto max-w-5xl px-6 py-12">
-        <section className="rounded-card border border-hairline bg-surface p-8 shadow-card sm:p-12">
-          <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-secondary">{brand}</p>
-          <h1 className="mt-3 font-serif text-4xl leading-tight text-ink sm:text-5xl">{strings.browse}</h1>
+      <SiteHeader
+        locale={locale}
+        brand={brand}
+        alternates={alternates}
+        notAvailableLabel={strings.otherLocaleNotAvailable}
+        languageLabel={strings.languageLabel}
+      />
+      <main id="main-content" className="public-page">
+        <section className="border-b border-hairline bg-[var(--gradient-backdrop)]">
+          <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-20">
+            <p className="eyebrow">{brand}</p>
+            <h1 className="mt-3 max-w-2xl font-serif text-[2.25rem] leading-[1.12] text-ink sm:text-[3.25rem]">{strings.browse}</h1>
+            <p className="mt-4 max-w-2xl text-[14px] leading-[1.65] text-body sm:text-[15px]">{strings.browseIntro}</p>
+          </div>
         </section>
 
-        <ul className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="mx-auto grid max-w-6xl grid-cols-1 gap-4 px-4 py-8 sm:grid-cols-2 sm:px-6 sm:py-10 lg:grid-cols-3">
           {home.categories.map((category) => (
             <li key={category.slug}>
               <a
                 href={categoryPath(locale, category.slug)}
-                className="flex items-center justify-between rounded-card border border-hairline bg-surface px-5 py-6 shadow-card transition hover:-translate-y-0.5 hover:shadow-lift"
+                className="group flex min-h-28 items-center justify-between rounded-card border border-hairline bg-surface px-5 py-6 shadow-card transition hover:-translate-y-0.5 hover:shadow-lift"
               >
-                <span className="font-serif text-xl text-ink">{category.label}</span>
-                <span className="rounded-chip bg-neutral px-2.5 py-1 text-[12px] font-semibold text-secondary">
-                  {category.count}
+                <span>
+                  <span className="font-serif text-xl text-ink">{category.label}</span>
+                  <span className="mt-2 block text-[12px] font-semibold text-secondary">{category.count}</span>
                 </span>
+                <span className="grid size-9 place-items-center rounded-full bg-field text-teal-dark transition group-hover:bg-info-bg" aria-hidden>→</span>
               </a>
             </li>
           ))}

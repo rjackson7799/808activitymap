@@ -57,17 +57,29 @@ export default async function CategoryPage({
 
   return (
     <>
-      <SiteHeader locale={locale} brand={brand} alternates={alternates} notAvailableLabel={strings.otherLocaleNotAvailable} />
-      <main className="mx-auto max-w-5xl px-6 py-10">
-        <Breadcrumbs items={[{ name: strings.home, href: homePath(locale) }, { name: category.label }]} />
-        <h1 className="mt-4 font-serif text-4xl text-ink">{category.label}</h1>
-        <ul className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <SiteHeader
+        locale={locale}
+        brand={brand}
+        alternates={alternates}
+        notAvailableLabel={strings.otherLocaleNotAvailable}
+        languageLabel={strings.languageLabel}
+      />
+      <main id="main-content" className="public-page">
+        <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12">
+          <Breadcrumbs items={[{ name: strings.home, href: homePath(locale) }, { name: category.label }]} />
+          <div className="mt-5 max-w-2xl">
+            <p className="eyebrow">{strings.browse}</p>
+            <h1 className="mt-2 font-serif text-[2rem] leading-tight text-ink sm:text-[2.625rem]">{category.label}</h1>
+            <p className="mt-3 text-[14px] leading-relaxed text-secondary">{strings.categoryIntro(category.label, category.listings.length)}</p>
+          </div>
+        <ul className="mt-8 grid grid-cols-1 gap-5 lg:grid-cols-2">
           {category.listings.map((listing) => (
             <li key={listing.slug}>
-              <ListingCard locale={locale} listing={listing} />
+              <ListingCard locale={locale} listing={listing} viewDetailsLabel={strings.viewDetails} />
             </li>
           ))}
         </ul>
+        </div>
       </main>
       <PublicFooter brand={brand} strings={strings} />
     </>

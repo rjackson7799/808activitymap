@@ -1,12 +1,11 @@
-import { Marcellus, Plus_Jakarta_Sans } from "next/font/google";
+import { Marcellus, Noto_Sans_JP, Noto_Sans_KR, Plus_Jakarta_Sans } from "next/font/google";
 
 /**
  * Type system (design-tokens.md): Marcellus (display/serif, wt 400) for headings,
  * titles, and numerals — the face that keeps the surface from reading as stock SaaS;
- * Plus Jakarta Sans (body/UI) for everything else. Loaded once here and applied as
- * CSS variables so BOTH root layouts (public + admin, CP4 multi-root) share the same
- * self-hosted font instances. Latin-only faces; JA/KO fall back through the stack in
- * globals.css (--font-serif → serif, --font-sans → system-ui).
+ * Plus Jakarta Sans (body/UI) for everything else. Japanese and Korean replace both
+ * roles with their matching Noto Sans family, as specified in docs/design.md; this
+ * avoids mixed Latin/CJK fallback metrics in headings and controls.
  */
 export const marcellus = Marcellus({
   subsets: ["latin"],
@@ -21,5 +20,17 @@ export const plusJakarta = Plus_Jakarta_Sans({
   display: "swap",
 });
 
+export const notoSansJp = Noto_Sans_JP({
+  subsets: ["latin"],
+  variable: "--font-noto-jp",
+  display: "swap",
+});
+
+export const notoSansKr = Noto_Sans_KR({
+  subsets: ["latin"],
+  variable: "--font-noto-kr",
+  display: "swap",
+});
+
 /** Combined variable classes to apply on <html>. */
-export const fontVariables = `${marcellus.variable} ${plusJakarta.variable}`;
+export const fontVariables = `${marcellus.variable} ${plusJakarta.variable} ${notoSansJp.variable} ${notoSansKr.variable}`;

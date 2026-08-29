@@ -6,8 +6,8 @@ import type { UiStrings } from "@/lib/i18n/ui";
  */
 export function PublicFooter({ brand, strings }: { brand: string; strings: UiStrings }) {
   return (
-    <footer className="mt-16 border-t border-hairline bg-shell">
-      <div className="mx-auto flex max-w-5xl flex-col gap-1.5 px-6 py-8 text-[12.5px] text-secondary">
+    <footer className="border-t border-hairline bg-white">
+      <div className="mx-auto flex max-w-6xl flex-col gap-1.5 px-4 py-8 text-[12.5px] text-secondary sm:px-6">
         <p className="font-serif text-base text-ink">{brand}</p>
         <p>{strings.aiReady}</p>
       </div>

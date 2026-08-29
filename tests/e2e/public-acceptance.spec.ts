@@ -80,8 +80,31 @@ test.describe("journey + structured data + a11y", () => {
 
   test("language switcher navigates to the JA listing", async ({ page }) => {
     await page.goto("/spot/aloha-ramen-hale");
+    await page.locator('summary[aria-label="Language"]').click();
     await page.getByRole("link", { name: "日本語" }).click();
     await expect(page).toHaveURL(/\/ja\/spot\//);
     await expect(page.locator("html")).toHaveAttribute("lang", "ja");
+  });
+
+  test("public layouts fit mobile and Japanese uses its locale type family", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/");
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+
+    const languageControl = page.locator('summary[aria-label="Language"]');
+    const controlBox = await languageControl.boundingBox();
+    expect(controlBox?.height).toBeGreaterThanOrEqual(36);
+
+    await languageControl.click();
+    expect((await new AxeBuilder({ page }).analyze()).violations, "axe with language menu open").toEqual([]);
+    await page.getByRole("link", { name: "日本語" }).click();
+    await expect(page.locator("html")).toHaveAttribute("lang", "ja");
+    expect(await page.evaluate(() => getComputedStyle(document.querySelector("h1")!).fontFamily)).toContain("Noto Sans JP");
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto("/spot/aloha-ramen-hale");
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    await expect(page.getByRole("link", { name: "Directions" }).first()).toBeVisible();
   });
 });
