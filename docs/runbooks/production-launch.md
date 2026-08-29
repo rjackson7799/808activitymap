@@ -4,7 +4,7 @@ This runbook converts the Phase 0 completion criteria in the PRD into an evidenc
 
 ## Current decision
 
-**NO-GO as of 2026-08-29.** Application CI and the staging preview are healthy. The unresolved gates are product/content, staffing, public trust surfaces, production infrastructure, reliability operations, and the production-equivalent performance fixture.
+**NO-GO as of 2026-08-29.** Application CI and the staging preview are healthy. The unresolved gates are final brand/domain, launch content, staffing, machine-readable discovery, production infrastructure, reliability operations, and the production-equivalent performance fixture.
 
 Run the versioned gate from the repository root:
 
@@ -35,6 +35,7 @@ Evidence lives in `config/production-readiness.json`. Update a value only after 
 - The linked `808activitymap-staging` Vercel project uses Node 24 and remains a staging resource.
 - The linked Supabase resource is `808ActivityMap Staging2026`; no dedicated production project exists.
 - Staging blocks indexing and currently exposes two listings in EN and JA, with no KO URLs.
+- PR #8 staging preview verifies localized EN/JA trust pages and the complete report-a-change path: public intake, protected storage, 48-hour editorial ownership, MFA-gated review, and version-conflict handling.
 - `main` requires PRs, current successful results from all four CI jobs, resolved conversations, and applies protections to admins; force-push and deletion are disabled. The GitHub Production environment is restricted to protected branches and requires approval by the repository owner.
 - The homepage hardening gate passed at performance 0.98, accessibility 1.00, best practices 1.00, LCP 2,417ms, and 210,872 bytes. This is not a substitute for the required full-photo reference-listing run.
 

@@ -22,8 +22,8 @@
     "backupPublisherConfirmed": false
   },
   "publicTrust": {
-    "trustPageVerified": false,
-    "reportChangeFlowVerified": false,
+    "trustPageVerified": true,
+    "reportChangeFlowVerified": true,
     "llmsTxtVerified": false
   },
   "infrastructure": {
