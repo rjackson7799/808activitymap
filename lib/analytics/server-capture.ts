@@ -9,12 +9,12 @@ import { SESSION_FORWARD_HEADER } from "./session";
  * /api/events route with the internal token — the proxy itself never touches
  * Supabase or the service-role key. Edge-safe (fetch + env only).
  *
- * Fire-and-forget: a delivery failure is analytics loss, logged but never
- * surfaced. The route applies the bot/prefetch filter + canonical-slug
- * resolution, so non-canonical / bot / ineligible hits still drop server-side.
+ * The destination is a validated deployment-owned origin from configuration,
+ * never request metadata. Redirects are rejected so the internal token cannot
+ * be forwarded to a second origin. A delivery failure is analytics loss,
+ * logged but never surfaced.
  */
 export async function postServerEvent(
-  origin: string,
   event: { name: "listing_view" | "session_start"; slug?: string; locale: string; sessionId: string },
   forwarded: { userAgent: string | null; referer: string | null; landingQuery: string | null },
 ): Promise<void> {
@@ -28,10 +28,11 @@ export async function postServerEvent(
   if (forwarded.landingQuery) headers["x-events-query"] = forwarded.landingQuery;
 
   try {
-    await fetch(`${origin}/api/events`, {
+    await fetch(new URL("/api/events", env().EVENTS_INGEST_ORIGIN), {
       method: "POST",
       headers,
       body: JSON.stringify({ name: event.name, slug: event.slug, locale: event.locale }),
+      redirect: "error",
     });
   } catch (error) {
     captureError(error, { where: "proxy.postServerEvent", name: event.name });

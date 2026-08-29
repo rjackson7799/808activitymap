@@ -142,23 +142,6 @@ create policy category_locales_delete on public.category_locales
 revoke all on table public.category_locales from authenticated;
 grant select, insert, update, delete on table public.category_locales to authenticated;
 
--- ── change_requests ─────────────────────────────────────────────────────
-
-create policy change_requests_select on public.change_requests
-  for select to authenticated
-  using (
-    ((select public.is_platform(array['super_admin', 'publisher', 'editor', 'language_reviewer_ja', 'language_reviewer_ko', 'ops_agent'])))
-  );
-
-create policy change_requests_insert on public.change_requests
-  for insert to authenticated
-  with check (
-    ((select public.is_platform(array['ops_agent'])))
-  );
-
-revoke all on table public.change_requests from authenticated;
-grant select, insert on table public.change_requests to authenticated;
-
 -- ── hours_exceptions ────────────────────────────────────────────────────
 
 create policy hours_exceptions_select on public.hours_exceptions
@@ -316,8 +299,23 @@ create policy listing_media_insert on public.listing_media
     ((select public.is_platform(array['super_admin', 'publisher', 'editor'])) and (select public.jwt_aal()) = 'aal2')
   );
 
+create policy listing_media_update on public.listing_media
+  for update to authenticated
+  using (
+    ((select public.is_platform(array['super_admin', 'publisher', 'editor'])) and (select public.jwt_aal()) = 'aal2')
+  )
+  with check (
+    ((select public.is_platform(array['super_admin', 'publisher', 'editor'])) and (select public.jwt_aal()) = 'aal2')
+  );
+
+create policy listing_media_delete on public.listing_media
+  for delete to authenticated
+  using (
+    ((select public.is_platform(array['super_admin', 'publisher', 'editor'])) and (select public.jwt_aal()) = 'aal2')
+  );
+
 revoke all on table public.listing_media from authenticated;
-grant select, insert on table public.listing_media to authenticated;
+grant select, insert, update, delete on table public.listing_media to authenticated;
 
 -- ── listings ────────────────────────────────────────────────────────────
 
@@ -832,5 +830,20 @@ create policy user_roles_insert on public.user_roles
     ((select public.is_platform(array['super_admin'])) and (select public.jwt_aal()) = 'aal2')
   );
 
+create policy user_roles_update on public.user_roles
+  for update to authenticated
+  using (
+    ((select public.is_platform(array['super_admin'])) and (select public.jwt_aal()) = 'aal2')
+  )
+  with check (
+    ((select public.is_platform(array['super_admin'])) and (select public.jwt_aal()) = 'aal2')
+  );
+
+create policy user_roles_delete on public.user_roles
+  for delete to authenticated
+  using (
+    ((select public.is_platform(array['super_admin'])) and (select public.jwt_aal()) = 'aal2')
+  );
+
 revoke all on table public.user_roles from authenticated;
-grant select, insert on table public.user_roles to authenticated;
+grant select, insert, update, delete on table public.user_roles to authenticated;

@@ -5,7 +5,7 @@ import { env } from "@/config/env";
 import { DEFAULT_LOCALE, LOCALES, type Locale } from "@/lib/locales";
 import { postServerEvent } from "@/lib/analytics/server-capture";
 import { isValidSessionId, SESSION_COOKIE, SESSION_MAX_AGE_SECONDS } from "@/lib/analytics/session";
-import { decodeSlug } from "@/lib/public-read/paths";
+import { decodeSlug, hasMalformedPercentEncoding } from "@/lib/public-read/paths";
 
 /**
  * Proxy (Next 16 middleware). Three concerns, branched by pathname BEFORE any work:
@@ -43,12 +43,7 @@ function hasMalformedListingEncoding(rawUrl: string): boolean {
   }
   const match = rawPath.match(RAW_LISTING_PATH);
   if (!match) return false;
-  try {
-    decodeURIComponent(match[1]!);
-    return false;
-  } catch {
-    return true;
-  }
+  return hasMalformedPercentEncoding(match[1]!);
 }
 
 async function adminGuard(request: NextRequest): Promise<NextResponse> {
@@ -115,9 +110,7 @@ function capturePublicAnalytics(
 
   const match = localPath.match(LISTING_PATH);
   if (match) {
-    try {
-      decodeURIComponent(match[1]!);
-    } catch {
+    if (hasMalformedPercentEncoding(match[1]!)) {
       // Next's dynamic-route decoder throws on malformed percent sequences.
       // Reject them at the boundary as an ordinary not-found response rather
       // than allowing an invalid public URL to become a server error.
@@ -138,7 +131,6 @@ function capturePublicAnalytics(
     maxAge: SESSION_MAX_AGE_SECONDS,
   });
 
-  const origin = request.nextUrl.origin;
   const forwarded = {
     userAgent: request.headers.get("user-agent"),
     referer: request.headers.get("referer"),
@@ -147,10 +139,10 @@ function capturePublicAnalytics(
   event.waitUntil(
     (async () => {
       if (isNewSession) {
-        await postServerEvent(origin, { name: "session_start", locale, sessionId }, forwarded);
+        await postServerEvent({ name: "session_start", locale, sessionId }, forwarded);
       }
       if (slug) {
-        await postServerEvent(origin, { name: "listing_view", slug, locale, sessionId }, forwarded);
+        await postServerEvent({ name: "listing_view", slug, locale, sessionId }, forwarded);
       }
     })(),
   );

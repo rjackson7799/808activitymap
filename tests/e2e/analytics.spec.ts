@@ -89,6 +89,11 @@ test.describe("analytics server capture (ADR-005)", () => {
     const response = await request.get(`${e2eEnv().baseUrl}/spot/%E0%A4%A`);
     expect(response.status()).toBe(404);
   });
+
+  test("a transport-escaped malformed listing slug returns not-found, not a server error", async ({ request }) => {
+    const response = await request.get(`${e2eEnv().baseUrl}/spot/%25E0%25A4%25A`);
+    expect(response.status()).toBe(404);
+  });
 });
 
 test.describe("analytics client controls", () => {

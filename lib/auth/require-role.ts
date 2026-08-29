@@ -1,6 +1,7 @@
 import "server-only";
 import type { Role } from "@/db/rls/matrix";
 import {
+  AuthzError,
   assertRole,
   parseVerifiedClaims,
   type VerifiedClaims,
@@ -24,5 +25,10 @@ export async function requireRole(
   const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase.auth.getClaims();
   const claims = error ? null : parseVerifiedClaims(data?.claims ?? null);
-  return assertRole(claims, roles, opts);
+  const verified = assertRole(claims, roles);
+  const { data: live, error: liveError } = await supabase.rpc("is_platform", {
+    required: [...roles],
+  });
+  if (liveError || live !== true) throw new AuthzError("forbidden");
+  return assertRole(verified, roles, opts);
 }

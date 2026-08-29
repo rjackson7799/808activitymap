@@ -194,4 +194,89 @@ describe("security-event audit (TSD §17)", () => {
       ]);
     });
   });
+
+  it("verifies a canonical factor audit without creating a duplicate", async () => {
+    await withRollback(async (tx) => {
+      await seedAuthUser(tx);
+      const factor = "87000000-0000-4000-8000-000000000011";
+      await tx`
+        insert into auth.mfa_factors
+          (id, user_id, friendly_name, factor_type, status, secret, created_at, updated_at)
+        values
+          (${factor}::uuid, ${USER}::uuid, 'primary', 'totp', 'unverified',
+           'SECRET_NOT_AUDITED', now(), now())`;
+
+      const [result] = await tx`
+        select public.ensure_mfa_factor_audit(
+          ${USER}::uuid, ${factor}::uuid, 'insert', 'totp', 'primary',
+          null, 'unverified'
+        ) as outcome`;
+      expect(result!.outcome).toBe("trigger_recorded");
+      const rows = await tx`
+        select actor_source, before, after
+        from audit_log
+        where target_table = 'auth.mfa_factors'
+          and target_id = ${factor}
+          and action = 'mfa_factor_insert'`;
+      expect(rows).toHaveLength(1);
+      expect(rows[0]).toMatchObject({ actor_source: "system", before: null });
+      expect(JSON.stringify(rows[0])).not.toContain("SECRET_NOT_AUDITED");
+    });
+  });
+
+  it("writes one minimal fallback when the exact trigger event is absent", async () => {
+    await withRollback(async (tx) => {
+      await seedAuthUser(tx);
+      const factor = "87000000-0000-4000-8000-000000000012";
+      // A verified-at-insert fixture has no canonical UPDATE row, modeling a
+      // swallowed trigger audit after a successful unverified -> verified mutation.
+      await tx`
+        insert into auth.mfa_factors
+          (id, user_id, friendly_name, factor_type, status, secret, created_at, updated_at)
+        values
+          (${factor}::uuid, ${USER}::uuid, 'fallback', 'totp', 'verified',
+           'ANOTHER_SECRET_NOT_AUDITED', now(), now())`;
+
+      const [result] = await tx`
+        select public.ensure_mfa_factor_audit(
+          ${USER}::uuid, ${factor}::uuid, 'update', 'totp', 'fallback',
+          'unverified', 'verified'
+        ) as outcome`;
+      expect(result!.outcome).toBe("fallback_recorded");
+      const rows = await tx`
+        select actor, actor_source, before, after
+        from audit_log
+        where target_table = 'auth.mfa_factors'
+          and target_id = ${factor}
+          and action = 'mfa_factor_update'`;
+      expect(rows).toEqual([
+        expect.objectContaining({
+          actor: USER,
+          actor_source: "service",
+          before: expect.objectContaining({ status: "unverified", factor_type: "totp" }),
+          after: expect.objectContaining({ status: "verified", factor_type: "totp" }),
+        }),
+      ]);
+      expect(JSON.stringify(rows)).not.toContain("ANOTHER_SECRET_NOT_AUDITED");
+    });
+  });
+
+  it("keeps the fallback RPC service-only and rejects impossible transitions", async () => {
+    const signature =
+      "public.ensure_mfa_factor_audit(uuid,uuid,text,text,text,text,text)";
+    const [privileges] = await sql`
+      select
+        has_function_privilege('anon', ${signature}, 'execute') as anon,
+        has_function_privilege('authenticated', ${signature}, 'execute') as authenticated,
+        has_function_privilege('service_role', ${signature}, 'execute') as service`;
+    expect(privileges).toEqual({ anon: false, authenticated: false, service: true });
+
+    await expect(
+      sql`select public.ensure_mfa_factor_audit(
+        ${USER}::uuid,
+        '87000000-0000-4000-8000-000000000013'::uuid,
+        'update', 'totp', null, 'verified', 'unverified'
+      )`,
+    ).rejects.toThrow(/invalid update transition/);
+  });
 });

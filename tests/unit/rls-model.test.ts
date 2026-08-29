@@ -84,7 +84,10 @@ describe("PRD §4 cells survive expansion (spot checks per row)", () => {
   it("Photos: ops_agent uploads but cannot moderate (no media update)", () => {
     expect(expectation("ops_agent", "media", "insert").outcome).toBe("allow");
     expect(expectation("ops_agent", "media", "update").outcome).toBe("deny-rls");
+    expect(expectation("ops_agent", "listing_media", "insert").outcome).toBe("deny-rls");
     expect(expectation("editor", "media", "update").outcome).toBe("allow");
+    expect(expectation("editor", "listing_media", "update").outcome).toBe("deny-grant");
+    expect(expectation("editor", "listing_media", "delete").outcome).toBe("deny-grant");
   });
 
   it("Taxonomy: publisher+ only; editor and ops denied", () => {
@@ -98,6 +101,10 @@ describe("PRD §4 cells survive expansion (spot checks per row)", () => {
     expect(sa.outcome).toBe("allow");
     expect(sa.aal2Required).toBe(true);
     expect(expectation("publisher", "user_roles", "insert").outcome).toBe("deny-rls");
+    expect(expectation("super_admin", "user_roles", "update").outcome).toBe("deny-grant");
+    expect(expectation("super_admin", "user_roles", "delete").outcome).toBe("deny-grant");
+    const grants = model.grants.find((g) => g.table === "user_roles")!;
+    expect(grants.ops).toEqual({ select: "full", insert: "full" });
   });
 
   it("Audit log: publisher reads all; editor/reviewer/ops own scope; nobody writes", () => {

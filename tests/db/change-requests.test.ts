@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { expectErrorIn, withRollback } from "./helpers";
+import { expectErrorIn, setClaims, withRollback } from "./helpers";
 
 const LISTING_ID = "c0000000-0000-4000-8000-000000000001";
 const EDITOR_ID = "99000000-0000-4000-8000-000000000003";
@@ -17,8 +17,7 @@ async function seedRequest(tx: Parameters<Parameters<typeof withRollback>[0]>[0]
 }
 
 async function become(tx: Parameters<Parameters<typeof withRollback>[0]>[0], claims: Record<string, unknown>, role = "authenticated") {
-  await tx`select set_config('request.jwt.claims', ${JSON.stringify({ role, ...claims })}, true)`;
-  await tx.unsafe(`set local role ${role}`);
+  await setClaims(tx, { role: role as "authenticated" | "anon", ...claims }, true);
 }
 
 describe("change request queue", () => {
@@ -41,7 +40,7 @@ describe("change request queue", () => {
       await become(tx, { sub: EDITOR_ID, aal: "aal1", app_roles: ["editor"] });
       await expectErrorIn(tx, /aal2_required/, (sp) => sp`select public.assign_change_request(${id}::uuid)`);
 
-      await tx`select set_config('request.jwt.claims', ${JSON.stringify({ role: "authenticated", sub: EDITOR_ID, aal: "aal2", app_roles: ["editor"] })}, true)`;
+      await setClaims(tx, { sub: EDITOR_ID, aal: "aal2", app_roles: ["editor"] }, true);
       await tx`select public.assign_change_request(${id}::uuid)`;
       await tx`select public.resolve_change_request(${id}::uuid, 'rejected', 'Reliable source did not confirm the report.')`;
       const [row] = await tx<{ status: string; assignee: string; resolved_by: string }[]>`select status, assignee, resolved_by from public.change_requests where id = ${id}`;

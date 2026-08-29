@@ -142,23 +142,6 @@ create policy category_locales_delete on public.category_locales
 revoke all on table public.category_locales from authenticated;
 grant select, insert, update, delete on table public.category_locales to authenticated;
 
--- ── change_requests ─────────────────────────────────────────────────────
-
-create policy change_requests_select on public.change_requests
-  for select to authenticated
-  using (
-    ((select public.is_platform(array['super_admin', 'publisher', 'editor', 'language_reviewer_ja', 'language_reviewer_ko', 'ops_agent'])))
-  );
-
-create policy change_requests_insert on public.change_requests
-  for insert to authenticated
-  with check (
-    ((select public.is_platform(array['ops_agent'])))
-  );
-
-revoke all on table public.change_requests from authenticated;
-grant select, insert on table public.change_requests to authenticated;
-
 -- ── hours_exceptions ────────────────────────────────────────────────────
 
 create policy hours_exceptions_select on public.hours_exceptions

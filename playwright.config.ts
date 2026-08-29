@@ -44,6 +44,7 @@ export default defineConfig({
   webServer: {
     command: "npm run start:e2e",
     url: baseURL,
+    env: { ...process.env, EVENTS_INGEST_ORIGIN: baseURL },
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,
     stdout: "pipe",

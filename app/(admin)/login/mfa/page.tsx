@@ -1,16 +1,16 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { createBrowserClient } from "@supabase/ssr";
+import { prepareMfa, verifyMfa } from "./actions";
 
 /**
  * TOTP step (ADR-001): first sign-in enrolls an authenticator (QR + secret),
- * every later sign-in verifies a 6-digit code. Client component — enrollment
- * QR display and code entry are interactive; the browser client shares the
- * cookie session with the server. Verification upgrades the session to aal2;
- * the proxy then admits /admin.
+ * every later sign-in verifies a 6-digit code. The interactive UI delegates
+ * factor mutations to server actions so each successful lifecycle change can
+ * verify/write its best-effort audit without exposing secrets. Verification
+ * upgrades the cookie session to aal2; the proxy then admits /admin.
  */
 
 type Step =
@@ -25,86 +25,29 @@ export default function MfaPage() {
   const [code, setCode] = useState("");
   const [pending, setPending] = useState(false);
 
-  const supabase = useCallback(
-    () =>
-      createBrowserClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      ),
-    [],
-  );
-
   useEffect(() => {
-    const client = supabase();
     (async () => {
-      const { data: session } = await client.auth.getSession();
-      if (!session.session) {
+      const prepared = await prepareMfa();
+      if (prepared.kind === "error" && prepared.message.includes("Sign in again")) {
         router.replace("/login");
-        return;
+      } else {
+        setStep(prepared);
       }
-      const { data, error } = await client.auth.mfa.listFactors();
-      if (error) {
-        setStep({ kind: "error", message: error.message });
-        return;
-      }
-      // listFactors(): `totp` holds only VERIFIED totp factors; `all` has everything
-      const verified = data.totp[0];
-      if (verified) {
-        const challenge = await client.auth.mfa.challenge({ factorId: verified.id });
-        if (challenge.error) {
-          setStep({ kind: "error", message: challenge.error.message });
-          return;
-        }
-        setStep({
-          kind: "challenge",
-          factorId: verified.id,
-          challengeId: challenge.data.id,
-        });
-        return;
-      }
-      // first login: enroll (clear an abandoned unverified factor if present)
-      const unverified = data.all.find(
-        (f) => f.factor_type === "totp" && f.status === "unverified",
-      );
-      if (unverified) await client.auth.mfa.unenroll({ factorId: unverified.id });
-      const enroll = await client.auth.mfa.enroll({ factorType: "totp" });
-      if (enroll.error) {
-        setStep({ kind: "error", message: enroll.error.message });
-        return;
-      }
-      setStep({
-        kind: "enroll",
-        factorId: enroll.data.id,
-        qr: enroll.data.totp.qr_code,
-        secret: enroll.data.totp.secret,
-      });
     })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [router]);
 
   const verify = async () => {
     if (step.kind !== "enroll" && step.kind !== "challenge") return;
     setPending(true);
-    const client = supabase();
     try {
-      let challengeId: string;
-      if (step.kind === "enroll") {
-        const challenge = await client.auth.mfa.challenge({ factorId: step.factorId });
-        if (challenge.error) {
-          setStep({ kind: "error", message: challenge.error.message });
-          return;
-        }
-        challengeId = challenge.data.id;
-      } else {
-        challengeId = step.challengeId;
-      }
-      const result = await client.auth.mfa.verify({
+      const result = await verifyMfa({
+        kind: step.kind,
         factorId: step.factorId,
-        challengeId,
+        ...(step.kind === "challenge" ? { challengeId: step.challengeId } : {}),
         code,
       });
-      if (result.error) {
-        setStep({ kind: "error", message: "Code not accepted — try the next code." });
+      if (!result.ok) {
+        setStep({ kind: "error", message: result.message });
         return;
       }
       router.replace("/admin");
