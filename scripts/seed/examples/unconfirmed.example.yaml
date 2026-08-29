@@ -1,0 +1,35 @@
+external_ref: sample-cafe
+organization:
+  name: Sample Cafe
+location:
+  address:
+    street: 1 Example Avenue
+    city: Honolulu
+    region: HI
+    postal_code: "96815"
+    country: US
+  geo: [21.2800, -157.8300]
+  phone: "+1-808-555-0100"
+hours:
+  mon: 09:00-17:00
+  tue: 09:00-17:00
+  wed: 09:00-17:00
+  thu: 09:00-17:00
+  fri: 09:00-17:00
+  sat: closed
+  sun: closed
+category:
+  primary: cafes-coffee
+  secondary: []
+photos: []
+locales:
+  en:
+    name: Sample Cafe
+    slug: sample-cafe
+    editorial_note: Replace this fictional example with reviewed first-party copy.
+    seo_title: Sample Cafe
+    seo_desc: Fictional dossier used only to demonstrate validation.
+source:
+  website: https://example.com
+verification:
+  confirmed: false
