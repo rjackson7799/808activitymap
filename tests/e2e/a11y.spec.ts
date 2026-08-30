@@ -77,6 +77,8 @@ test("admin pages are axe-clean; taxonomy form is keyboard-operable with visible
 
   // keyboard operability + visible focus on the taxonomy create form
   await page.goto("/admin/taxonomy");
+  await expect(page.getByRole("heading", { name: "Taxonomy", exact: true })).toBeVisible();
+  await expect(page.getByRole("form", { name: /create category/i })).toBeVisible();
   const label = page.getByLabel("Label (English)");
   await label.focus();
   await expect(label).toBeFocused();
@@ -92,4 +94,11 @@ test("admin pages are axe-clean; taxonomy form is keyboard-operable with visible
   await page.keyboard.press("Tab");
   await expect(page.getByLabel("Slug (English)")).toBeFocused();
   await expect(page.getByRole("form", { name: /create category/i })).toBeVisible();
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.getByRole("form", { name: /create category/i })).toBeVisible();
+  const taxonomyOverflowsMobileViewport = await page.evaluate(
+    () => document.documentElement.scrollWidth > window.innerWidth,
+  );
+  expect(taxonomyOverflowsMobileViewport, "taxonomy should not overflow the mobile viewport").toBe(false);
 });
