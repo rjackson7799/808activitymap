@@ -1,5 +1,9 @@
 # Phase 0 Staging Deployment Runbook — 2026-08-27
 
+## Current staging state — 2026-08-30
+
+The linked staging database has been advanced and read back successfully through `20260830011000_rls_policies.sql`. A post-deployment `supabase migration list --linked` showed identical local and remote histories, and `supabase db push --linked --dry-run` reported that the remote database is up to date. The pending-migration inventory below is retained as the original 2026-08-27 deployment record; do not treat it as current drift.
+
 ## Release identity
 
 - Repository: `808ActivityMap`

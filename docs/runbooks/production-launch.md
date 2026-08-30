@@ -34,6 +34,7 @@ Evidence lives in `config/production-readiness.json`. Update a value only after 
 - `808eventures` is the provisional staging brand. Final D27 approval and the production domain remain open.
 - The linked `808activitymap-staging` Vercel project uses Node 24 and remains a staging resource.
 - The linked Supabase resource is `808ActivityMap Staging2026`; no dedicated production project exists.
+- The linked staging database migration history matches the repository through `20260830011000`, including Korean listing follow-on and permissioned menu seeding.
 - Staging blocks indexing and currently exposes two listings in EN and JA, with no KO URLs.
 - PR #8 staging preview verifies localized EN/JA trust pages and the complete report-a-change path: public intake, protected storage, 48-hour editorial ownership, MFA-gated review, and version-conflict handling.
 - The machine-readable discovery implementation now includes environment-branded `llms.txt`, fail-closed pre-production robots policy, a production crawler allowlist and sitemap reference, publishability-gated EN/JA sitemap entries, and fixture-tested listing/category JSON-LD. The gate remains open until these are verified on the approved final production domain.
