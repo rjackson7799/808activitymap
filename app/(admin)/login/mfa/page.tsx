@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { AuthShell, authInputClassName } from "@/components/admin/AuthShell";
+import { Button } from "@/components/ui/button";
 import { prepareMfa, verifyMfa } from "./actions";
 
 /**
@@ -57,57 +59,88 @@ export default function MfaPage() {
   };
 
   return (
-    <main style={{ maxWidth: 420, margin: "4rem auto", fontFamily: "system-ui" }}>
-      <h1>Two-factor authentication</h1>
-
-      {step.kind === "loading" ? <p>Loading…</p> : null}
+    <AuthShell
+      eyebrow="Secure access"
+      title="Two-factor authentication"
+      description="Confirm your identity with the six-digit code from your authenticator app."
+      wide={step.kind === "enroll"}
+    >
+      {step.kind === "loading" ? (
+        <div role="status" aria-live="polite" className="flex items-center gap-3 text-sm text-secondary">
+          <span className="h-5 w-5 animate-pulse rounded-full bg-teal/25" aria-hidden="true" />
+          Preparing secure sign-in…
+        </div>
+      ) : null}
 
       {step.kind === "error" ? (
-        <p role="alert" style={{ color: "#b00020" }}>
-          {step.message} — <Link href="/login">back to sign-in</Link>
-        </p>
+        <div role="alert" className="rounded-field border border-error/20 bg-error-bg p-4 text-sm text-error">
+          <p>{step.message}</p>
+          <Link href="/login" className="mt-3 inline-block font-semibold underline underline-offset-4">
+            Back to sign-in
+          </Link>
+        </div>
       ) : null}
 
       {step.kind === "enroll" ? (
-        <>
-          <p>
-            Scan the QR code with your authenticator app (or enter the secret
-            manually), then enter the 6-digit code to finish setup.
+        <div className="mb-6 rounded-card border border-hairline bg-white p-4 sm:p-5">
+          <p className="text-sm leading-6 text-secondary">
+            Scan this QR code with your authenticator app, or enter the setup key manually.
           </p>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={step.qr} alt="TOTP enrollment QR code" width={200} height={200} />
-          <p>
-            Secret: <code>{step.secret}</code>
-          </p>
-        </>
+          <div className="mt-4 flex flex-col items-center gap-4 sm:flex-row sm:items-start">
+            <div className="shrink-0 rounded-field border border-hairline-strong bg-white p-2 shadow-card">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={step.qr} alt="TOTP enrollment QR code" width={200} height={200} />
+            </div>
+            <div className="min-w-0 flex-1 rounded-field bg-field p-3">
+              <p className="text-xs font-bold uppercase tracking-wider text-muted">Setup key</p>
+              <code className="mt-2 block break-all text-sm font-semibold leading-6 text-ink">
+                {step.secret}
+              </code>
+            </div>
+          </div>
+        </div>
       ) : null}
-
-      {step.kind === "challenge" ? <p>Enter the 6-digit code from your authenticator app.</p> : null}
 
       {step.kind === "enroll" || step.kind === "challenge" ? (
         <form
+          className="space-y-5"
           onSubmit={(e) => {
             e.preventDefault();
             void verify();
           }}
         >
-          <label>
-            Code
+          <div>
+            <label htmlFor="mfa-code" className="block text-sm font-semibold text-ink">
+              Six-digit code
+            </label>
             <input
+              id="mfa-code"
               inputMode="numeric"
               autoComplete="one-time-code"
               pattern="[0-9]{6}"
+              maxLength={6}
               value={code}
-              onChange={(e) => setCode(e.target.value)}
+              onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
               required
-              style={{ display: "block" }}
+              disabled={pending}
+              aria-describedby="mfa-code-help"
+              className={`${authInputClassName} text-center font-mono text-xl font-semibold tracking-[0.35em]`}
             />
-          </label>
-          <button type="submit" disabled={pending || code.length !== 6} style={{ marginTop: "1rem" }}>
+            <p id="mfa-code-help" className="mt-2 text-xs leading-5 text-muted">
+              Enter the current code shown in your authenticator app.
+            </p>
+          </div>
+          <Button
+            type="submit"
+            variant="cta"
+            size="lg"
+            disabled={pending || code.length !== 6}
+            className="w-full"
+          >
             {pending ? "Verifying…" : "Verify"}
-          </button>
+          </Button>
         </form>
       ) : null}
-    </main>
+    </AuthShell>
   );
 }
