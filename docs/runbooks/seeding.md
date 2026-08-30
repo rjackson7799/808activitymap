@@ -11,6 +11,8 @@ This runbook creates Phase 0 listing drafts from a business's own website and up
 - Publishing remains a separate MFA-gated admin action after `check` is clean.
 - Do not add self-service claims, menus, deals, or machine translation to a dossier.
 
+Menus use the separate permissioned workflow in `docs/runbooks/menu-seeding.md`; they are intentionally not embedded in the listing dossier.
+
 ## Operator prerequisites
 
 1. Use a publisher or super-admin account with a verified TOTP factor.

@@ -10,6 +10,12 @@ const ids = {
 };
 const photo = "71000000-0000-4000-8000-000000000005";
 const evidence = "71000000-0000-4000-8000-000000000006";
+const menuIds = {
+  source: "71000000-0000-4000-8000-000000000011", evidence: "71000000-0000-4000-8000-000000000012",
+  document: "71000000-0000-4000-8000-000000000013", version: "71000000-0000-4000-8000-000000000014",
+  locale: "71000000-0000-4000-8000-000000000015", section: "71000000-0000-4000-8000-000000000016",
+  item: "71000000-0000-4000-8000-000000000017",
+};
 const ja = { name: "パーミッションテスト", slug: "パーミッションテスト", editorial_note: "現地で確認済みです。", seo_title: "パーミッションテスト", seo_desc: "許可済みのテスト掲載です。" };
 const ko = { name: "퍼미션 테스트", slug: "퍼미션-테스트", editorial_note: "현장에서 확인되었습니다.", seo_title: "퍼미션 테스트", seo_desc: "사용 허가를 받은 테스트 목록입니다." };
 
@@ -36,6 +42,7 @@ describe("permissioned dossier loader", () => {
       await expectErrorIn(tx, /aal2_required/, (sp) => sp`
         select stage_permissioned_listing_locale(${ids.listing}::uuid, 'ko', ${tx.json(ko)}::jsonb)
       `);
+      await expectErrorIn(tx, /aal2_required/, (sp) => sp`select load_permissioned_menu_dossier(${tx.json({})}::jsonb)`);
     });
   });
 
@@ -101,6 +108,29 @@ describe("permissioned dossier loader", () => {
       await expectErrorIn(tx, /locale_locked_for_review/, (sp) => sp`
         select stage_permissioned_listing_locale(${ids.listing}::uuid, 'ko', ${tx.json({ ...ko, name: "변경 불가" })}::jsonb)
       `);
+
+      await tx`insert into storage.objects(bucket_id,name) values ('menu-sources','menu/test.pdf'),('evidence','approval/menu-test.pdf')`;
+      const menu = {
+        ids: { listing: ids.listing, document: menuIds.document, version: menuIds.version, locales: { en: menuIds.locale } },
+        version: 1,
+        seed_hash: "menu-hash-v1",
+        source: { id: menuIds.source, path: "menu/test.pdf", license: "vendor-supplied", granted_by: "Fixture Vendor", captured_at: "2026-08-29T20:00:00Z" },
+        approval: { id: menuIds.evidence, path: "approval/menu-test.pdf", license: "vendor-approval", granted_by: "Fixture Vendor" },
+        sections: [{ id: menuIds.section, ref: "main", position: 0, items: [{ id: menuIds.item, ref: "bowl", position: 0, price_cents: 1200, currency: "USD", price_type: "fixed", flags: {}, owner_pick: true }] }],
+        locales: { en: { sections: [{ ref: "main", name: "Main", items: [{ ref: "bowl", name: "Fixture Bowl", human_confirmed: true }] }] } },
+      };
+      await expectErrorIn(tx, /menu_id_collision/, (sp) => sp`
+        select load_permissioned_menu_dossier(${tx.json({ ...menu, source: { ...menu.source, id: photo } })}::jsonb)
+      `);
+      expect((await tx`select load_permissioned_menu_dossier(${tx.json(menu)}::jsonb) as id`)[0]!.id).toBe(menuIds.version);
+      expect(await tx`select status from menu_version_locales where id=${menuIds.locale}`).toEqual([{ status: "translation_pending" }]);
+      await tx`select transition_menu_version_locale(${menuIds.locale}::uuid,'qa_pending')`;
+      await tx`select transition_menu_version_locale(${menuIds.locale}::uuid,'qa_approved')`;
+      await tx`select transition_menu_version_locale(${menuIds.locale}::uuid,'approved','vendor_approved_external',${menuIds.evidence}::uuid)`;
+      expect(await tx`select * from can_publish_menu_locale(${menuIds.locale}::uuid)`).toEqual([]);
+      await tx`select transition_menu_version_locale(${menuIds.locale}::uuid,'published')`;
+      expect(await tx`select status from menu_versions where id=${menuIds.version}`).toEqual([{ status: "active" }]);
+      await expectErrorIn(tx, /menu_locked_for_review/, (sp) => sp`select load_permissioned_menu_dossier(${tx.json({ ...menu, seed_hash: "changed" })}::jsonb)`);
     });
   });
 });
