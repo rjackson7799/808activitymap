@@ -44,6 +44,22 @@ test("admin pages are axe-clean; taxonomy form is keyboard-operable with visible
   const { publisher } = readState();
   await signInWithMfa(page, publisher);
 
+  await page.goto("/admin");
+  await expect(page.getByRole("heading", { name: "Admin workspace" })).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "Admin" }).getByRole("link", { name: "Dashboard" }))
+    .toHaveAttribute("aria-current", "page");
+  await expect(page.getByRole("link", { name: /taxonomy manage categories/i })).toBeVisible();
+  await expect(page.getByText("Two-factor authentication verified for this session.")).toBeVisible();
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.getByRole("navigation", { name: "Admin" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Sign out" })).toBeVisible();
+  const pageOverflowsMobileViewport = await page.evaluate(
+    () => document.documentElement.scrollWidth > window.innerWidth,
+  );
+  expect(pageOverflowsMobileViewport, "admin shell should not overflow the mobile viewport").toBe(false);
+  await page.setViewportSize({ width: 1280, height: 720 });
+
   const paths = [
     "/admin",
     "/admin/taxonomy",
