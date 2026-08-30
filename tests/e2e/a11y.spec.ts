@@ -101,4 +101,11 @@ test("admin pages are axe-clean; taxonomy form is keyboard-operable with visible
     () => document.documentElement.scrollWidth > window.innerWidth,
   );
   expect(taxonomyOverflowsMobileViewport, "taxonomy should not overflow the mobile viewport").toBe(false);
+
+  await page.goto("/admin/listings");
+  await expect(page.getByRole("heading", { name: "Listings", exact: true })).toBeVisible();
+  const listingsOverflowMobileViewport = await page.evaluate(
+    () => document.documentElement.scrollWidth > window.innerWidth,
+  );
+  expect(listingsOverflowMobileViewport, "listings should not overflow the mobile viewport").toBe(false);
 });
