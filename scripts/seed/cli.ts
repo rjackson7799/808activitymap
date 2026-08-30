@@ -7,16 +7,21 @@ import { deterministicUuid, normalizeHours, readDossier } from "./dossier";
 async function main(): Promise<void> {
 const [command, dossierPath, ...flags] = process.argv.slice(2);
 const dryRun = flags.includes("--dry-run") || process.env.npm_config_dry_run === "true";
-const commands = ["load", "check", "approve-en", "publish", "stage-ja", "submit-ja", "approve-ja", "check-ja", "publish-ja"];
+const commands = [
+  "load", "check", "approve-en", "publish",
+  "stage-ja", "submit-ja", "approve-ja", "check-ja", "publish-ja",
+  "stage-ko", "submit-ko", "approve-ko", "check-ko", "publish-ko",
+];
 if (!command || !dossierPath || !commands.includes(command)) {
   throw new Error(`Usage: npm run seed:listings -- <${commands.join("|")}> <dossier.yaml> [--dry-run]`);
 }
 
 const { dossier, directory } = readDossier(dossierPath);
-const jaCommands = ["stage-ja", "submit-ja", "approve-ja", "check-ja", "publish-ja"];
-if (jaCommands.includes(command)) {
-  if (!dossier.verification.confirmed) throw new Error("Japanese follow-on requires a confirmed dossier");
-  if (!dossier.locales.ja) throw new Error(`Command ${command} requires locales.ja in the dossier`);
+const followOnLocale = command.endsWith("-ja") ? "ja" : command.endsWith("-ko") ? "ko" : null;
+const localeLabel = { ja: "Japanese", ko: "Korean" } as const;
+if (followOnLocale) {
+  if (!dossier.verification.confirmed) throw new Error(`${localeLabel[followOnLocale]} follow-on requires a confirmed dossier`);
+  if (!dossier.locales[followOnLocale]) throw new Error(`Command ${command} requires locales.${followOnLocale} in the dossier`);
 }
 const ids = {
   organization: deterministicUuid(dossier.external_ref, "organization"),
@@ -49,7 +54,7 @@ if (dryRun) {
 
 const client = await authenticatedClient();
 
-async function checkReadiness(locale: "en" | "ja"): Promise<boolean> {
+async function checkReadiness(locale: "en" | "ja" | "ko"): Promise<boolean> {
   const result = await client.rpc("can_publish_listing_locale", { p_listing_id: ids.listing, p_locale: locale });
   if (result.error) {
     if (result.error.message.includes("not found")) {
@@ -62,8 +67,8 @@ async function checkReadiness(locale: "en" | "ja"): Promise<boolean> {
   return result.data?.length === 0;
 }
 
-if (command === "check" || command === "check-ja") {
-  process.exit(await checkReadiness(command === "check-ja" ? "ja" : "en") ? 0 : 2);
+if (command === "check" || command === "check-ja" || command === "check-ko") {
+  process.exit(await checkReadiness(followOnLocale ?? "en") ? 0 : 2);
 }
 
 if (command === "approve-en") {
@@ -85,32 +90,34 @@ if (command === "publish") {
   process.exit(0);
 }
 
-if (["stage-ja", "submit-ja", "approve-ja", "publish-ja"].includes(command)) {
-  const ja = dossier.locales.ja!;
+if (followOnLocale) {
+  const content = dossier.locales[followOnLocale]!;
+  const language = localeLabel[followOnLocale];
+  const action = command.slice(0, command.indexOf("-"));
 
-  if (command === "stage-ja") {
+  if (action === "stage") {
     const staged = await client.rpc("stage_permissioned_listing_locale", {
-      p_listing_id: ids.listing, p_locale: "ja", p_content: ja,
+      p_listing_id: ids.listing, p_locale: followOnLocale, p_content: content,
     });
     if (staged.error) throw staged.error;
-    console.log(`STAGED  ${dossier.external_ref} — Japanese locale is machine_draft`);
+    console.log(`STAGED  ${dossier.external_ref} — ${language} locale is machine_draft`);
     process.exit(0);
   }
 
-  if (command === "submit-ja" || command === "approve-ja") {
-    const target = command === "submit-ja" ? "qa_pending" : "qa_approved";
+  if (action === "submit" || action === "approve") {
+    const target = action === "submit" ? "qa_pending" : "qa_approved";
     const transitioned = await client.rpc("transition_listing_locale", {
-      p_listing_id: ids.listing, p_locale: "ja", p_to_status: target,
+      p_listing_id: ids.listing, p_locale: followOnLocale, p_to_status: target,
     });
     if (transitioned.error) throw transitioned.error;
-    console.log(`${command === "submit-ja" ? "SUBMITTED" : "APPROVED"}  ${dossier.external_ref} — Japanese locale is ${target}`);
+    console.log(`${action === "submit" ? "SUBMITTED" : "APPROVED"}  ${dossier.external_ref} — ${language} locale is ${target}`);
     process.exit(0);
   }
 
-  if (!await checkReadiness("ja")) process.exit(2);
-  const published = await client.rpc("publish_listing_locale", { p_listing_id: ids.listing, p_locale: "ja" });
+  if (!await checkReadiness(followOnLocale)) process.exit(2);
+  const published = await client.rpc("publish_listing_locale", { p_listing_id: ids.listing, p_locale: followOnLocale });
   if (published.error) throw published.error;
-  console.log(`PUBLISHED  ${dossier.external_ref} — Japanese locale is live`);
+  console.log(`PUBLISHED  ${dossier.external_ref} — ${language} locale is live`);
   process.exit(0);
 }
 

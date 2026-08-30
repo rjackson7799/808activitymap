@@ -30,6 +30,22 @@ describe("permissioned seed dossier", () => {
       locales: { ...valid.locales, ja: { name: "サンプルカフェ", editorial_note: "確認済みです。", seo_title: "サンプル", seo_desc: "サンプルです。" } },
     })).toThrow();
   });
+  it("accepts an optional reviewed Korean block with an explicit canonical slug", () => {
+    const parsed = dossierSchema.parse({
+      ...valid,
+      locales: {
+        ...valid.locales,
+        ko: { name: "샘플 카페", slug: "샘플-카페", editorial_note: "검토된 샘플입니다.", seo_title: "샘플 카페", seo_desc: "검토용 샘플 카페입니다." },
+      },
+    });
+    expect(parsed.locales.ko?.slug).toBe("샘플-카페");
+  });
+  it("requires an explicit canonical slug for Korean follow-on content", () => {
+    expect(() => dossierSchema.parse({
+      ...valid,
+      locales: { ...valid.locales, ko: { name: "샘플 카페", editorial_note: "검토된 샘플입니다.", seo_title: "샘플 카페", seo_desc: "검토용 샘플입니다." } },
+    })).toThrow();
+  });
   it("creates stable, entity-specific UUIDs", () => {
     expect(deterministicUuid("sample-cafe", "listing")).toBe(deterministicUuid("sample-cafe", "listing"));
     expect(deterministicUuid("sample-cafe", "listing")).not.toBe(deterministicUuid("sample-cafe", "location"));
