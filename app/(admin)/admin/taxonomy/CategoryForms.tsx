@@ -1,6 +1,14 @@
 "use client";
 
 import { useActionState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  adminCheckboxClassName,
+  adminErrorClassName,
+  adminInputClassName,
+  adminLabelClassName,
+  adminSuccessClassName,
+} from "@/components/admin/formStyles";
 import { createCategory, setCategoryActive, type ActionState } from "./actions";
 
 /**
@@ -8,52 +16,63 @@ import { createCategory, setCategoryActive, type ActionState } from "./actions";
  * inputs + surface the typed ActionState (field-scoped errors near the field,
  * so "duplicate slug" lands on the slug input — the "clean surfaced validation
  * error" the slice requires). Native browser focus rings are kept for
- * keyboard/visible-focus a11y; design tokens arrive in CP4.
+ * keyboard/visible-focus a11y.
  */
 
 export function NewCategoryForm({ parents }: { parents: { id: string; label: string }[] }) {
   const [state, action, pending] = useActionState<ActionState, FormData>(createCategory, {});
 
   return (
-    <form action={action} aria-label="Create category" style={{ display: "grid", gap: "0.5rem", maxWidth: 420 }}>
-      <h2>New category</h2>
-      <label>
-        Label (English)
-        <input name="label" required autoComplete="off" style={{ display: "block", width: "100%" }} />
-      </label>
+    <form action={action} aria-label="Create category" className="rounded-card border border-hairline-strong bg-white p-5 shadow-card sm:p-6">
+      <div className="mb-5">
+        <p className="eyebrow mb-2">Create</p>
+        <h2 className="text-xl font-bold text-ink">New category</h2>
+        <p className="mt-1 text-sm leading-6 text-secondary">Start with the English public label and URL slug.</p>
+      </div>
+
+      <div className="space-y-4">
+        <div>
+          <label htmlFor="new-category-label" className={adminLabelClassName}>Label (English)</label>
+          <input id="new-category-label" name="label" required autoComplete="off" className={adminInputClassName} disabled={pending} />
+        </div>
       {state.field === "label" && state.error ? (
-        <p role="alert" style={{ color: "#b00020", margin: 0 }}>{state.error}</p>
+          <p role="alert" className={adminErrorClassName}>{state.error}</p>
       ) : null}
-      <label>
-        Slug (English)
-        <input name="slug" required autoComplete="off" style={{ display: "block", width: "100%" }} />
-      </label>
+        <div>
+          <label htmlFor="new-category-slug" className={adminLabelClassName}>Slug (English)</label>
+          <input id="new-category-slug" name="slug" required autoComplete="off" className={adminInputClassName} disabled={pending} />
+          <p className="mt-2 text-xs leading-5 text-muted">Lowercase letters, numbers, and hyphens only.</p>
+        </div>
       {state.field === "slug" && state.error ? (
-        <p role="alert" style={{ color: "#b00020", margin: 0 }}>{state.error}</p>
+          <p role="alert" className={adminErrorClassName}>{state.error}</p>
       ) : null}
-      <label>
-        Parent category
-        <select name="parent_id" defaultValue="" style={{ display: "block", width: "100%" }}>
-          <option value="">(top level)</option>
-          {parents.map((p) => (
-            <option key={p.id} value={p.id}>{p.label}</option>
-          ))}
-        </select>
-      </label>
-      <label>
-        Sort order
-        <input name="sort" type="number" defaultValue={0} style={{ display: "block", width: "6rem" }} />
-      </label>
-      <label>
-        <input name="publicly_visible" type="checkbox" defaultChecked /> Publicly visible
-      </label>
+        <div>
+          <label htmlFor="new-category-parent" className={adminLabelClassName}>Parent category</label>
+          <select id="new-category-parent" name="parent_id" defaultValue="" className={adminInputClassName} disabled={pending}>
+            <option value="">Top level</option>
+            {parents.map((p) => (
+              <option key={p.id} value={p.id}>{p.label}</option>
+            ))}
+          </select>
+        </div>
+        <div className="max-w-32">
+          <label htmlFor="new-category-sort" className={adminLabelClassName}>Sort order</label>
+          <input id="new-category-sort" name="sort" type="number" defaultValue={0} className={adminInputClassName} disabled={pending} />
+        </div>
+        <label className="flex min-h-11 items-center gap-3 rounded-field bg-field px-3 py-2 text-sm font-semibold text-ink">
+          <input name="publicly_visible" type="checkbox" defaultChecked className={adminCheckboxClassName} disabled={pending} />
+          Publicly visible
+        </label>
       {state.error && !state.field ? (
-        <p role="alert" style={{ color: "#b00020", margin: 0 }}>{state.error}</p>
+          <p role="alert" className={adminErrorClassName}>{state.error}</p>
       ) : null}
       {state.ok ? (
-        <p role="status" style={{ color: "#166534", margin: 0 }}>Category created.</p>
+          <p role="status" className={adminSuccessClassName}>Category created.</p>
       ) : null}
-      <button type="submit" disabled={pending}>{pending ? "Creating…" : "Create category"}</button>
+        <Button type="submit" variant="cta" size="lg" disabled={pending} className="w-full">
+          {pending ? "Creating…" : "Create category"}
+        </Button>
+      </div>
     </form>
   );
 }
@@ -62,12 +81,14 @@ export function ActiveToggle({ id, active }: { id: string; active: boolean }) {
   const [state, action, pending] = useActionState<ActionState, FormData>(setCategoryActive, {});
 
   return (
-    <form action={action} style={{ display: "inline" }}>
+    <form action={action} className="inline-flex flex-wrap items-center gap-2">
       <input type="hidden" name="category_id" value={id} />
       <input type="hidden" name="active" value={active ? "false" : "true"} />
-      <button type="submit" disabled={pending}>{active ? "Deactivate" : "Activate"}</button>
+      <Button type="submit" variant="outline" size="sm" disabled={pending}>
+        {pending ? "Saving…" : active ? "Deactivate" : "Activate"}
+      </Button>
       {state.error ? (
-        <span role="alert" style={{ color: "#b00020", marginLeft: "0.5rem" }}>{state.error}</span>
+        <span role="alert" className="text-xs font-medium text-error">{state.error}</span>
       ) : null}
     </form>
   );
