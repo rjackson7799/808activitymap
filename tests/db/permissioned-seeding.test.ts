@@ -11,6 +11,7 @@ const ids = {
 const photo = "71000000-0000-4000-8000-000000000005";
 const evidence = "71000000-0000-4000-8000-000000000006";
 const ja = { name: "パーミッションテスト", slug: "パーミッションテスト", editorial_note: "現地で確認済みです。", seo_title: "パーミッションテスト", seo_desc: "許可済みのテスト掲載です。" };
+const ko = { name: "퍼미션 테스트", slug: "퍼미션-테스트", editorial_note: "현장에서 확인되었습니다.", seo_title: "퍼미션 테스트", seo_desc: "사용 허가를 받은 테스트 목록입니다." };
 
 function payload(confirmed: boolean) {
   return {
@@ -32,6 +33,9 @@ describe("permissioned dossier loader", () => {
       await expectErrorIn(tx, /aal2_required/, (sp) => sp`
         select stage_permissioned_listing_locale(${ids.listing}::uuid, 'ja', ${tx.json(ja)}::jsonb)
       `);
+      await expectErrorIn(tx, /aal2_required/, (sp) => sp`
+        select stage_permissioned_listing_locale(${ids.listing}::uuid, 'ko', ${tx.json(ko)}::jsonb)
+      `);
     });
   });
 
@@ -47,6 +51,9 @@ describe("permissioned dossier loader", () => {
       expect(blockers.map((row) => row.blocker_code)).toEqual(expect.arrayContaining(["missing_required_field", "locale_status_insufficient", "provenance_missing"]));
       await expectErrorIn(tx, /permissioned_source_not_confirmed/, (sp) => sp`
         select stage_permissioned_listing_locale(${ids.listing}::uuid, 'ja', ${tx.json(ja)}::jsonb)
+      `);
+      await expectErrorIn(tx, /permissioned_source_not_confirmed/, (sp) => sp`
+        select stage_permissioned_listing_locale(${ids.listing}::uuid, 'ko', ${tx.json(ko)}::jsonb)
       `);
     });
   });
@@ -81,6 +88,18 @@ describe("permissioned dossier loader", () => {
       await tx`select stage_permissioned_listing_locale(${ids.listing}::uuid, 'ja', ${tx.json(ja)}::jsonb)`;
       await expectErrorIn(tx, /locale_locked_for_review/, (sp) => sp`
         select stage_permissioned_listing_locale(${ids.listing}::uuid, 'ja', ${tx.json({ ...ja, name: "変更不可" })}::jsonb)
+      `);
+
+      await tx`select stage_permissioned_listing_locale(${ids.listing}::uuid, 'ko', ${tx.json(ko)}::jsonb)`;
+      expect(await tx`select status from listing_locales where listing_id=${ids.listing} and locale='ko'`).toEqual([{ status: "machine_draft" }]);
+      await tx`select transition_listing_locale(${ids.listing}::uuid, 'ko', 'qa_pending')`;
+      await tx`select transition_listing_locale(${ids.listing}::uuid, 'ko', 'qa_approved')`;
+      expect(await tx`select * from can_publish_listing_locale(${ids.listing}::uuid, 'ko')`).toEqual([]);
+      await tx`select publish_listing_locale(${ids.listing}::uuid, 'ko')`;
+      expect(await tx`select status from listing_locales where listing_id=${ids.listing} and locale='ko'`).toEqual([{ status: "published" }]);
+      await tx`select stage_permissioned_listing_locale(${ids.listing}::uuid, 'ko', ${tx.json(ko)}::jsonb)`;
+      await expectErrorIn(tx, /locale_locked_for_review/, (sp) => sp`
+        select stage_permissioned_listing_locale(${ids.listing}::uuid, 'ko', ${tx.json({ ...ko, name: "변경 불가" })}::jsonb)
       `);
     });
   });

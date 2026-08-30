@@ -7,6 +7,7 @@ This runbook creates Phase 0 listing drafts from a business's own website and up
 - Use local or staging only until production infrastructure is explicitly approved.
 - A `load` never publishes. It leaves the English locale in `qa_pending` for review.
 - A `stage-ja` never serves translated copy. It leaves Japanese in `machine_draft` until a reviewer submits and approves it.
+- A `stage-ko` never serves translated copy. It leaves Korean in `machine_draft` until the named Korean reviewer submits and approves it.
 - Publishing remains a separate MFA-gated admin action after `check` is clean.
 - Do not add self-service claims, menus, deals, or machine translation to a dossier.
 
@@ -24,7 +25,7 @@ This runbook creates Phase 0 listing drafts from a business's own website and up
 
    `npm run seed:inventory -- path/to/dossiers`
 
-   The audit recursively validates YAML dossiers and local evidence files. The first pre-visit run is expected to report confirmation and media blockers; `READY` is required only before the final confirmed launch batch. It blocks on inventory outside the 25–40 launch target, invalid or duplicate IDs/slugs, missing in-person confirmation, missing licensed photos, missing Japanese content, and missing or unsupported photo/permission files. It performs no authentication, uploads, or database writes. Use `npm run --silent seed:inventory:json -- path/to/dossiers` for a durable machine-readable report; sanitized output may be attached to a release review, but private paths and agreement details must not be committed.
+   The audit recursively validates YAML dossiers and local evidence files. The first pre-visit run is expected to report confirmation and media blockers; `READY` is required only before the final confirmed launch batch. It blocks on inventory outside the 25–40 launch target, invalid or duplicate IDs/slugs, missing in-person confirmation, missing licensed photos, missing Japanese content, and missing or unsupported photo/permission files. It reports Korean listing coverage without requiring Korean for every seeded business; the separate launch gate requires complete Korean coverage for founding vendors. It performs no authentication, uploads, or database writes. Use `npm run --silent seed:inventory:json -- path/to/dossiers` for a durable machine-readable report; sanitized output may be attached to a release review, but private paths and agreement details must not be committed.
 3. Draft the dossier from the business's own HTTPS website. Keep `verification.confirmed: false`.
 4. Validate without authentication or writes:
 
@@ -99,11 +100,52 @@ Use the authenticated identity appropriate to each step. A publisher or super-ad
 
 Staging is idempotent when the dossier content is unchanged. Once review begins, changed content is rejected instead of silently overwriting approved or published Japanese copy; revisions must return through a reviewed editorial workflow.
 
+## Korean follow-on
+
+Add `locales.ko` only after the English dossier is confirmed. Korean requires an explicit native canonical slug and complete reviewed SEO/editorial fields:
+
+```yaml
+locales:
+  en: # existing reviewed English block
+    # ...
+  ko:
+    name: 샘플 카페
+    slug: 샘플-카페
+    editorial_note: 현장에서 확인되었습니다.
+    seo_title: 샘플 카페
+    seo_desc: 와이키키의 샘플 카페입니다.
+```
+
+The technical workflow is available before staffing is complete, but Korean approval and publication remain operationally blocked until the named Korean reviewer and backup are confirmed.
+
+1. Stage non-serving translated copy:
+
+   `npm run seed:listings -- stage-ko path/to/dossier.yaml`
+
+2. Submit the machine draft for review:
+
+   `npm run seed:listings -- submit-ko path/to/dossier.yaml`
+
+3. After human Korean review, record approval:
+
+   `npm run seed:listings -- approve-ko path/to/dossier.yaml`
+
+4. Confirm the locale-specific publication contract is clean:
+
+   `npm run seed:listings -- check-ko path/to/dossier.yaml`
+
+5. Publish Korean with a fresh readiness check:
+
+   `npm run seed:listings -- publish-ko path/to/dossier.yaml`
+
+As with Japanese, unchanged staging is idempotent and reviewed content cannot be silently overwritten. This listing workflow does not create or translate Korean menus; menu coverage remains separately measured by the production launch gate.
+
 ## Expected blockers
 
 - An unconfirmed dossier reports missing approved provenance and usually missing photo/QA blockers.
 - A confirmed dossier still reports `locale_status_insufficient` until English QA approval.
 - Japanese reports `locale_status_insufficient` until the staged machine draft completes Japanese QA.
+- Korean reports `locale_status_insufficient` until the staged machine draft completes Korean QA.
 - Missing or unmoderated photos, incomplete rights, unknown categories, expired provenance, and incomplete core fields remain blocking.
 
 ## Safety and recovery

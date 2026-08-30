@@ -35,6 +35,12 @@ locales:
     editorial_note: 検証専用の架空の掲載情報です。
     seo_title: サンプルカフェ
     seo_desc: ドシエ検証専用の架空のカフェです。
+  ko:
+    name: 샘플 카페
+    slug: 샘플-카페
+    editorial_note: 검증 전용 가상 목록입니다.
+    seo_title: 샘플 카페
+    seo_desc: 서류 검증 전용 가상 카페입니다.
 source:
   website: https://example.com
 verification:

@@ -13,6 +13,7 @@ function dossier(index: number, overrides: Record<string, unknown> = {}): Dossie
     locales: {
       en: { name: `Sample ${index}`, slug: `sample-${index}`, editorial_note: "Reviewed.", seo_title: `Sample ${index}`, seo_desc: "A reviewed fixture." },
       ja: { name: `サンプル${index}`, slug: `サンプル-${index}`, editorial_note: "確認済みです。", seo_title: `サンプル${index}`, seo_desc: "確認済みです。" },
+      ...(index % 2 === 0 ? { ko: { name: `샘플 ${index}`, slug: `샘플-${index}`, editorial_note: "검토되었습니다.", seo_title: `샘플 ${index}`, seo_desc: "검토된 샘플입니다." } } : {}),
     },
     source: { website: `https://example.com/sample-${index}` },
     verification: { confirmed: true, permission_form: `permission-${index}.pdf`, granted_by: "Fixture Vendor", verified_at: "2026-08-29T20:00:00Z" },
@@ -28,7 +29,7 @@ function input(dossiers: Dossier[]) {
 describe("launch inventory audit", () => {
   it("accepts 25 unique, confirmed, photo-backed EN+JA dossiers", () => {
     const report = auditInventory(input(Array.from({ length: 25 }, (_, index) => dossier(index))), undefined, () => true);
-    expect(report).toMatchObject({ ready: true, validDossiers: 25, confirmed: 25, withPhotos: 25, withJapanese: 25, issues: [] });
+    expect(report).toMatchObject({ ready: true, validDossiers: 25, confirmed: 25, withPhotos: 25, withJapanese: 25, withKorean: 13, issues: [] });
   });
 
   it("reports launch-count, permission, photo, Japanese, asset, and uniqueness blockers", () => {

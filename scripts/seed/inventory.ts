@@ -18,6 +18,7 @@ export type InventoryReport = {
   confirmed: number;
   withPhotos: number;
   withJapanese: number;
+  withKorean: number;
   target: { min: number; max: number };
   ready: boolean;
   issues: InventoryIssue[];
@@ -75,7 +76,7 @@ export function auditInventory(
     if (priorRef) issues.push({ code: "duplicate_external_ref", path, external_ref: dossier.external_ref, detail: `also used by ${priorRef}` });
     else refs.set(dossier.external_ref, path);
 
-    for (const locale of ["en", "ja"] as const) {
+    for (const locale of ["en", "ja", "ko"] as const) {
       const content = dossier.locales[locale];
       if (!content) continue;
       const slug = content.slug ?? dossier.external_ref;
@@ -120,6 +121,7 @@ export function auditInventory(
     confirmed: input.entries.filter(({ dossier }) => dossier.verification.confirmed).length,
     withPhotos: input.entries.filter(({ dossier }) => dossier.photos.length > 0).length,
     withJapanese: input.entries.filter(({ dossier }) => Boolean(dossier.locales.ja)).length,
+    withKorean: input.entries.filter(({ dossier }) => Boolean(dossier.locales.ko)).length,
     target,
     ready: issues.length === 0,
     issues,
