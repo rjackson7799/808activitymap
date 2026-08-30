@@ -13,6 +13,29 @@ import { FIXTURE } from "./support/fixture";
 test("login is axe-clean and declares its language", async ({ page }) => {
   await page.goto("/login");
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  await expect(page.getByLabel("Email address")).toBeVisible();
+  await expect(page.getByLabel("Password")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Sign in" })).toBeVisible();
+
+  const controlsHaveVisibleSurfaces = await page.evaluate(() => {
+    const controls = [
+      document.querySelector<HTMLInputElement>("#email"),
+      document.querySelector<HTMLInputElement>("#password"),
+      document.querySelector<HTMLButtonElement>('button[type="submit"]'),
+    ];
+    return controls.every((control) => {
+      if (!control) return false;
+      const style = getComputedStyle(control);
+      const rect = control.getBoundingClientRect();
+      return (
+        rect.height >= 44 &&
+        (style.backgroundColor !== "rgba(0, 0, 0, 0)" || style.backgroundImage !== "none") &&
+        (style.borderStyle !== "none" || control.tagName === "BUTTON")
+      );
+    });
+  });
+  expect(controlsHaveVisibleSurfaces, "login fields and action have visible 44px surfaces").toBe(true);
+
   const results = await new AxeBuilder({ page }).analyze();
   expect(results.violations, "axe violations on /login").toEqual([]);
 });
