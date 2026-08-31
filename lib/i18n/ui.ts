@@ -48,6 +48,8 @@ export interface UiStrings {
   aiReady: string;
   allergenNote: string;
   otherLocaleNotAvailable: string;
+  notFoundTitle: string;
+  notFoundBody: string;
 }
 
 const en: UiStrings = {
@@ -92,6 +94,8 @@ const en: UiStrings = {
   aiReady: "AI-ready — findable & citable",
   allergenNote: "Ask staff about allergens and preparation.",
   otherLocaleNotAvailable: "Not available in this language yet — showing the category instead.",
+  notFoundTitle: "Page not found",
+  notFoundBody: "This page may have moved, or it may not be available yet.",
 };
 
 const ja: UiStrings = {
@@ -136,6 +140,8 @@ const ja: UiStrings = {
   aiReady: "AI対応 — 見つけやすく引用しやすい",
   allergenNote: "アレルギーや調理法についてはスタッフにお尋ねください。",
   otherLocaleNotAvailable: "この言語ではまだご覧いただけません — カテゴリーを表示します。",
+  notFoundTitle: "ページが見つかりません",
+  notFoundBody: "ページが移動したか、まだ公開されていない可能性があります。",
 };
 
 // KO mirrors EN copy until Slice 2 localizes it; never served pre-flip.
@@ -150,6 +156,8 @@ const ko: UiStrings = {
   languageLabel: "언어",
   localTipLabel: "현지인의 한마디",
   aboutTitle: (name) => `${name} 소개`,
+  notFoundTitle: "페이지를 찾을 수 없습니다",
+  notFoundBody: "페이지가 이동했거나 아직 제공되지 않을 수 있습니다.",
 };
 
 const STRINGS: Record<Locale, UiStrings> = { en, ja, ko };
