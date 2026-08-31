@@ -1,6 +1,13 @@
 "use client";
 
 import { useActionState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  adminErrorClassName,
+  adminInputClassName,
+  adminLabelClassName,
+  adminSuccessClassName,
+} from "@/components/admin/formStyles";
 import {
   publishLocale,
   unpublishLocale,
@@ -9,9 +16,6 @@ import {
   publishMenuLocale,
   type ActionState,
 } from "../actions";
-
-const errStyle = { color: "#b00020", marginLeft: "0.5rem" } as const;
-const okStyle = { color: "#166534", marginLeft: "0.5rem" } as const;
 
 type Action = (prev: ActionState, formData: FormData) => Promise<ActionState>;
 
@@ -27,17 +31,19 @@ function ActionForm({
 }) {
   const [state, formAction, pending] = useActionState<ActionState, FormData>(action, {});
   return (
-    <form action={formAction} style={{ display: "inline-block", marginRight: "0.5rem" }}>
+    <form action={formAction} className="flex flex-wrap items-center gap-2">
       {Object.entries(fields).map(([k, v]) => (
         <input key={k} type="hidden" name={k} value={v} />
       ))}
-      <button type="submit" disabled={pending}>{pending ? "Working…" : label}</button>
+      <Button type="submit" variant={label.startsWith("Unpublish") ? "outline" : "primary"} size="md" disabled={pending}>
+        {pending ? "Working…" : label}
+      </Button>
       {state.error ? (
-        <span role="alert" data-testid="action-error" data-error-code={state.code ?? "error"} style={errStyle}>
+        <span role="alert" data-testid="action-error" data-error-code={state.code ?? "error"} className={adminErrorClassName}>
           {state.error}
         </span>
       ) : null}
-      {state.ok ? <span role="status" style={okStyle}>Done.</span> : null}
+      {state.ok ? <span role="status" className={adminSuccessClassName}>Done.</span> : null}
     </form>
   );
 }
@@ -54,7 +60,7 @@ export function LocaleControls({
   status: string;
 }) {
   return (
-    <div style={{ marginTop: "0.4rem" }}>
+    <div className="mt-5 flex flex-wrap gap-2 border-t border-hairline pt-4">
       {(status === "not_started" || status === "machine_draft") && (
         <ActionForm
           action={transitionListingLocale}
@@ -101,29 +107,29 @@ export function MenuApprovalControls({
   const [state, formAction, pending] = useActionState<ActionState, FormData>(recordMenuApproval, {});
 
   return (
-    <div style={{ marginTop: "0.4rem" }}>
+    <div className="mt-5 border-t border-hairline pt-4">
       {(status === "qa_approved" || status === "vendor_approval_pending") && (
-        <form action={formAction} aria-label={`Record vendor approval for the ${locale} menu`}>
+        <form action={formAction} aria-label={`Record vendor approval for the ${locale} menu`} className="space-y-4">
           <input type="hidden" name="listing_id" value={listingId} />
           <input type="hidden" name="mvl_id" value={mvlId} />
-          <label>
-            Approval evidence
-            <select name="evidence_media_id" defaultValue="" style={{ marginLeft: "0.4rem" }}>
+          <div>
+            <label htmlFor={`evidence-${mvlId}`} className={adminLabelClassName}>Approval evidence</label>
+            <select id={`evidence-${mvlId}`} name="evidence_media_id" defaultValue="" className={adminInputClassName} disabled={pending}>
               <option value="">— none —</option>
               {evidenceMedia.map((m) => (
                 <option key={m.id} value={m.id}>{m.path}</option>
               ))}
             </select>
-          </label>
-          <button type="submit" disabled={pending} style={{ marginLeft: "0.5rem" }}>
+          </div>
+          <Button type="submit" variant="primary" size="md" disabled={pending}>
             {pending ? "Recording…" : "Record vendor approval"}
-          </button>
+          </Button>
           {state.error ? (
-            <span role="alert" data-testid="action-error" data-error-code={state.code ?? "error"} style={errStyle}>
+            <p role="alert" data-testid="action-error" data-error-code={state.code ?? "error"} className={adminErrorClassName}>
               {state.error}
-            </span>
+            </p>
           ) : null}
-          {state.ok ? <span role="status" style={okStyle}>Approval recorded.</span> : null}
+          {state.ok ? <p role="status" className={adminSuccessClassName}>Approval recorded.</p> : null}
         </form>
       )}
       {status === "approved" && (
