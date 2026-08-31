@@ -31,7 +31,7 @@ export async function generateMetadata({
   const { locale, categorySlug } = await params;
   if (!isLocale(locale)) return {};
   const category = await getCategoryDTO(locale, decodeSlug(categorySlug));
-  if (!category) return {};
+  if (!category) return { title: ui(locale).notFoundTitle };
   const origin = toOrigin(env().PORTAL_DOMAIN);
   const alternates = await getCategoryLocaleAlternates(category.id);
   const strings = ui(locale);

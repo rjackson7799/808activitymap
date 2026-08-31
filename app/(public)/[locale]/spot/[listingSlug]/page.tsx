@@ -52,9 +52,9 @@ export async function generateMetadata({
   const { locale, listingSlug } = await params;
   if (!isLocale(locale)) return {};
   const resolved = await resolveListingSlug(locale, decodeSlug(listingSlug));
-  if (resolved.kind !== "canonical") return {};
+  if (resolved.kind !== "canonical") return { title: ui(locale).notFoundTitle };
   const dto = await getListingDTO(locale, resolved.listingId);
-  if (!dto) return {};
+  if (!dto) return { title: ui(locale).notFoundTitle };
   const origin = toOrigin(env().PORTAL_DOMAIN);
   const alternates = await getListingLocaleAlternates(resolved.listingId);
   return {

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import "@/app/globals.css";
 import { fontVariables } from "@/app/fonts";
 
@@ -14,10 +15,18 @@ export const metadata: Metadata = {
 export default function GlobalNotFound() {
   return (
     <html lang="en" className={fontVariables}>
-      <body className="bg-sand text-body">
-        <main className="mx-auto flex min-h-dvh max-w-xl flex-col items-center justify-center gap-3 px-6 text-center">
-          <h1 className="font-serif text-3xl text-ink">Page not found</h1>
-          <p className="text-secondary">The page you’re looking for doesn’t exist or has moved.</p>
+      <body className="bg-sand text-body antialiased">
+        <main className="grid min-h-dvh place-items-center px-4 py-12 sm:px-6">
+          <div className="w-full max-w-xl rounded-card border border-hairline-strong bg-surface p-7 text-center shadow-card sm:p-10">
+            <p className="font-serif text-6xl leading-none text-terracotta" aria-hidden>404</p>
+            <h1 className="mt-5 font-serif text-[2rem] leading-tight text-ink sm:text-[2.5rem]">Page not found</h1>
+            <p className="mx-auto mt-4 max-w-md text-[14px] leading-[1.75] text-body">The page you’re looking for doesn’t exist or has moved.</p>
+            <p className="mt-7">
+              <Link href="/" className="inline-flex min-h-11 w-full items-center justify-center rounded-cta bg-ink px-5 text-[13px] font-bold text-white transition hover:bg-ink-soft sm:w-auto">
+                Browse listings
+              </Link>
+            </p>
+          </div>
         </main>
       </body>
     </html>
