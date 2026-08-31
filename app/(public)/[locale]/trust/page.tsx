@@ -59,7 +59,7 @@ export default async function TrustPage({ params }: { params: Promise<{ locale: 
                 <span className="grid size-10 place-items-center rounded-full bg-info-bg text-teal-dark" aria-hidden>
                   <Icon size={20} strokeWidth={2} />
                 </span>
-                <span className="font-serif text-sm text-label" aria-hidden>{String(index + 1).padStart(2, "0")}</span>
+                <span className="font-serif text-sm text-muted" aria-hidden>{String(index + 1).padStart(2, "0")}</span>
               </div>
               <h2 className="mt-5 font-serif text-xl leading-snug text-ink">{title}</h2>
               <p className="mt-3 text-[14px] leading-[1.75] text-body">{body}</p>
