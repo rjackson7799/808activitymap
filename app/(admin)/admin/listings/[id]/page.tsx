@@ -80,7 +80,12 @@ export default async function ListingPublishPage({ params }: { params: Promise<{
                 <p className="text-xs font-bold uppercase tracking-wider text-terracotta-deep">Publish blockers</p>
               <ul aria-label={`${ll.locale} publish blockers`} className="mt-2 list-disc space-y-1 pl-5 text-sm text-terracotta-deep">
                 {ll.blockers.map((b, i) => (
-                  <li key={`${b.blocker_code}-${i}`}>{humanize(b.blocker_code)}</li>
+                  <li key={`${b.blocker_code}-${i}`}>
+                    <span>{humanize(b.blocker_code)}</span>
+                    <code className="ml-2 rounded bg-white/60 px-1.5 py-0.5 text-[11px] text-muted">
+                      {b.blocker_code}
+                    </code>
+                  </li>
                 ))}
               </ul>
               </div>
