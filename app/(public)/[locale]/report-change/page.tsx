@@ -49,12 +49,30 @@ export default async function ReportChangePage({ params, searchParams }: { param
   return <>
     <SiteHeader locale={locale} brand={brand} alternates={alts} notAvailableLabel={chrome.otherLocaleNotAvailable} languageLabel={chrome.languageLabel} />
     <main id="main-content" className="public-page">
-      <div className="mx-auto max-w-2xl px-4 py-12 sm:px-6 sm:py-16">
-        <h1 className="font-serif text-[2.25rem] leading-tight text-ink sm:text-[2.75rem]">{strings.reportTitle}</h1>
-        {listing && listingId ? <>
-          <p className="mt-4 text-[15px] leading-[1.7] text-body">{strings.reportIntro(listing.name)}</p>
-          <div className="mt-8 rounded-card border border-hairline bg-surface p-5 shadow-card sm:p-7"><CorrectionForm listingId={listingId} locale={locale} strings={formStrings} /></div>
-        </> : <div className="mt-6 rounded-card border border-hairline bg-surface p-6 shadow-card"><p className="text-[14px] leading-[1.7] text-body">{strings.reportNeedsListing}</p><p className="mt-5"><a href={homePath(locale)} className="font-bold text-teal-dark underline underline-offset-4">{strings.backToBrowse}</a></p></div>}
+      <section className="border-b border-hairline bg-[var(--gradient-backdrop)]">
+        <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
+          <p className="eyebrow">{brand}</p>
+          <h1 className="mt-3 font-serif text-[2.25rem] leading-tight text-ink sm:text-[3rem]">{strings.reportTitle}</h1>
+          {listing && listingId ? (
+            <p className="mt-5 max-w-2xl text-[15px] leading-[1.75] text-body">{strings.reportIntro(listing.name)}</p>
+          ) : null}
+        </div>
+      </section>
+      <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-12">
+        {listing && listingId ? (
+          <div className="rounded-card border border-hairline-strong bg-surface p-5 shadow-card sm:p-8">
+            <CorrectionForm listingId={listingId} locale={locale} strings={formStrings} />
+          </div>
+        ) : (
+          <div className="rounded-card border border-hairline-strong bg-surface p-6 shadow-card sm:p-8">
+            <p className="text-[14px] leading-[1.75] text-body">{strings.reportNeedsListing}</p>
+            <p className="mt-6">
+              <a href={homePath(locale)} className="inline-flex min-h-11 items-center rounded-cta bg-ink px-5 text-[13px] font-bold text-white transition hover:bg-ink-soft">
+                {strings.backToBrowse}
+              </a>
+            </p>
+          </div>
+        )}
       </div>
     </main>
     <PublicFooter brand={brand} strings={chrome} locale={locale} />

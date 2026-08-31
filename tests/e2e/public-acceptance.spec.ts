@@ -143,6 +143,22 @@ test.describe("journey + structured data + a11y", () => {
     await page.goto("/spot/aloha-ramen-hale");
     await page.getByRole("link", { name: "Report a change" }).first().click();
     await expect(page.getByRole("heading", { level: 1, name: "Report a change" })).toBeVisible();
+    const reportUrl = new URL(page.url());
+    const listingId = reportUrl.searchParams.get("listing");
+    expect(listingId).toBeTruthy();
+    const correctionControlsHaveVisibleSurfaces = await page.evaluate(() => {
+      const controls = [
+        document.querySelector<HTMLSelectElement>("#field"),
+        document.querySelector<HTMLTextAreaElement>("#details"),
+        document.querySelector<HTMLButtonElement>('button[type="submit"]'),
+      ];
+      return controls.every((control) => {
+        if (!control) return false;
+        const style = getComputedStyle(control);
+        return control.getBoundingClientRect().height >= 44 && style.backgroundColor !== "rgba(0, 0, 0, 0)";
+      });
+    });
+    expect(correctionControlsHaveVisibleSurfaces, "correction controls have visible 44px surfaces").toBe(true);
     await page.getByLabel("What needs updating?").selectOption("hours");
     await page.getByLabel("What should we know?").fill("The weekday closing time is now 8 p.m.; staff confirmed this today.");
     await page.getByLabel("Email (optional)").fill("visitor@example.com");
@@ -158,5 +174,12 @@ test.describe("journey + structured data + a11y", () => {
     await expect(page.getByRole("heading", { level: 1, name: "正確な情報を保つために" })).toBeVisible();
     expect(await page.evaluate(() => getComputedStyle(document.querySelector("h1")!).fontFamily)).toContain("Noto Sans JP");
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+
+    await page.goto(`/ja/report-change?listing=${encodeURIComponent(listingId!)}`);
+    await expect(page.getByRole("heading", { level: 1, name: "変更を報告" })).toBeVisible();
+    await expect(page.getByLabel("更新が必要な項目")).toBeVisible();
+    expect(await page.evaluate(() => getComputedStyle(document.querySelector("h1")!).fontFamily)).toContain("Noto Sans JP");
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    expect((await new AxeBuilder({ page }).analyze()).violations, "axe on Japanese correction page").toEqual([]);
   });
 });
