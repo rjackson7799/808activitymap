@@ -139,6 +139,7 @@ test.describe("journey + structured data + a11y", () => {
     const englishResponse = await page.goto("/activities");
     expect(englishResponse?.status()).toBe(404);
     await expect(page.getByRole("heading", { level: 1, name: "Page not found" })).toBeVisible();
+    await expect(page).toHaveTitle("Page not found");
     await expect(page.getByRole("link", { name: "Browse Waikīkī" })).toHaveAttribute("href", "/");
     expect((await new AxeBuilder({ page }).analyze()).violations, "axe on English not-found").toEqual([]);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
@@ -147,6 +148,7 @@ test.describe("journey + structured data + a11y", () => {
     expect(japaneseResponse?.status()).toBe(404);
     await expect(page.locator("html")).toHaveAttribute("lang", "ja");
     await expect(page.getByRole("heading", { level: 1, name: "ページが見つかりません" })).toBeVisible();
+    await expect(page).toHaveTitle("ページが見つかりません");
     await expect(page.getByRole("link", { name: "ワイキキを見る" })).toHaveAttribute("href", "/ja");
     expect(await page.evaluate(() => getComputedStyle(document.querySelector("h1")!).fontFamily)).toContain("Noto Sans JP");
     expect((await new AxeBuilder({ page }).analyze()).violations, "axe on Japanese not-found").toEqual([]);
