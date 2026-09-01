@@ -50,6 +50,9 @@ export interface UiStrings {
   otherLocaleNotAvailable: string;
   notFoundTitle: string;
   notFoundBody: string;
+  errorTitle: string;
+  errorBody: string;
+  retry: string;
 }
 
 const en: UiStrings = {
@@ -96,6 +99,9 @@ const en: UiStrings = {
   otherLocaleNotAvailable: "Not available in this language yet — showing the category instead.",
   notFoundTitle: "Page not found",
   notFoundBody: "This page may have moved, or it may not be available yet.",
+  errorTitle: "We couldn’t load this page",
+  errorBody: "Something unexpected happened. Try again, or return to browse.",
+  retry: "Try again",
 };
 
 const ja: UiStrings = {
@@ -142,6 +148,9 @@ const ja: UiStrings = {
   otherLocaleNotAvailable: "この言語ではまだご覧いただけません — カテゴリーを表示します。",
   notFoundTitle: "ページが見つかりません",
   notFoundBody: "ページが移動したか、まだ公開されていない可能性があります。",
+  errorTitle: "ページを読み込めませんでした",
+  errorBody: "問題が発生しました。もう一度試すか、店舗一覧に戻ってください。",
+  retry: "もう一度試す",
 };
 
 // KO mirrors EN copy until Slice 2 localizes it; never served pre-flip.
@@ -158,6 +167,9 @@ const ko: UiStrings = {
   aboutTitle: (name) => `${name} 소개`,
   notFoundTitle: "페이지를 찾을 수 없습니다",
   notFoundBody: "페이지가 이동했거나 아직 제공되지 않을 수 있습니다.",
+  errorTitle: "페이지를 불러올 수 없습니다",
+  errorBody: "문제가 발생했습니다. 다시 시도하거나 둘러보기로 돌아가세요.",
+  retry: "다시 시도",
 };
 
 const STRINGS: Record<Locale, UiStrings> = { en, ja, ko };
