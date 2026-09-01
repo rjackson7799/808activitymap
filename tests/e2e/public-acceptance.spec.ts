@@ -106,6 +106,7 @@ test.describe("journey + structured data + a11y", () => {
   test("language switcher navigates to the JA listing", async ({ page }) => {
     await page.goto("/spot/aloha-ramen-hale");
     await page.locator('summary[aria-label="Language"]').click();
+    await expect(page.getByText("Japanese", { exact: true })).toBeVisible();
     await page.getByRole("link", { name: "日本語" }).click();
     await expect(page).toHaveURL(/\/ja\/spot\//);
     await expect(page.locator("html")).toHaveAttribute("lang", "ja");
