@@ -64,6 +64,7 @@ test("admin pages are axe-clean; taxonomy form is keyboard-operable with visible
     "/admin",
     "/admin/taxonomy",
     "/admin/listings",
+    "/admin/freshness",
     "/admin/change-requests",
     "/admin/audit",
     `/admin/listings/${FIXTURE.listing}`,
@@ -116,6 +117,15 @@ test("admin pages are axe-clean; taxonomy form is keyboard-operable with visible
     () => document.documentElement.scrollWidth > window.innerWidth,
   );
   expect(correctionsOverflowMobileViewport, "corrections should not overflow the mobile viewport").toBe(false);
+
+  await page.goto("/admin/freshness");
+  await expect(page.getByRole("heading", { name: "Freshness", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Configured review windows", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Listing health", exact: true })).toBeVisible();
+  const freshnessOverflowsMobileViewport = await page.evaluate(
+    () => document.documentElement.scrollWidth > window.innerWidth,
+  );
+  expect(freshnessOverflowsMobileViewport, "freshness should not overflow the mobile viewport").toBe(false);
 
   await page.goto("/admin/audit");
   await expect(page.getByRole("heading", { name: "Audit log", exact: true })).toBeVisible();

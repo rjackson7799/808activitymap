@@ -22,7 +22,7 @@ export interface ProvenanceRow {
 export type StalenessThresholds = Record<string, number>; // key → days
 
 /** Map a provenance field to its staleness-threshold key (config: staleness_thresholds_days). */
-function thresholdKey(field: string): string {
+export function provenanceThresholdKey(field: string): string {
   switch (field) {
     case "hours":
       return "hours";
@@ -39,6 +39,22 @@ function thresholdKey(field: string): string {
   }
 }
 
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+/** Shared freshness rule for public trust chips and the staff dashboard. */
+export function isProvenanceStale(
+  row: Pick<ProvenanceRow, "field" | "verifiedAt" | "expiresAt">,
+  thresholds: StalenessThresholds,
+  now: Date,
+): boolean {
+  const thresholdDays = thresholds[provenanceThresholdKey(row.field)];
+  const verifiedMs = new Date(row.verifiedAt).getTime();
+  const ageDays = (now.getTime() - verifiedMs) / DAY_MS;
+  const pastThreshold = thresholdDays != null && ageDays > thresholdDays;
+  const expired = row.expiresAt != null && now.getTime() > new Date(row.expiresAt).getTime();
+  return pastThreshold || expired;
+}
+
 /** Stable display order for the freshness facts. */
 const FIELD_ORDER = ["name", "price_band", "address", "hours", "menu"];
 
@@ -46,27 +62,19 @@ function isoDate(iso: string): string {
   return iso.slice(0, 10);
 }
 
-const DAY_MS = 24 * 60 * 60 * 1000;
-
 export function computeFreshness(
   rows: ProvenanceRow[],
   thresholds: StalenessThresholds,
   now: Date,
   locale: Locale,
 ): FreshnessDTO {
-  const nowMs = now.getTime();
   const facts = rows
     .map((row) => {
-      const thresholdDays = thresholds[thresholdKey(row.field)];
-      const verifiedMs = new Date(row.verifiedAt).getTime();
-      const ageDays = (nowMs - verifiedMs) / DAY_MS;
-      const pastThreshold = thresholdDays != null && ageDays > thresholdDays;
-      const expired = row.expiresAt != null && nowMs > new Date(row.expiresAt).getTime();
       return {
         field: row.field,
         label: provenanceFactLabel(row.field, locale),
         verifiedDate: isoDate(row.verifiedAt),
-        isStale: pastThreshold || expired,
+        isStale: isProvenanceStale(row, thresholds, now),
       };
     })
     .sort((a, b) => {

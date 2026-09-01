@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { computeFreshness, type ProvenanceRow } from "@/lib/public-read/freshness";
+import {
+  computeFreshness,
+  isProvenanceStale,
+  provenanceThresholdKey,
+  type ProvenanceRow,
+} from "@/lib/public-read/freshness";
 
 /**
  * Freshness summary (D15). Injected `now` makes staleness deterministic. Also pins the
@@ -48,5 +53,19 @@ describe("computeFreshness", () => {
       "en",
     );
     expect(out.facts.map((f) => f.label)).toEqual(["Business details", "Location", "Hours"]);
+  });
+});
+
+describe("shared provenance freshness rules", () => {
+  it("uses the same configured field groups for the public surface and staff dashboard", () => {
+    expect(provenanceThresholdKey("price_band")).toBe("price");
+    expect(provenanceThresholdKey("content")).toBe("menu");
+    expect(provenanceThresholdKey("phone")).toBe("business_fact");
+  });
+
+  it("treats the exact threshold day as current and the next moment as stale", () => {
+    const provenance = row("hours", "2026-04-12T00:00:00Z");
+    expect(isProvenanceStale(provenance, THRESHOLDS, NOW)).toBe(false);
+    expect(isProvenanceStale(provenance, THRESHOLDS, new Date("2026-07-11T00:00:01Z"))).toBe(true);
   });
 });

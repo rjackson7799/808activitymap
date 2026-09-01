@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { ArrowUpRight, History, MapPinned, MessageSquareText, ShieldCheck, Tags } from "lucide-react";
+import { ArrowUpRight, Clock3, History, MapPinned, MessageSquareText, ShieldCheck, Tags } from "lucide-react";
 import { AuthzError, STAFF_ROLES } from "@/lib/auth/claims";
 import { requireRole } from "@/lib/auth/require-role";
 
@@ -40,7 +40,7 @@ export default async function AdminPage() {
           <p className="mt-1 text-sm text-secondary">Choose an area to review or update.</p>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           <WorkspaceCard
             href="/admin/taxonomy"
             title="Taxonomy"
@@ -52,6 +52,12 @@ export default async function AdminPage() {
             title="Listings"
             description="Review publication status and locale readiness."
             icon={<MapPinned aria-hidden="true" className="h-5 w-5" />}
+          />
+          <WorkspaceCard
+            href="/admin/freshness"
+            title="Freshness"
+            description="Monitor approved facts against their review windows."
+            icon={<Clock3 aria-hidden="true" className="h-5 w-5" />}
           />
           <WorkspaceCard
             href="/admin/change-requests"
