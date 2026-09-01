@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { ArrowUpRight, MapPinned, MessageSquareText, ShieldCheck, Tags } from "lucide-react";
+import { ArrowUpRight, History, MapPinned, MessageSquareText, ShieldCheck, Tags } from "lucide-react";
 import { AuthzError, STAFF_ROLES } from "@/lib/auth/claims";
 import { requireRole } from "@/lib/auth/require-role";
 
@@ -40,7 +40,7 @@ export default async function AdminPage() {
           <p className="mt-1 text-sm text-secondary">Choose an area to review or update.</p>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           <WorkspaceCard
             href="/admin/taxonomy"
             title="Taxonomy"
@@ -58,6 +58,12 @@ export default async function AdminPage() {
             title="Corrections"
             description="Process community-submitted listing corrections."
             icon={<MessageSquareText aria-hidden="true" className="h-5 w-5" />}
+          />
+          <WorkspaceCard
+            href="/admin/audit"
+            title="Audit log"
+            description="Review immutable staff and system activity."
+            icon={<History aria-hidden="true" className="h-5 w-5" />}
           />
         </div>
       </section>
