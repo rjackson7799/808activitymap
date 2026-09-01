@@ -63,7 +63,7 @@ export interface UiStrings {
 
 const en: UiStrings = {
   browse: "Browse Waikīkī",
-  browseIntro: "Locals-verified places, current details, and approved menus for choosing with confidence.",
+  browseIntro: "Local picks, current details, approved menus.",
   categoryIntro: (category, count) => `${count} verified ${category.toLowerCase()} ${count === 1 ? "place" : "places"} to explore.`,
   browseEmptyTitle: "New places are being verified",
   browseEmptyBody: "Our local team is preparing verified recommendations. Please check back soon.",
@@ -118,7 +118,7 @@ const en: UiStrings = {
 
 const ja: UiStrings = {
   browse: "ワイキキを見る",
-  browseIntro: "地元で確認した店舗情報と承認済みメニューで、安心してお店を選べます。",
+  browseIntro: "地元のおすすめ、最新情報、承認済みメニュー。",
   categoryIntro: (category, count) => `${category}の確認済み店舗 ${count}件をご紹介します。`,
   browseEmptyTitle: "新しい店舗を確認中です",
   browseEmptyBody: "地元チームが確認済みのおすすめ情報を準備しています。しばらくしてからもう一度ご覧ください。",
@@ -176,7 +176,7 @@ const ko: UiStrings = {
   ...en,
   home: "홈",
   browse: "와이키키 둘러보기",
-  browseIntro: "현지에서 확인한 장소 정보와 승인된 메뉴로 안심하고 선택하세요.",
+  browseIntro: "현지 추천, 최신 정보, 승인된 메뉴.",
   categoryIntro: (category, count) => `확인된 ${category} 장소 ${count}곳을 둘러보세요.`,
   browseEmptyTitle: "새로운 장소를 확인하고 있습니다",
   browseEmptyBody: "현지 팀이 확인된 추천 정보를 준비하고 있습니다. 잠시 후 다시 확인해 주세요.",

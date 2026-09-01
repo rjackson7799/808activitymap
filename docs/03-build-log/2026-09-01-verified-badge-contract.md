@@ -22,3 +22,4 @@ Aligned the public `Verified Local` badge with PRD D15. A listing now earns the 
 - The full local migration chain and seed complete successfully.
 - Database coverage verifies the seven required evidence facts and the public DTO's verified result.
 - The production build and 45-test browser suite pass, including desktop/mobile layout, English/Japanese typography, accessibility, no-JavaScript rendering, and public leakage checks.
+- CI's strict 2.5-second homepage LCP budget was preserved. Placeholder hero copy was tightened across EN/JA/KO to keep the mobile introduction compact, and hidden Lighthouse traces are now retained when that gate fails.

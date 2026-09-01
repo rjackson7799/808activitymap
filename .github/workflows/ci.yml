@@ -131,4 +131,5 @@ jobs:
           path: |
             playwright-report/
             .lighthouse/
+          include-hidden-files: true
           retention-days: 7
