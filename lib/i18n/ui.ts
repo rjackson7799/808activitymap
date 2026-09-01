@@ -47,6 +47,8 @@ export interface UiStrings {
   verifiedOn: (date: string) => string;
   stale: string;
   verifiedLocal: string;
+  verificationDue: string;
+  verificationInProgress: string;
   locallyOwned: string;
   temporarilyClosed: string;
   aiReady: string;
@@ -100,6 +102,8 @@ const en: UiStrings = {
   verifiedOn: (date) => `verified ${date}`,
   stale: "due for a re-check",
   verifiedLocal: "Verified Local",
+  verificationDue: "Verification due for review",
+  verificationInProgress: "Verification in progress",
   locallyOwned: "Locally Owned",
   temporarilyClosed: "Temporarily closed",
   aiReady: "AI-ready — findable & citable",
@@ -153,6 +157,8 @@ const ja: UiStrings = {
   verifiedOn: (date) => `${date}に確認`,
   stale: "再確認予定",
   verifiedLocal: "地元確認済み",
+  verificationDue: "確認情報を再確認中",
+  verificationInProgress: "確認作業中",
   locallyOwned: "地元経営",
   temporarilyClosed: "臨時休業中",
   aiReady: "AI対応 — 見つけやすく引用しやすい",
@@ -179,6 +185,8 @@ const ko: UiStrings = {
   viewDetails: "자세히 보기",
   skipToContent: "본문으로 건너뛰기",
   languageLabel: "언어",
+  verificationDue: "확인 정보 재검토 중",
+  verificationInProgress: "확인 진행 중",
   localTipLabel: "현지인의 한마디",
   aboutTitle: (name) => `${name} 소개`,
   notFoundTitle: "페이지를 찾을 수 없습니다",

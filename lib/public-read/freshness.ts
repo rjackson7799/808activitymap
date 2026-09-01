@@ -20,6 +20,19 @@ export interface ProvenanceRow {
 }
 
 export type StalenessThresholds = Record<string, number>; // key → days
+export interface BadgeFreshnessRules {
+  badge_fields: string[];
+  suspend_on_stale: boolean;
+}
+
+export type BadgeStatus = "verified" | "stale" | "incomplete";
+
+/** Map stored provenance to the public badge's semantic fact names. */
+export function provenanceBadgeKey(row: Pick<ProvenanceRow, "targetTable" | "field">): string {
+  if (row.targetTable === "media" && row.field === "rights") return "photo";
+  if (row.field === "price_band") return "price";
+  return row.field;
+}
 
 /** Map a provenance field to its staleness-threshold key (config: staleness_thresholds_days). */
 export function provenanceThresholdKey(field: string): string {
@@ -67,8 +80,12 @@ export function computeFreshness(
   thresholds: StalenessThresholds,
   now: Date,
   locale: Locale,
-): FreshnessDTO {
+): Omit<FreshnessDTO, "badgeStatus"> {
   const facts = rows
+    // The badge evaluates the complete evidence set separately. This public summary
+    // stays concise and avoids repeating a generic label for geo, phone, photo rights,
+    // and category evidence.
+    .filter((row) => FIELD_ORDER.includes(row.field))
     .map((row) => {
       return {
         field: row.field,
@@ -85,4 +102,27 @@ export function computeFreshness(
     .map(({ label, verifiedDate, isStale }) => ({ label, verifiedDate, isStale }));
 
   return { facts, anyStale: facts.some((f) => f.isStale) };
+}
+
+/**
+ * A listing earns the badge only when every required semantic fact has at least one
+ * current approved provenance row. Multiple photos are an any-fresh set: one current,
+ * rights-cleared photo is sufficient even if an older attached photo is stale.
+ */
+export function computeBadgeStatus(
+  rows: ProvenanceRow[],
+  thresholds: StalenessThresholds,
+  rules: BadgeFreshnessRules,
+  now: Date,
+): BadgeStatus {
+  let hasStaleRequiredFact = false;
+
+  for (const requiredField of rules.badge_fields) {
+    const matching = rows.filter((row) => provenanceBadgeKey(row) === requiredField);
+    if (matching.length === 0) return "incomplete";
+    if (matching.some((row) => !isProvenanceStale(row, thresholds, now))) continue;
+    hasStaleRequiredFact = true;
+  }
+
+  return rules.suspend_on_stale && hasStaleRequiredFact ? "stale" : "verified";
 }

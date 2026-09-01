@@ -96,6 +96,7 @@ test.describe("journey + structured data + a11y", () => {
     // Listing
     await expect(page).toHaveURL(/\/spot\/aloha-ramen-hale$/);
     await expect(page.getByRole("heading", { level: 1, name: "Aloha Ramen Hale" })).toBeVisible();
+    await expect(page.getByText("Verified Local", { exact: false })).toBeVisible();
     await expect(page.getByRole("link", { name: /Directions/ })).toHaveAttribute("href", /google\.com\/maps/);
     expect((await new AxeBuilder({ page }).analyze()).violations, "axe on listing").toEqual([]);
     // JSON-LD Restaurant present
@@ -110,6 +111,7 @@ test.describe("journey + structured data + a11y", () => {
     await page.getByRole("link", { name: "日本語" }).click();
     await expect(page).toHaveURL(/\/ja\/spot\//);
     await expect(page.locator("html")).toHaveAttribute("lang", "ja");
+    await expect(page.getByText("地元確認済み", { exact: false })).toBeVisible();
   });
 
   test("public layouts fit mobile and Japanese uses its locale type family", async ({ page }) => {

@@ -1,5 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { env } from "@/config/env";
+import type { AppConfig } from "@/config/app-config";
 import type { Locale } from "@/lib/locales";
 import { loadAppConfig } from "./config";
 import type {
@@ -22,7 +23,7 @@ import {
   resolveName,
   resolveSeo,
 } from "./fallback";
-import { computeFreshness, type ProvenanceRow } from "./freshness";
+import { computeBadgeStatus, computeFreshness, type ProvenanceRow } from "./freshness";
 import { categoryPath, homePath, listingPath } from "./paths";
 
 /**
@@ -237,7 +238,7 @@ async function fetchFreshness(
   listingId: string,
   locationId: string,
   locale: Locale,
-  thresholds: Record<string, number>,
+  config: Pick<AppConfig, "staleness_thresholds_days" | "badge_freshness_rules">,
   menuApprovedAt: string | null,
 ) {
   const { data } = await client
@@ -251,10 +252,37 @@ async function fetchFreshness(
   const rows: ProvenanceRow[] = ((data ?? []) as { target_table: string; field: string; verified_at: string; expires_at: string | null }[]).map(
     (r) => ({ targetTable: r.target_table, field: r.field, verifiedAt: r.verified_at, expiresAt: r.expires_at }),
   );
+
+  // Photo rights are provenance on media, not on the listing. Only evidence attached
+  // to this listing can satisfy the D15 “≥1 photo” badge requirement.
+  const { data: attachments } = await client
+    .from("listing_media")
+    .select("media_id")
+    .eq("listing_id", listingId);
+  const mediaIds = ((attachments ?? []) as { media_id: string }[]).map((row) => row.media_id);
+  if (mediaIds.length > 0) {
+    const { data: mediaProvenance } = await client
+      .from("provenance")
+      .select("target_table, field, verified_at, expires_at")
+      .eq("target_table", "media")
+      .eq("field", "rights")
+      .eq("is_current", true)
+      .eq("approval_status", "approved")
+      .in("target_id", mediaIds);
+    rows.push(
+      ...((mediaProvenance ?? []) as { target_table: string; field: string; verified_at: string; expires_at: string | null }[]).map(
+        (r) => ({ targetTable: r.target_table, field: r.field, verifiedAt: r.verified_at, expiresAt: r.expires_at }),
+      ),
+    );
+  }
   if (menuApprovedAt) {
     rows.push({ targetTable: "menu_versions", field: "menu", verifiedAt: menuApprovedAt, expiresAt: null });
   }
-  return computeFreshness(rows, thresholds, new Date(), locale);
+  const now = new Date();
+  return {
+    ...computeFreshness(rows, config.staleness_thresholds_days, now, locale),
+    badgeStatus: computeBadgeStatus(rows, config.staleness_thresholds_days, config.badge_freshness_rules, now),
+  };
 }
 
 export async function getListingDTO(
@@ -366,7 +394,7 @@ export async function getListingDTO(
     listingId,
     l.location_id,
     locale,
-    config.staleness_thresholds_days,
+    config,
     approvedAt,
   );
 
