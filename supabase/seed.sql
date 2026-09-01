@@ -74,6 +74,8 @@ insert into public.app_config (key, value, description) values
    'Fixed-window rate limits for public endpoints'),
   ('correction_rate_limits', '{"per_ip":5,"per_session":3}',
    'Fixed-window rate limits for public correction intake'),
+  ('business_inquiry_rate_limits', '{"per_ip":4,"per_session":2}',
+   'Fixed-window rate limits for public business-interest intake'),
   ('retention_days',
    '{"events":730,"ip_abuse":90,"claim_evidence":730}',
    'Retention obligations (PRD §19)')

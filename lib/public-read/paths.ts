@@ -66,6 +66,10 @@ export function reportChangePath(locale: Locale, listingId?: string): string {
   return listingId ? `${base}?listing=${encodeURIComponent(listingId)}` : base;
 }
 
+export function forBusinessPath(locale: Locale): string {
+  return `${localePrefix(locale)}/for-business`;
+}
+
 /**
  * Absolute URL for canonicals, hreflang, sitemaps, and JSON-LD. `origin` is derived from
  * PORTAL_DOMAIN (never the request/staging host). Native-script path segments are
