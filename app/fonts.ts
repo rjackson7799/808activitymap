@@ -17,8 +17,11 @@ export const marcellus = Marcellus({
 export const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-plus-jakarta",
-  // Avoid a late body-font swap becoming LCP on constrained mobile networks.
+  // The homepage LCP is body copy. Let constrained first visits use the
+  // adjusted system fallback instead of competing with critical CSS for a
+  // font that is already optional; normal/cached visits still use Jakarta.
   display: "optional",
+  preload: false,
 });
 
 /** Combined variable classes to apply on <html>. */

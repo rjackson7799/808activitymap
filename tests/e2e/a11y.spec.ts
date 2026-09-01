@@ -65,6 +65,7 @@ test("admin pages are axe-clean; taxonomy form is keyboard-operable with visible
     "/admin/taxonomy",
     "/admin/listings",
     "/admin/change-requests",
+    "/admin/audit",
     `/admin/listings/${FIXTURE.listing}`,
     "/login/mfa", // reachable with a session — challenge UI must be a11y-clean too
   ];
@@ -115,4 +116,11 @@ test("admin pages are axe-clean; taxonomy form is keyboard-operable with visible
     () => document.documentElement.scrollWidth > window.innerWidth,
   );
   expect(correctionsOverflowMobileViewport, "corrections should not overflow the mobile viewport").toBe(false);
+
+  await page.goto("/admin/audit");
+  await expect(page.getByRole("heading", { name: "Audit log", exact: true })).toBeVisible();
+  const auditOverflowsMobileViewport = await page.evaluate(
+    () => document.documentElement.scrollWidth > window.innerWidth,
+  );
+  expect(auditOverflowsMobileViewport, "audit log should not overflow the mobile viewport").toBe(false);
 });

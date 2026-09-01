@@ -9,6 +9,7 @@ const items = [
   { href: "/admin/taxonomy", label: "Taxonomy" },
   { href: "/admin/listings", label: "Listings" },
   { href: "/admin/change-requests", label: "Corrections" },
+  { href: "/admin/audit", label: "Audit log" },
 ] as const;
 
 export function AdminNav() {
