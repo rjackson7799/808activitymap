@@ -9,6 +9,7 @@ import { localeAlternatesMeta } from "@/lib/public-read/metadata";
 import type { LocaleAlternate } from "@/lib/public-read/queries";
 import { SiteHeader } from "@/components/public/SiteHeader";
 import { PublicFooter } from "@/components/public/PublicFooter";
+import { PublicEmptyState } from "@/components/public/PublicEmptyState";
 
 export const dynamicParams = true;
 export const revalidate = 3600;
@@ -60,22 +61,28 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           </div>
         </section>
 
-        <ul className="mx-auto grid max-w-6xl grid-cols-1 gap-4 px-4 py-8 sm:grid-cols-2 sm:px-6 sm:py-10 lg:grid-cols-3">
-          {home.categories.map((category) => (
-            <li key={category.slug}>
-              <a
-                href={categoryPath(locale, category.slug)}
-                className="group flex min-h-28 items-center justify-between rounded-card border border-hairline bg-surface px-5 py-6 shadow-card transition hover:-translate-y-0.5 hover:shadow-lift"
-              >
-                <span>
-                  <span className="font-serif text-xl text-ink">{category.label}</span>
-                  <span className="mt-2 block text-[12px] font-semibold text-secondary">{category.count}</span>
-                </span>
-                <span className="grid size-9 place-items-center rounded-full bg-field text-teal-dark transition group-hover:bg-info-bg" aria-hidden>→</span>
-              </a>
-            </li>
-          ))}
-        </ul>
+        {home.categories.length > 0 ? (
+          <ul className="mx-auto grid max-w-6xl grid-cols-1 gap-4 px-4 py-8 sm:grid-cols-2 sm:px-6 sm:py-10 lg:grid-cols-3">
+            {home.categories.map((category) => (
+              <li key={category.slug}>
+                <a
+                  href={categoryPath(locale, category.slug)}
+                  className="group flex min-h-28 items-center justify-between rounded-card border border-hairline bg-surface px-5 py-6 shadow-card transition hover:-translate-y-0.5 hover:shadow-lift"
+                >
+                  <span>
+                    <span className="font-serif text-xl text-ink">{category.label}</span>
+                    <span className="mt-2 block text-[12px] font-semibold text-secondary">{category.count}</span>
+                  </span>
+                  <span className="grid size-9 place-items-center rounded-full bg-field text-teal-dark transition group-hover:bg-info-bg" aria-hidden>→</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
+            <PublicEmptyState title={strings.browseEmptyTitle} body={strings.browseEmptyBody} />
+          </div>
+        )}
       </main>
       <PublicFooter brand={brand} strings={strings} locale={locale} />
     </>
