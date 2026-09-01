@@ -11,7 +11,11 @@ export const marcellus = Marcellus({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-marcellus",
-  display: "swap",
+  // Keep the branded face preloaded, but do not repaint the homepage heading
+  // after the strict mobile LCP window on a constrained first visit. Normal and
+  // cached visits still render Marcellus; slow first visits retain its adjusted
+  // metric-compatible fallback instead of turning a font swap into the LCP event.
+  display: "optional",
 });
 
 export const plusJakarta = Plus_Jakarta_Sans({
