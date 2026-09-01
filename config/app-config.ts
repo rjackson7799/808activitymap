@@ -313,6 +313,14 @@ export const APP_CONFIG_REGISTRY = {
     }),
     devDefault: { per_ip: 5, per_session: 3 },
   }),
+  business_inquiry_rate_limits: entry({
+    description: "Fixed-window rate limits for public business-interest intake. Writes fail closed if the limiter is unavailable.",
+    schema: z.object({
+      per_ip: z.number().int().positive(),
+      per_session: z.number().int().positive(),
+    }),
+    devDefault: { per_ip: 4, per_session: 2 },
+  }),
   retention_days: entry({
     description:
       "Data-retention obligations (PRD §19): events rows, hashed-IP/abuse data (90d), claim evidence (24mo). Enforcement jobs arrive with their surfaces; values are contract now.",
