@@ -53,6 +53,7 @@ export interface UiStrings {
   errorTitle: string;
   errorBody: string;
   retry: string;
+  loading: string;
 }
 
 const en: UiStrings = {
@@ -102,6 +103,7 @@ const en: UiStrings = {
   errorTitle: "We couldn’t load this page",
   errorBody: "Something unexpected happened. Try again, or return to browse.",
   retry: "Try again",
+  loading: "Loading page…",
 };
 
 const ja: UiStrings = {
@@ -151,6 +153,7 @@ const ja: UiStrings = {
   errorTitle: "ページを読み込めませんでした",
   errorBody: "問題が発生しました。もう一度試すか、店舗一覧に戻ってください。",
   retry: "もう一度試す",
+  loading: "ページを読み込んでいます…",
 };
 
 // KO mirrors EN copy until Slice 2 localizes it; never served pre-flip.
@@ -170,6 +173,7 @@ const ko: UiStrings = {
   errorTitle: "페이지를 불러올 수 없습니다",
   errorBody: "문제가 발생했습니다. 다시 시도하거나 둘러보기로 돌아가세요.",
   retry: "다시 시도",
+  loading: "페이지를 불러오는 중…",
 };
 
 const STRINGS: Record<Locale, UiStrings> = { en, ja, ko };
