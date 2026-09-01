@@ -15,6 +15,7 @@ import { SiteHeader } from "@/components/public/SiteHeader";
 import { PublicFooter } from "@/components/public/PublicFooter";
 import { Breadcrumbs } from "@/components/public/Breadcrumbs";
 import { ListingCard } from "@/components/public/ListingCard";
+import { PublicEmptyState } from "@/components/public/PublicEmptyState";
 
 export const dynamicParams = true;
 export const revalidate = 3600;
@@ -79,13 +80,24 @@ export default async function CategoryPage({
             <h1 className="mt-2 font-serif text-[2rem] leading-tight text-ink sm:text-[2.625rem]">{category.label}</h1>
             <p className="mt-3 text-[14px] leading-relaxed text-secondary">{strings.categoryIntro(category.label, category.listings.length)}</p>
           </div>
-        <ul className="mt-8 grid grid-cols-1 gap-5 lg:grid-cols-2">
-          {category.listings.map((listing) => (
-            <li key={listing.slug}>
-              <ListingCard locale={locale} listing={listing} viewDetailsLabel={strings.viewDetails} />
-            </li>
-          ))}
-        </ul>
+          {category.listings.length > 0 ? (
+            <ul className="mt-8 grid grid-cols-1 gap-5 lg:grid-cols-2">
+              {category.listings.map((listing) => (
+                <li key={listing.slug}>
+                  <ListingCard locale={locale} listing={listing} viewDetailsLabel={strings.viewDetails} />
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="mt-8">
+              <PublicEmptyState
+                title={strings.categoryEmptyTitle}
+                body={strings.categoryEmptyBody(category.label)}
+                actionHref={homePath(locale)}
+                actionLabel={strings.browse}
+              />
+            </div>
+          )}
         </div>
       </main>
       <PublicFooter brand={brand} strings={strings} locale={locale} />
