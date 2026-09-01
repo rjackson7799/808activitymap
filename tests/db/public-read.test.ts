@@ -100,6 +100,7 @@ describe("getListingDTO — listing A (reference fixture)", () => {
     // Provenance freshness: facts present, none stale (seed verified ~now).
     expect(dto!.provenance.facts.map((f) => f.label)).toContain("Hours");
     expect(dto!.provenance.anyStale).toBe(false);
+    expect(dto!.provenance.badgeStatus).toBe("verified");
     assertNoCanaries(dto);
   });
 

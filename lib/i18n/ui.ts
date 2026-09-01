@@ -47,6 +47,8 @@ export interface UiStrings {
   verifiedOn: (date: string) => string;
   stale: string;
   verifiedLocal: string;
+  verificationDue: string;
+  verificationInProgress: string;
   locallyOwned: string;
   temporarilyClosed: string;
   aiReady: string;
@@ -61,7 +63,7 @@ export interface UiStrings {
 
 const en: UiStrings = {
   browse: "Browse Waikīkī",
-  browseIntro: "Locals-verified places, current details, and approved menus for choosing with confidence.",
+  browseIntro: "Local picks, current details, approved menus.",
   categoryIntro: (category, count) => `${count} verified ${category.toLowerCase()} ${count === 1 ? "place" : "places"} to explore.`,
   browseEmptyTitle: "New places are being verified",
   browseEmptyBody: "Our local team is preparing verified recommendations. Please check back soon.",
@@ -100,6 +102,8 @@ const en: UiStrings = {
   verifiedOn: (date) => `verified ${date}`,
   stale: "due for a re-check",
   verifiedLocal: "Verified Local",
+  verificationDue: "Verification due for review",
+  verificationInProgress: "Verification in progress",
   locallyOwned: "Locally Owned",
   temporarilyClosed: "Temporarily closed",
   aiReady: "AI-ready — findable & citable",
@@ -114,7 +118,7 @@ const en: UiStrings = {
 
 const ja: UiStrings = {
   browse: "ワイキキを見る",
-  browseIntro: "地元で確認した店舗情報と承認済みメニューで、安心してお店を選べます。",
+  browseIntro: "地元のおすすめ、最新情報、承認済みメニュー。",
   categoryIntro: (category, count) => `${category}の確認済み店舗 ${count}件をご紹介します。`,
   browseEmptyTitle: "新しい店舗を確認中です",
   browseEmptyBody: "地元チームが確認済みのおすすめ情報を準備しています。しばらくしてからもう一度ご覧ください。",
@@ -153,6 +157,8 @@ const ja: UiStrings = {
   verifiedOn: (date) => `${date}に確認`,
   stale: "再確認予定",
   verifiedLocal: "地元確認済み",
+  verificationDue: "確認情報を再確認中",
+  verificationInProgress: "確認作業中",
   locallyOwned: "地元経営",
   temporarilyClosed: "臨時休業中",
   aiReady: "AI対応 — 見つけやすく引用しやすい",
@@ -170,7 +176,7 @@ const ko: UiStrings = {
   ...en,
   home: "홈",
   browse: "와이키키 둘러보기",
-  browseIntro: "현지에서 확인한 장소 정보와 승인된 메뉴로 안심하고 선택하세요.",
+  browseIntro: "현지 추천, 최신 정보, 승인된 메뉴.",
   categoryIntro: (category, count) => `확인된 ${category} 장소 ${count}곳을 둘러보세요.`,
   browseEmptyTitle: "새로운 장소를 확인하고 있습니다",
   browseEmptyBody: "현지 팀이 확인된 추천 정보를 준비하고 있습니다. 잠시 후 다시 확인해 주세요.",
@@ -179,6 +185,8 @@ const ko: UiStrings = {
   viewDetails: "자세히 보기",
   skipToContent: "본문으로 건너뛰기",
   languageLabel: "언어",
+  verificationDue: "확인 정보 재검토 중",
+  verificationInProgress: "확인 진행 중",
   localTipLabel: "현지인의 한마디",
   aboutTitle: (name) => `${name} 소개`,
   notFoundTitle: "페이지를 찾을 수 없습니다",

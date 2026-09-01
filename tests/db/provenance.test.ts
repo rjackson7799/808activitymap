@@ -10,6 +10,9 @@ import { LISTING, LOC } from "./fixtures";
 describe("current/history semantics", () => {
   it("upsert supersedes: one current row, full history preserved", async () => {
     await withRollback(async (tx) => {
+      const before = await tx`
+        select count(*)::integer as count from provenance
+        where target_table = 'locations' and target_id = ${LOC.ramen} and field = 'phone'`;
       await tx`select upsert_provenance('locations', ${LOC.ramen}::uuid, 'phone', 'vendor', 'callback')`;
       await tx`select upsert_provenance('locations', ${LOC.ramen}::uuid, 'phone', 'editor', 'in_person_visit')`;
       await tx`select upsert_provenance('locations', ${LOC.ramen}::uuid, 'phone', 'vendor', 'callback')`;
@@ -18,9 +21,9 @@ describe("current/history semantics", () => {
         select supplied_by, is_current from provenance
         where target_table = 'locations' and target_id = ${LOC.ramen} and field = 'phone'
         order by created_at`;
-      expect(all).toHaveLength(3);
+      expect(all).toHaveLength(before[0]!.count + 3);
       expect(all.filter((r) => r.is_current)).toHaveLength(1);
-      expect(all[2]!.is_current).toBe(true);
+      expect(all.at(-1)!.is_current).toBe(true);
     });
   });
 

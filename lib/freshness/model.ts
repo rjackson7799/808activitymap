@@ -1,7 +1,7 @@
 import type { AppConfig } from "@/config/app-config";
 import {
   isProvenanceStale,
-  provenanceThresholdKey,
+  provenanceBadgeKey,
   type StalenessThresholds,
 } from "@/lib/public-read/freshness";
 
@@ -63,7 +63,7 @@ export function buildFreshnessDashboard(
   for (const row of provenance) {
     const listingIds = listingIdsByTarget.get(`${row.targetTable}:${row.targetId}`) ?? [];
     const isStale = isProvenanceStale(row, config.staleness_thresholds_days, now);
-    const affectsBadge = config.badge_freshness_rules.badge_fields.includes(provenanceThresholdKey(row.field));
+    const affectsBadge = config.badge_freshness_rules.badge_fields.includes(provenanceBadgeKey(row));
     for (const listingId of listingIds) {
       const fact: FreshnessFact = {
         id: row.id,

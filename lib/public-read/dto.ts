@@ -65,6 +65,8 @@ export interface FreshnessFact {
 export interface FreshnessDTO {
   facts: FreshnessFact[];
   anyStale: boolean;
+  /** D15 badge contract: verified only when every configured required fact is current. */
+  badgeStatus: "verified" | "stale" | "incomplete";
 }
 
 export interface HoursSpan {

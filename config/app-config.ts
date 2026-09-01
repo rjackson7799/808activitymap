@@ -50,7 +50,7 @@ export const APP_CONFIG_REGISTRY = {
       suspend_on_stale: z.boolean(),
     }),
     devDefault: {
-      badge_fields: ["hours", "price"],
+      badge_fields: ["name", "address", "geo", "phone", "hours", "photo", "primary_category"],
       suspend_on_stale: true,
     },
   }),

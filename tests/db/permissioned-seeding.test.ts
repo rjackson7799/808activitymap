@@ -71,6 +71,18 @@ describe("permissioned dossier loader", () => {
       await tx`select load_permissioned_dossier(${tx.json(payload(true))}::jsonb)`;
       const rows = await tx`select approval_status, evidence_media_id from provenance where target_id=${ids.listing} and field='name' and is_current`;
       expect(rows).toEqual([{ approval_status: "approved", evidence_media_id: evidence }]);
+      const badgeEvidence = await tx`
+        select target_table, field, approval_status, evidence_media_id
+        from provenance
+        where is_current and (
+          (target_id=${ids.listing} and field in ('name', 'primary_category'))
+          or (target_id=${ids.location} and field in ('address', 'geo', 'phone', 'hours'))
+          or (target_id=${photo} and field='rights')
+        )
+        order by target_table, field
+      `;
+      expect(badgeEvidence).toHaveLength(7);
+      expect(badgeEvidence.every((fact) => fact.approval_status === "approved" && fact.evidence_media_id === evidence)).toBe(true);
       const media = await tx`select moderation_status, rights->>'license' as license from media where id=${photo}`;
       expect(media).toEqual([{ moderation_status: "approved", license: "agreement" }]);
 
