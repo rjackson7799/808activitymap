@@ -42,6 +42,8 @@ test("editor records external menu approval from the Phase 0 approval queue", as
 
     await page.setViewportSize({ width: 390, height: 844 });
     await page.reload();
+    await expect(page.getByRole("heading", { name: "Menu approvals", exact: true })).toBeVisible();
+    await page.waitForLoadState("networkidle");
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
     expect((await new AxeBuilder({ page }).analyze()).violations, "axe on mobile approval queue").toEqual([]);
   } finally {
