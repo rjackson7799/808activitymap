@@ -96,6 +96,21 @@ function mapRaiseMessage(message: string): MappedError | null {
       message: "That inquiry is no longer available. Refresh the queue.",
     };
   }
+  if (message.includes("qa_item_claimed")) {
+    return { code: "qa_item_claimed", message: "Another reviewer already claimed this item. Refresh the queue." };
+  }
+  if (message.includes("qa_item_unavailable")) {
+    return { code: "qa_item_unavailable", message: "This item is no longer awaiting QA. Refresh the queue." };
+  }
+  if (message.includes("qa_session_active")) {
+    return { code: "qa_session_active", message: "Pause your current work session before starting another item." };
+  }
+  if (message.includes("qa_session_not_active")) {
+    return { code: "qa_session_not_active", message: "No active timer was found for this item." };
+  }
+  if (message.includes("menu_locale_incomplete")) {
+    return { code: "menu_locale_incomplete", message: "Confirm every translated menu item and complete all names before approval." };
+  }
   if (message.includes("permission_denied")) {
     return {
       code: "permission_denied",

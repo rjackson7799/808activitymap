@@ -49,6 +49,8 @@ const P = {
   alias: "77000000-0000-4000-8000-000000000024",
   org2: "77000000-0000-4000-8000-000000000026",
   changeRequest: "77000000-0000-4000-8000-000000000027",
+  qaAssignment: "77000000-0000-4000-8000-000000000028",
+  qaSession: "77000000-0000-4000-8000-000000000029",
 };
 const PROBE_SESSION = "77000000-0000-4000-8000-000000000099";
 const LIVE_DATABASE_ROLES = new Set([
@@ -121,6 +123,10 @@ async function seedProbeFamily(tx: TxSql): Promise<void> {
       ('${P.item}', 'ja', 'プローブ麺'), ('${P.item}', 'ko', '프로브 면');
     insert into public.slug_aliases (id, route_scope, locale, alias_slug, target_id) values
       ('${P.alias}', 'listing', 'ja', 'probe-alias', '${P.listing}');
+    insert into public.qa_assignments (id,target_type,target_id,locale,assigned_to) values
+      ('${P.qaAssignment}','menu_locale','${P.mvlJa}','ja','${P.actor}');
+    insert into public.qa_work_sessions (id,assignment_id,actor,started_at,ended_at,active_minutes,end_reason) values
+      ('${P.qaSession}','${P.qaAssignment}','${P.actor}',now()-interval '5 minutes',now(),5,'paused');
   `);
 }
 
@@ -144,6 +150,16 @@ interface WriteProbes {
 }
 
 const PROBES: Record<string, WriteProbes> = {
+  qa_assignments: {
+    update: `update qa_assignments set assigned_at = assigned_at where id = '${P.qaAssignment}'`,
+    insert: `insert into qa_assignments (target_type,target_id,locale,assigned_to) values ('listing_locale','${P.listing2}','ja','${P.other}')`,
+    del: `delete from qa_assignments where id = '${P.qaAssignment}'`,
+  },
+  qa_work_sessions: {
+    update: `update qa_work_sessions set started_at = started_at where id = '${P.qaSession}'`,
+    insert: `insert into qa_work_sessions (assignment_id,actor) values ('${P.qaAssignment}','${P.other}')`,
+    del: `delete from qa_work_sessions where id = '${P.qaSession}'`,
+  },
   app_config: {
     update: `update app_config set value = value where key = 'probe.rls'`,
     insert: `insert into app_config (key, value) values ('probe.insert', '{}'::jsonb)`,

@@ -65,6 +65,8 @@ test("admin pages are axe-clean; taxonomy form is keyboard-operable with visible
     "/admin/taxonomy",
     "/admin/listings",
     "/admin/approvals",
+    "/admin/qa/ja",
+    "/admin/qa/ko",
     "/admin/freshness",
     "/admin/change-requests",
     "/admin/audit",
@@ -126,6 +128,11 @@ test("admin pages are axe-clean; taxonomy form is keyboard-operable with visible
     () => document.documentElement.scrollWidth > window.innerWidth,
   );
   expect(approvalsOverflowMobileViewport, "menu approvals should not overflow the mobile viewport").toBe(false);
+
+  await page.goto("/admin/qa/ja");
+  await expect(page.getByRole("heading", { name: "Japanese QA queue", exact: true })).toBeVisible();
+  const qaOverflowMobileViewport = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
+  expect(qaOverflowMobileViewport, "language QA should not overflow the mobile viewport").toBe(false);
 
   await page.goto("/admin/freshness");
   await expect(page.getByRole("heading", { name: "Freshness", exact: true })).toBeVisible();

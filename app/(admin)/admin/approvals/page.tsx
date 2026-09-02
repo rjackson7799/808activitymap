@@ -39,7 +39,6 @@ export default async function ApprovalsPage() {
   const canRecord = canRecordExternalMenuApproval(claims.appRoles);
   const summary = summarizeMenuApprovals(items);
   // Queue age is intentionally evaluated at request time on this dynamic staff page.
-  // eslint-disable-next-line react-hooks/purity
   const now = new Date();
 
   return (
