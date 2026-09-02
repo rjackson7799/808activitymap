@@ -62,6 +62,13 @@ export interface DealDTO {
   sponsored: boolean;
 }
 
+export interface AffiliateLinkDTO {
+  id: string;
+  partnerKey: string;
+  partnerName: string;
+  context: "nearby_activity" | "reservation" | "transportation" | "other";
+}
+
 export interface FreshnessFact {
   /** Display label mapped from the provenance `field` (never the raw internal columns). */
   label: string;
@@ -118,6 +125,8 @@ export interface ListingDTO {
   menu: MenuDTO | null;
   /** Active, QA-approved localized offers only; reveal codes never enter this DTO. */
   deals: DealDTO[];
+  /** Active curated links only; destination URLs remain behind the measured redirect. */
+  affiliateLinks: AffiliateLinkDTO[];
   provenance: FreshnessDTO;
 }
 

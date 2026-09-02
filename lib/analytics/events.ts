@@ -107,7 +107,7 @@ export const EVENT_REGISTRY = {
     listingScoped: true,
   },
   affiliate_clickout: {
-    status: "planned", // Slice 7 — server-side redirect endpoint
+    status: "implemented", // Slice 7 — server-side redirect endpoint
     source: SERVER,
     props: z.strictObject({ partner: z.string().min(1), context: z.string().optional() }),
     listingScoped: true,

@@ -55,6 +55,8 @@ const P = {
   dealLocale: "77000000-0000-4000-8000-000000000031",
   deal2: "77000000-0000-4000-8000-000000000032",
   dealLocaleKo: "77000000-0000-4000-8000-000000000033",
+  affiliate: "77000000-0000-4000-8000-000000000034",
+  affiliate2: "77000000-0000-4000-8000-000000000035",
 };
 const PROBE_SESSION = "77000000-0000-4000-8000-000000000099";
 const LIVE_DATABASE_ROLES = new Set([
@@ -96,6 +98,9 @@ async function seedProbeFamily(tx: TxSql): Promise<void> {
     insert into public.deal_locales (id,deal_id,locale,title,terms) values
       ('${P.dealLocale}','${P.deal}','ja','プローブ特典','プローブ利用条件'),
       ('${P.dealLocaleKo}','${P.deal}','ko','프로브 혜택','프로브 이용 조건');
+    insert into public.affiliate_links (id,listing_id,partner_key,partner_name,destination_url,created_by) values
+      ('${P.affiliate}','${P.listing}','probe-partner','Probe Partner','https://example.com/probe','${P.actor}'),
+      ('${P.affiliate2}','${P.listing2}','probe-partner-2','Probe Partner 2','https://example.com/probe-2','${P.actor}');
     insert into public.listing_locales (listing_id, locale, name) values
       ('${P.listing}', 'ja', 'プローブ'), ('${P.listing}', 'ko', '프로브');
     insert into public.categories (id, market_id) values
@@ -160,6 +165,11 @@ interface WriteProbes {
 }
 
 const PROBES: Record<string, WriteProbes> = {
+  affiliate_links: {
+    update: `update affiliate_links set partner_name = partner_name where id = '${P.affiliate}'`,
+    insert: `insert into affiliate_links (listing_id,partner_key,partner_name,destination_url,created_by) values ('${P.listing2}','insert-probe','Insert Probe','https://example.com/insert','${P.actor}')`,
+    del: `delete from affiliate_links where id = '${P.affiliate2}'`,
+  },
   deals: {
     update: `update deals set reveal_code = reveal_code where id = '${P.deal}'`,
     insert: `insert into deals (listing_id,reveal_code,starts_at,expires_at,created_by) values ('${P.listing2}','NEW',now(),now()+interval '1 day','${P.actor}')`,

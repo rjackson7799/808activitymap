@@ -4,9 +4,11 @@ import { AuthzError, STAFF_ROLES } from "@/lib/auth/claims";
 import { requireRole } from "@/lib/auth/require-role";
 import { createSupabaseServerClient } from "@/lib/auth/server";
 import { ActivateForm, CreateDealForm, KillForm, LocaleForm, ReviewForm } from "./DealForms";
+import { AffiliateLinkStatusForm, CreateAffiliateLinkForm } from "./AffiliateForms";
 
 type DealLocaleRow = { id: string; locale: "en"|"ja"|"ko"; status: string; title: string; terms: string; reviewed_at: string|null };
 type DealRow = { id: string; listing_id: string; listing_name: string; status: string; reveal_code: string; sponsor_label: boolean; reveal_count: number; starts_at: string; expires_at: string; approval_evidence_media_id: string|null; locales: DealLocaleRow[] };
+type AffiliateLinkRow = { id:string; listing_id:string; listing_name:string; partner_key:string; partner_name:string; destination_url:string; context:string; status:string; sort_order:number; consecutive_failures:number; last_checked_at:string|null; last_http_status:number|null };
 
 const CREATE_ROLES = ["super_admin", "publisher", "editor", "ops_agent"] as const;
 const MANAGE_ROLES = ["super_admin", "publisher", "editor"] as const;
@@ -21,15 +23,17 @@ export default async function DealsPage() {
   const db = await createSupabaseServerClient();
   const canCreate = claims.appRoles.some((r) => CREATE_ROLES.includes(r as typeof CREATE_ROLES[number]));
   const canManage = claims.appRoles.some((r) => MANAGE_ROLES.includes(r as typeof MANAGE_ROLES[number]));
-  const [dealResult, listingResult, evidenceResult] = await Promise.all([
+  const [dealResult, listingResult, evidenceResult, affiliateResult] = await Promise.all([
     db.rpc("list_admin_deals"),
     canCreate ? db.from("listings").select("id, listing_locales(locale,name)").order("created_at", { ascending: false }) : Promise.resolve({ data: [], error: null }),
     canManage ? db.from("media").select("id,path").eq("bucket", "evidence").eq("kind", "evidence").eq("moderation_status", "approved").order("created_at", { ascending: false }) : Promise.resolve({ data: [], error: null }),
+    canManage ? db.rpc("list_admin_affiliate_links") : Promise.resolve({ data: [], error: null }),
   ]);
   const deals = (dealResult.data ?? []) as unknown as DealRow[];
   const listings = ((listingResult.data ?? []) as unknown as Array<{id:string;listing_locales:Array<{locale:string;name:string|null}>}>).map((l)=>({id:l.id,name:l.listing_locales.find((x)=>x.locale==="en")?.name ?? l.id}));
   const evidence = (evidenceResult.data ?? []) as Array<{id:string;path:string}>;
-  const error = dealResult.error ?? listingResult.error ?? evidenceResult.error;
+  const affiliateLinks = (affiliateResult.data ?? []) as unknown as AffiliateLinkRow[];
+  const error = dealResult.error ?? listingResult.error ?? evidenceResult.error ?? affiliateResult.error;
   const active = deals.filter((d)=>d.status==="active").length;
   const awaiting = deals.filter((d)=>d.status==="requested").length;
 
@@ -40,6 +44,7 @@ export default async function DealsPage() {
     {error ? <p role="alert" className="rounded-field border border-error/20 bg-error-bg p-4 text-sm text-error">Couldn&apos;t load deals: {error.message}</p>:null}
     {!error && deals.length===0 ? <div className="rounded-card border border-dashed border-hairline-strong bg-white p-8 text-center shadow-card"><h2 className="text-lg font-bold text-ink">No offers yet</h2><p className="mt-2 text-sm text-secondary">Create the first permissioned offer when vendor terms are ready.</p></div>:null}
     {!error && deals.length>0 ? <section aria-labelledby="deal-queue-heading"><h2 id="deal-queue-heading" className="mb-4 text-xl font-bold text-ink">Offer workflow</h2><div className="grid gap-5">{deals.map((deal)=><DealCard key={deal.id} deal={deal} evidence={evidence} roles={claims.appRoles} canManage={canManage}/>)}</div></section>:null}
+    {canManage ? <section aria-labelledby="affiliate-heading" className="space-y-5 border-t border-hairline pt-8"><header className="max-w-3xl"><p className="eyebrow mb-2">Tracked recommendations</p><h2 id="affiliate-heading" className="font-serif text-3xl text-ink">Affiliate links</h2><p className="mt-2 text-sm leading-6 text-secondary">Curate clearly disclosed partner links for existing listing pages. Destinations are measured through a first-party redirect and checked weekly.</p></header><div className="rounded-card border border-hairline-strong bg-white p-5 shadow-card sm:p-6"><h3 className="text-lg font-bold text-ink">Add tracked link</h3><p className="mb-5 mt-1 text-sm text-secondary">Use the partner’s final HTTPS tracking URL. Private network addresses are blocked.</p><CreateAffiliateLinkForm listings={listings}/></div>{affiliateLinks.length===0?<div className="rounded-card border border-dashed border-hairline-strong bg-white p-7 text-center"><h3 className="font-bold text-ink">No affiliate links yet</h3><p className="mt-2 text-sm text-secondary">Public listing pages omit this module until a link is added.</p></div>:<div className="grid gap-4">{affiliateLinks.map((link)=><article key={link.id} className="rounded-card border border-hairline-strong bg-white p-5 shadow-card"><div className="flex flex-wrap items-start justify-between gap-3"><div><h3 className="font-bold text-ink">{link.partner_name}</h3><p className="mt-1 text-sm text-secondary">{link.listing_name} · {humanize(link.context)} · order {link.sort_order}</p></div><Badge variant={link.status==="active"?"verified":link.status==="dead"?"error":"neutral"}>{humanize(link.status)}</Badge></div><p className="mt-3 break-all text-xs text-muted">{link.destination_url}</p><p className="mt-2 text-xs text-muted">Health: {link.last_checked_at ? `${link.last_http_status ?? "network error"} · ${link.consecutive_failures} consecutive failures` : "not checked yet"}</p><div className="mt-4"><AffiliateLinkStatusForm id={link.id} status={link.status}/></div></article>)}</div>}</section>:null}
   </div>;
 }
 

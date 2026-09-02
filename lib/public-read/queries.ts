@@ -2,6 +2,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { env } from "@/config/env";
 import type { AppConfig } from "@/config/app-config";
 import type { Locale } from "@/lib/locales";
+import { orderAffiliateLinks } from "@/lib/affiliate/order";
 import { loadAppConfig } from "./config";
 import type {
   CategoryDTO,
@@ -12,6 +13,7 @@ import type {
   ListingCardDTO,
   ListingDTO,
   DealDTO,
+  AffiliateLinkDTO,
   MenuDTO,
   PhotoDTO,
   SitemapRow,
@@ -254,6 +256,21 @@ async function fetchDeals(client: SupabaseClient, listingId: string, locale: Loc
   });
 }
 
+async function fetchAffiliateLinks(client: SupabaseClient, listingId: string): Promise<Array<AffiliateLinkDTO & { sortOrder: number }>> {
+  const { data, error } = await client
+    .from("affiliate_links")
+    .select("id,partner_key,partner_name,context,sort_order")
+    .eq("listing_id", listingId)
+    .eq("status", "active")
+    .order("sort_order", { ascending: true })
+    .order("partner_name", { ascending: true });
+  if (error) throw new Error(`affiliate links read failed: ${error.message}`);
+  type Row = { id: string; partner_key: string; partner_name: string; context: AffiliateLinkDTO["context"]; sort_order: number };
+  return ((data ?? []) as Row[]).map((row) => ({
+    id: row.id, partnerKey: row.partner_key, partnerName: row.partner_name, context: row.context, sortOrder: row.sort_order,
+  }));
+}
+
 async function fetchFreshness(
   client: SupabaseClient,
   listingId: string,
@@ -408,11 +425,14 @@ export async function getListingDTO(
   });
 
   const photos = await fetchPhotos(client, listingId, locale);
-  const [{ menu, approvedAt }, deals] = await Promise.all([
+  const [{ menu, approvedAt }, deals, affiliateRows] = await Promise.all([
     fetchMenu(client, listingId, locale),
     fetchDeals(client, listingId, locale),
+    fetchAffiliateLinks(client, listingId),
   ]);
   const config = await loadAppConfig(client);
+  const affiliateLinks = orderAffiliateLinks(affiliateRows, config.affiliate_module_ordering)
+    .map((link) => ({ id: link.id, partnerKey: link.partnerKey, partnerName: link.partnerName, context: link.context }));
   const provenance = await fetchFreshness(
     client,
     listingId,
@@ -455,6 +475,7 @@ export async function getListingDTO(
     photos,
     menu,
     deals,
+    affiliateLinks,
     provenance,
   };
 }

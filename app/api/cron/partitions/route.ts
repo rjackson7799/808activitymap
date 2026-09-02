@@ -3,6 +3,9 @@ import { env } from "@/config/env";
 import { createSupabaseServiceClient } from "@/lib/auth/server";
 import { getAppConfig } from "@/lib/public-read/server";
 import { captureError, logEvent } from "@/lib/observability/log";
+import { checkDueAffiliateLinks } from "@/lib/affiliate/server";
+import { revalidateTag } from "next/cache";
+import { TAG_PUBLIC } from "@/lib/public-read/tags";
 
 /**
  * Scheduled events maintenance (CP5). Vercel Cron invokes this with
@@ -56,6 +59,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const { data: dealStatusRows, error: dealStatusError } = await db.rpc("reconcile_deal_statuses");
     if (dealStatusError) throw dealStatusError;
     const dealStatuses = Array.isArray(dealStatusRows) ? dealStatusRows[0] : dealStatusRows;
+    const affiliateHealth = await checkDueAffiliateLinks(20);
+    if ((dealStatuses?.activated ?? 0) > 0 || (dealStatuses?.expired ?? 0) > 0 || affiliateHealth.dead > 0) {
+      revalidateTag(TAG_PUBLIC, "max");
+    }
 
     return NextResponse.json({
       ok: true,
@@ -65,6 +72,8 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       rateLimitsPruned: pruned ?? 0,
       dealsActivated: dealStatuses?.activated ?? 0,
       dealsExpired: dealStatuses?.expired ?? 0,
+      affiliateLinksChecked: affiliateHealth.checked,
+      affiliateLinksHidden: affiliateHealth.dead,
     });
   } catch (error) {
     captureError(error, { where: "cron/partitions" });
