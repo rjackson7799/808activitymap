@@ -1,8 +1,9 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { ArrowUpRight, Clock3, History, MapPinned, MessageSquareText, ShieldCheck, Tags } from "lucide-react";
+import { ArrowUpRight, BriefcaseBusiness, Clock3, History, MapPinned, MessageSquareText, ShieldCheck, Tags } from "lucide-react";
 import { AuthzError, STAFF_ROLES } from "@/lib/auth/claims";
 import { requireRole } from "@/lib/auth/require-role";
+import { canManageBusinessInquiries } from "@/lib/business-inquiries/admin";
 
 /**
  * Admin dashboard. Self-guards (the layout also guards — defense in depth;
@@ -65,6 +66,14 @@ export default async function AdminPage() {
             description="Process community-submitted listing corrections."
             icon={<MessageSquareText aria-hidden="true" className="h-5 w-5" />}
           />
+          {canManageBusinessInquiries(claims.appRoles) ? (
+            <WorkspaceCard
+              href="/admin/business-inquiries"
+              title="Business inquiries"
+              description="Follow up on interest from the public business page."
+              icon={<BriefcaseBusiness aria-hidden="true" className="h-5 w-5" />}
+            />
+          ) : null}
           <WorkspaceCard
             href="/admin/audit"
             title="Audit log"

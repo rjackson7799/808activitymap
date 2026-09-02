@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import type { Role } from "@/db/rls/matrix";
+import { canManageBusinessInquiries } from "@/lib/business-inquiries/admin";
 import { cn } from "@/lib/utils";
 
 const items = [
@@ -10,15 +12,17 @@ const items = [
   { href: "/admin/listings", label: "Listings" },
   { href: "/admin/freshness", label: "Freshness" },
   { href: "/admin/change-requests", label: "Corrections" },
+  { href: "/admin/business-inquiries", label: "Inquiries", inquiryOnly: true },
   { href: "/admin/audit", label: "Audit log" },
 ] as const;
 
-export function AdminNav() {
+export function AdminNav({ roles }: { roles: readonly Role[] }) {
   const pathname = usePathname();
+  const visibleItems = items.filter((item) => !("inquiryOnly" in item) || canManageBusinessInquiries(roles));
 
   return (
     <nav aria-label="Admin" className="-mx-2 flex min-w-0 gap-1 overflow-x-auto px-2 pb-1 lg:mx-0 lg:px-0 lg:pb-0">
-      {items.map((item) => {
+      {visibleItems.map((item) => {
         const active = item.href === "/admin" ? pathname === item.href : pathname.startsWith(item.href);
         return (
           <Link

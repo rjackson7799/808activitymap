@@ -84,6 +84,18 @@ function mapRaiseMessage(message: string): MappedError | null {
       message: "That change isn't allowed from the current state — refresh and try again.",
     };
   }
+  if (message.includes("business_inquiry_status_unchanged")) {
+    return {
+      code: "status_unchanged",
+      message: "That inquiry already has the selected status. Refresh and try again.",
+    };
+  }
+  if (message.includes("business_inquiry_not_found")) {
+    return {
+      code: "not_found",
+      message: "That inquiry is no longer available. Refresh the queue.",
+    };
+  }
   if (message.includes("permission_denied")) {
     return {
       code: "permission_denied",
