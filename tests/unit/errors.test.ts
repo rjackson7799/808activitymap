@@ -73,6 +73,11 @@ describe("mapDbError — guarded-fn RAISEs (SQLSTATE P0001, keyed on message)", 
     expect(mapped.code).toBe("invalid_transition");
   });
 
+  it("maps inquiry concurrency errors without leaking database details", () => {
+    expect(mapDbError(p0001("business_inquiry_status_unchanged")).code).toBe("status_unchanged");
+    expect(mapDbError(p0001("business_inquiry_not_found")).code).toBe("not_found");
+  });
+
   it("menu_evidence_missing → evidence-required message preserving the machine code", () => {
     const mapped = mapDbError(
       p0001("menu_evidence_missing: menu_version_locale abc (en) requires approval evidence media, approver and timestamp"),

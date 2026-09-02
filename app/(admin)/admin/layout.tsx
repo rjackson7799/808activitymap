@@ -18,8 +18,9 @@ import { signOut } from "../login/actions";
  * the guarded SECURITY DEFINER fns back it at the DB (ADR-001).
  */
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+  let claims;
   try {
-    await requireRole(STAFF_ROLES, { aal2: true });
+    claims = await requireRole(STAFF_ROLES, { aal2: true });
   } catch (e) {
     if (e instanceof AuthzError) {
       redirect(e.reason === "aal2_required" ? "/login/mfa" : "/login");
@@ -56,7 +57,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           </Link>
 
           <div className="order-3 w-full lg:order-none lg:w-auto">
-            <AdminNav />
+            <AdminNav roles={claims.appRoles} />
           </div>
 
           <form action={signOut}>
