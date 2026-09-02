@@ -10,6 +10,7 @@ const items = [
   { href: "/admin", label: "Dashboard" },
   { href: "/admin/taxonomy", label: "Taxonomy" },
   { href: "/admin/listings", label: "Listings" },
+  { href: "/admin/qa/ja", label: "Language QA", activePrefix: "/admin/qa" },
   { href: "/admin/approvals", label: "Approvals" },
   { href: "/admin/freshness", label: "Freshness" },
   { href: "/admin/change-requests", label: "Corrections" },
@@ -25,7 +26,9 @@ export function AdminNav({ roles }: { roles: readonly Role[] }) {
   return (
     <nav aria-label="Admin" className="-mx-2 flex min-w-0 gap-1 overflow-x-auto px-2 pb-1 lg:mx-0 lg:px-0 lg:pb-0">
       {visibleItems.map((item) => {
-        const active = item.href === "/admin" ? pathname === item.href : pathname.startsWith(item.href);
+        const active = item.href === "/admin"
+          ? pathname === item.href
+          : pathname.startsWith("activePrefix" in item ? item.activePrefix : item.href);
         return (
           <Link
             key={item.href}

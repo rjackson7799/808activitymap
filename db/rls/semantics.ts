@@ -532,6 +532,22 @@ const STAFF_ROLES: Role[] = [
  */
 export const EXTRA_SURFACES: ExtraSurface[] = [
   {
+    description: "All staff can read locale QA assignment and capacity records",
+    roles: STAFF_ROLES,
+    tables: ["qa_assignments", "qa_work_sessions"],
+    ops: ["select"],
+    predicate: { kind: "all" },
+    aal: "none",
+  },
+  {
+    description: "Locale QA assignment, timing, and decisions are owned by guarded functions",
+    roles: ["super_admin", "publisher", "language_reviewer_ja", "language_reviewer_ko"],
+    tables: ["qa_assignments", "qa_work_sessions"],
+    ops: [],
+    predicate: { kind: "fnOwned", fn: "claim_qa_item / start_qa_work / pause_qa_work / decide_qa_item" },
+    aal: "none",
+  },
+  {
     description: "All staff can read the correction queue for operational triage",
     roles: STAFF_ROLES,
     tables: ["change_requests"],

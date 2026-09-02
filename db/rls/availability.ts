@@ -55,6 +55,8 @@ export const LIVE_TABLES: readonly TableName[] = [
   "menu_versions",
   "organizations",
   "provenance",
+  "qa_assignments",
+  "qa_work_sessions",
   "slug_aliases",
   "user_roles",
 ];
