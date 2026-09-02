@@ -16,6 +16,7 @@ const MAX_ATTEMPTS_PER_RUN = 3;
 // Two-times slowdown models the required iPhone 12-class launch device.
 const CPU_SLOWDOWN = Number(process.env.LIGHTHOUSE_CPU_SLOWDOWN ?? 2);
 const OUTPUT_DIR = ".lighthouse";
+const CHROME_PROFILE_DIR = fileURLToPath(new URL("../.lighthouse/chrome-profile/", import.meta.url));
 
 const BUDGETS = {
   performance: 0.9,
@@ -88,11 +89,11 @@ let chrome;
 try {
   await waitForServer(`${BASE_URL}${TARGET_PATH}`);
   await mkdir(OUTPUT_DIR, { recursive: true });
-  await mkdir(`${OUTPUT_DIR}/chrome-profile`, { recursive: true });
+  await mkdir(CHROME_PROFILE_DIR, { recursive: true });
   chrome = await chromeLauncher.launch({
     chromePath: process.env.CHROME_PATH,
-    userDataDir: `${OUTPUT_DIR}/chrome-profile`,
-    chromeFlags: ["--headless", "--no-sandbox", "--disable-dev-shm-usage"],
+    userDataDir: CHROME_PROFILE_DIR,
+    chromeFlags: ["--headless=new", "--no-sandbox", "--disable-dev-shm-usage"],
   });
 
   const results = [];

@@ -27,6 +27,7 @@ describe("event dictionary — status gate", () => {
         "direction_click",
         "deal_reveal",
         "affiliate_clickout",
+        "today_note_view",
         "report_change",
       ]),
     );
@@ -41,9 +42,17 @@ describe("event dictionary — status gate", () => {
   });
 
   it("keeps deferred events as `planned` (not emittable)", () => {
-    for (const name of ["today_note_view", "menu_item_expand"] as EventName[]) {
+    for (const name of ["menu_item_expand"] as EventName[]) {
       expect(isImplemented(name)).toBe(false);
     }
+  });
+
+  it("accepts the one-second weekly editorial view contract", () => {
+    const noteId = "85000000-0000-4000-8000-000000000001";
+    expect(parseEventInput({ name: "today_note_view", props: { note_id: noteId } }, { source: "client" }))
+      .toMatchObject({ name: "today_note_view", source: "client", listingScoped: false });
+    expect(() => parseEventInput({ name: "today_note_view", props: { note_id: "not-a-uuid" } }, { source: "client" }))
+      .toThrow(/invalid props/);
   });
 });
 

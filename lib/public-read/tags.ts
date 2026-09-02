@@ -5,4 +5,5 @@
  */
 export const TAG_PUBLIC = "public";
 export const TAG_SITEMAP = "sitemap";
+export const TAG_TODAY = "today";
 export const tagForListing = (id: string) => `listing:${id}`;

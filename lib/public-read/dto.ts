@@ -156,6 +156,28 @@ export interface HomeDTO {
   categories: HomeCategoryDTO[];
 }
 
+export interface TodayListingDTO {
+  id: string;
+  slug: string;
+  name: string;
+  priceBand: string | null;
+  primaryCategory: CategoryRef;
+  photo: PhotoDTO | null;
+  neighborhood: string | null;
+  editorialNote: string | null;
+}
+
+export interface TodayDTO {
+  id: string;
+  locale: Locale;
+  weekOf: string;
+  publishedAt: string;
+  title: string;
+  dek: string;
+  body: string;
+  listings: TodayListingDTO[];
+}
+
 export interface SitemapRow {
   /** Public path (no /en prefix; native-script slugs decoded). */
   path: string;

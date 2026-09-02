@@ -270,6 +270,34 @@ insert into public.slug_aliases (id, route_scope, locale, alias_slug, target_id)
    'c0000000-0000-4000-8000-000000000001')
 on conflict (route_scope, locale, alias_slug) do nothing;
 
+-- ── Weekly editorial fixture (D5: /today, EN/JA currently served) ────────
+
+insert into public.today_editions
+  (id, week_of, status, created_by, published_by, published_at) values
+  ('85000000-0000-4000-8000-000000000001', '2026-08-31', 'published',
+   '99000000-0000-4000-8000-000000000001', '99000000-0000-4000-8000-000000000002',
+   '2026-08-31T18:00:00Z')
+on conflict (id) do nothing;
+
+insert into public.today_edition_locales
+  (id, edition_id, locale, status, title, dek, body, reviewed_by, reviewed_at) values
+  ('85100000-0000-4000-8000-000000000001', '85000000-0000-4000-8000-000000000001', 'en', 'published',
+   'Two counters for an easy Waikīkī evening',
+   'A warm bowl first, then a small sushi counter when you want to linger.',
+   'Start just off the busiest blocks, where a focused bowl of tonkotsu makes an unhurried early dinner. If the evening keeps going, trade the beach crowds for a ten-seat counter and let the chef set the pace.\n\nBoth places are compact, so going a little earlier is the simplest move this week.',
+   '99000000-0000-4000-8000-000000000002', '2026-08-31T17:30:00Z'),
+  ('85100000-0000-4000-8000-000000000002', '85000000-0000-4000-8000-000000000001', 'ja', 'published',
+   'ワイキキで気軽に楽しむ、二つのカウンター',
+   'まずは温かい一杯を。夜をゆっくり過ごしたい日は、小さな寿司カウンターへ。',
+   'にぎやかな通りを少し離れ、丁寧に仕上げた豚骨ラーメンで早めの夕食を。もう少し夜を楽しみたいなら、ビーチの人混みを離れて10席のカウンターへ移り、大将のペースに身を任せてみてください。\n\nどちらも席数が限られているため、今週は少し早めの時間がおすすめです。',
+   '99000000-0000-4000-8000-000000000002', '2026-08-31T17:45:00Z')
+on conflict (edition_id, locale) do nothing;
+
+insert into public.today_edition_items (edition_id, listing_id, position) values
+  ('85000000-0000-4000-8000-000000000001', 'c0000000-0000-4000-8000-000000000001', 1),
+  ('85000000-0000-4000-8000-000000000001', 'c0000000-0000-4000-8000-000000000002', 2)
+on conflict (edition_id, listing_id) do nothing;
+
 -- ── Menu for listing A (published EN/JA with evidence; KO pending) ───────
 
 insert into public.menu_documents (id, listing_id, source_media_id, captured_at, captured_by) values

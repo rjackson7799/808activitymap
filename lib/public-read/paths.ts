@@ -70,6 +70,10 @@ export function forBusinessPath(locale: Locale): string {
   return `${localePrefix(locale)}/for-business`;
 }
 
+export function todayPath(locale: Locale): string {
+  return `${localePrefix(locale)}/today`;
+}
+
 /**
  * Absolute URL for canonicals, hreflang, sitemaps, and JSON-LD. `origin` is derived from
  * PORTAL_DOMAIN (never the request/staging host). Native-script path segments are

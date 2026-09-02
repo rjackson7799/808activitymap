@@ -56,7 +56,11 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <section className="border-b border-hairline bg-[var(--gradient-backdrop)]">
           <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-20">
             <p className="eyebrow">{brand}</p>
-            <h1 className="mt-3 max-w-2xl font-serif text-[2.25rem] leading-[1.12] text-ink sm:text-[3.25rem]">{strings.browse}</h1>
+            <h1 className="mt-3 max-w-2xl font-serif text-[2.25rem] leading-[1.12] text-ink sm:text-[3.25rem]">
+              {locale === "en" ? <>
+                Browse Waik<span style={{ fontFamily: '"Times New Roman", serif' }}>ī</span>k<span style={{ fontFamily: '"Times New Roman", serif' }}>ī</span>
+              </> : strings.browse}
+            </h1>
             <p className="mt-4 max-w-2xl text-[14px] leading-[1.65] text-body sm:text-[15px]">{strings.browseIntro}</p>
           </div>
         </section>

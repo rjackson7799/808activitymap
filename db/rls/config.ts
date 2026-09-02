@@ -13,7 +13,7 @@
  *    every future schema migration therefore requires a bump + regenerate.
  */
 
-export const OUTPUT_MIGRATION = "20260903101000_rls_policies.sql";
+export const OUTPUT_MIGRATION = "20260904101000_rls_policies.sql";
 
 /** Tables that exist as of CP1/CP2 (migrations 1–17) + CP5 (rate_limits). */
 export const CURRENT_TABLES = [
@@ -51,6 +51,9 @@ export const CURRENT_TABLES = [
   "qa_work_sessions",
   "rate_limits",
   "slug_aliases",
+  "today_edition_items",
+  "today_edition_locales",
+  "today_editions",
   "user_roles",
 ] as const;
 
