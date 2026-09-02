@@ -10,6 +10,7 @@ const items = [
   { href: "/admin", label: "Dashboard" },
   { href: "/admin/taxonomy", label: "Taxonomy" },
   { href: "/admin/listings", label: "Listings" },
+  { href: "/admin/approvals", label: "Approvals" },
   { href: "/admin/freshness", label: "Freshness" },
   { href: "/admin/change-requests", label: "Corrections" },
   { href: "/admin/business-inquiries", label: "Inquiries", inquiryOnly: true },
