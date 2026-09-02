@@ -158,12 +158,12 @@ function ApprovalCard({
           <Detail label="Approved at" value={item.approvedAt ? formatDateTime(item.approvedAt) : "Not recorded"} />
           <Detail label="Evidence document" value={item.evidencePath ?? "Not attached"} wide />
           <Detail label="Approver ID" value={item.approvedBy ?? "Not recorded"} wide />
-          <div className="sm:col-span-2">
-            <Link href={`/admin/listings/${item.listingId}`} className={buttonVariants({ variant: "outline", size: "sm" })}>
-              Open listing publication review
-            </Link>
-          </div>
         </dl>
+        <div className="mt-5">
+          <Link href={`/admin/listings/${item.listingId}`} className={buttonVariants({ variant: "outline", size: "sm" })}>
+            Open listing publication review
+          </Link>
+        </div>
 
         <div className="border-t border-hairline pt-6 lg:border-l lg:border-t-0 lg:pl-6 lg:pt-0">
           {pending && canRecord ? (
@@ -197,7 +197,10 @@ function statusVariant(status: string): "verified" | "info" | "stale" | "neutral
 }
 
 function humanize(value: string) {
-  return value.replaceAll("_", " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
+  return value
+    .split("_")
+    .map((word) => word === "qa" ? "QA" : word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 }
 
 function localeName(locale: string) {
