@@ -14,6 +14,7 @@ const items = [
   { href: "/admin/change-requests", label: "Corrections" },
   { href: "/admin/business-inquiries", label: "Inquiries", inquiryOnly: true },
   { href: "/admin/audit", label: "Audit log" },
+  { href: "/admin/config", label: "Configuration" },
 ] as const;
 
 export function AdminNav({ roles }: { roles: readonly Role[] }) {

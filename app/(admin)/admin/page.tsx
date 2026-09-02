@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { ArrowUpRight, BriefcaseBusiness, Clock3, History, MapPinned, MessageSquareText, ShieldCheck, Tags } from "lucide-react";
+import { ArrowUpRight, BriefcaseBusiness, Clock3, History, MapPinned, MessageSquareText, Settings2, ShieldCheck, Tags } from "lucide-react";
 import { AuthzError, STAFF_ROLES } from "@/lib/auth/claims";
 import { requireRole } from "@/lib/auth/require-role";
 import { canManageBusinessInquiries } from "@/lib/business-inquiries/admin";
@@ -79,6 +79,12 @@ export default async function AdminPage() {
             title="Audit log"
             description="Review immutable staff and system activity."
             icon={<History aria-hidden="true" className="h-5 w-5" />}
+          />
+          <WorkspaceCard
+            href="/admin/config"
+            title="Configuration"
+            description="Review operational policy and runtime settings."
+            icon={<Settings2 aria-hidden="true" className="h-5 w-5" />}
           />
         </div>
       </section>
