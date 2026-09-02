@@ -54,6 +54,14 @@ export interface MenuDTO {
   sections: MenuSectionDTO[];
 }
 
+export interface DealDTO {
+  id: string;
+  title: string;
+  terms: string;
+  expiresAt: string;
+  sponsored: boolean;
+}
+
 export interface FreshnessFact {
   /** Display label mapped from the provenance `field` (never the raw internal columns). */
   label: string;
@@ -108,6 +116,8 @@ export interface ListingDTO {
   photos: PhotoDTO[];
   /** null ⇒ "menu coming soon" (page publishes without a menu). */
   menu: MenuDTO | null;
+  /** Active, QA-approved localized offers only; reveal codes never enter this DTO. */
+  deals: DealDTO[];
   provenance: FreshnessDTO;
 }
 

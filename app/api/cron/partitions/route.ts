@@ -53,12 +53,18 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     });
     if (pruneErr) throw pruneErr;
 
+    const { data: dealStatusRows, error: dealStatusError } = await db.rpc("reconcile_deal_statuses");
+    if (dealStatusError) throw dealStatusError;
+    const dealStatuses = Array.isArray(dealStatusRows) ? dealStatusRows[0] : dealStatusRows;
+
     return NextResponse.json({
       ok: true,
       partitionsCreated: created ?? 0,
       eventsDefaultCount,
       eventsPruned: eventsPruned ?? 0,
       rateLimitsPruned: pruned ?? 0,
+      dealsActivated: dealStatuses?.activated ?? 0,
+      dealsExpired: dealStatuses?.expired ?? 0,
     });
   } catch (error) {
     captureError(error, { where: "cron/partitions" });

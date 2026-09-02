@@ -25,6 +25,7 @@ import { MenuDisplay } from "@/components/public/MenuDisplay";
 import { HoursTable } from "@/components/public/HoursTable";
 import { HowWeKeepCurrent } from "@/components/public/HowWeKeepCurrent";
 import { ShareButton } from "@/components/public/ShareButton";
+import { DealCard } from "@/components/public/DealCard";
 import { MapPin, Phone } from "lucide-react";
 
 /**
@@ -155,6 +156,30 @@ export default async function ListingPage({
                 </div>
               </section>
 
+              {dto.deals.length > 0 ? (
+                <section className="mt-10" aria-labelledby="current-offers-heading">
+                  <h2 id="current-offers-heading" className="font-serif text-[1.3125rem] text-ink">{strings.deals}</h2>
+                  <div className="mt-4 grid gap-4">
+                    {dto.deals.map((deal) => (
+                      <DealCard
+                        key={deal.id}
+                        deal={deal}
+                        locale={locale}
+                        expiresLabel={strings.dealExpires(formatDealDate(deal.expiresAt, locale))}
+                        labels={{
+                          reveal: strings.revealDeal,
+                          revealing: strings.revealingDeal,
+                          code: strings.dealCode,
+                          unavailable: strings.dealUnavailable,
+                          sponsored: strings.sponsored,
+                        }}
+                      />
+                    ))}
+                  </div>
+                  <p className="mt-3 text-xs leading-5 text-muted">{strings.dealDisclosure}</p>
+                </section>
+              ) : null}
+
               <div className="mt-10">
                 <HowWeKeepCurrent provenance={dto.provenance} strings={strings} />
                 <p className="mt-4 text-[12.5px]"><a href={reportChangePath(locale, dto.id)} className="font-semibold text-teal-dark underline underline-offset-4">{trustUi(locale).reportLink}</a></p>
@@ -209,7 +234,10 @@ export default async function ListingPage({
       </main>
 
       {dto.geo ? (
-        <div className="fixed inset-x-0 bottom-0 z-10 border-t border-hairline bg-white/95 p-3 pb-[max(.75rem,env(safe-area-inset-bottom))] backdrop-blur sm:hidden">
+        <aside
+          aria-label={strings.directions}
+          className="fixed inset-x-0 bottom-0 z-10 border-t border-hairline bg-white/95 p-3 pb-[max(.75rem,env(safe-area-inset-bottom))] backdrop-blur sm:hidden"
+        >
           <div className="mx-auto max-w-md">
                 <a
                   href={`https://www.google.com/maps/search/?api=1&query=${dto.geo.lat},${dto.geo.lng}`}
@@ -222,7 +250,7 @@ export default async function ListingPage({
                   {strings.directions}
                 </a>
           </div>
-        </div>
+        </aside>
       ) : null}
       <PublicFooter brand={brand} strings={strings} locale={locale} />
 
@@ -232,4 +260,10 @@ export default async function ListingPage({
       <script src="/public-enhancements.js" defer />
     </>
   );
+}
+
+function formatDealDate(value: string, locale: "en" | "ja" | "ko") {
+  return new Intl.DateTimeFormat(locale === "en" ? "en-US" : locale, {
+    month: "short", day: "numeric", year: "numeric", timeZone: "Pacific/Honolulu",
+  }).format(new Date(value));
 }

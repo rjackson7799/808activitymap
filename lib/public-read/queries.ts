@@ -11,6 +11,7 @@ import type {
   HoursDay,
   ListingCardDTO,
   ListingDTO,
+  DealDTO,
   MenuDTO,
   PhotoDTO,
   SitemapRow,
@@ -233,6 +234,26 @@ async function fetchMenu(
   return { menu, approvedAt };
 }
 
+async function fetchDeals(client: SupabaseClient, listingId: string, locale: Locale): Promise<DealDTO[]> {
+  const now = new Date().toISOString();
+  const { data, error } = await client
+    .from("deals")
+    .select("id, expires_at, sponsor_label, deal_locales!inner(title, terms)")
+    .eq("listing_id", listingId)
+    .eq("status", "active")
+    .lte("starts_at", now)
+    .gt("expires_at", now)
+    .eq("deal_locales.locale", locale)
+    .eq("deal_locales.status", "published")
+    .order("expires_at", { ascending: true });
+  if (error) throw new Error(`active deals read failed: ${error.message}`);
+  type Row = { id: string; expires_at: string; sponsor_label: boolean; deal_locales: Array<{ title: string; terms: string }> };
+  return ((data ?? []) as unknown as Row[]).flatMap((row) => {
+    const localized = row.deal_locales[0];
+    return localized ? [{ id: row.id, title: localized.title, terms: localized.terms, expiresAt: row.expires_at, sponsored: row.sponsor_label }] : [];
+  });
+}
+
 async function fetchFreshness(
   client: SupabaseClient,
   listingId: string,
@@ -387,7 +408,10 @@ export async function getListingDTO(
   });
 
   const photos = await fetchPhotos(client, listingId, locale);
-  const { menu, approvedAt } = await fetchMenu(client, listingId, locale);
+  const [{ menu, approvedAt }, deals] = await Promise.all([
+    fetchMenu(client, listingId, locale),
+    fetchDeals(client, listingId, locale),
+  ]);
   const config = await loadAppConfig(client);
   const provenance = await fetchFreshness(
     client,
@@ -430,6 +454,7 @@ export async function getListingDTO(
     hours,
     photos,
     menu,
+    deals,
     provenance,
   };
 }
