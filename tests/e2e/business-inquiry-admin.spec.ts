@@ -52,9 +52,9 @@ test("editor securely reviews and updates a business inquiry on desktop and mobi
   }
 });
 
-test("publisher does not see the operations-only inquiry workspace", async ({ page }) => {
-  const { publisher } = readState();
-  await signInWithMfa(page, publisher);
+test("language reviewer does not see the operations-only inquiry workspace", async ({ page }) => {
+  const { reviewerJa } = readState();
+  await signInWithMfa(page, reviewerJa);
   await page.goto("/admin");
   await expect(page.getByRole("navigation", { name: "Admin" }).getByRole("link", { name: "Inquiries" })).toHaveCount(0);
   await expect(page.getByRole("link", { name: /business inquiries follow up/i })).toHaveCount(0);

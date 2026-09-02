@@ -13,6 +13,7 @@ import type { ProvisionedStaff } from "./staff";
 export interface E2eState {
   publisher: ProvisionedStaff;
   editor: ProvisionedStaff;
+  reviewerJa: ProvisionedStaff;
 }
 
 const STATE_PATH = path.join(process.cwd(), "tests", "e2e", ".auth", "state.json");

@@ -52,4 +52,9 @@ export const E2E_USERS = {
     password: "e2e-editor-pw-123456",
     role: "editor" as const,
   },
+  reviewerJa: {
+    email: "e2e-reviewer-ja@portal.invalid",
+    password: "e2e-reviewer-ja-pw-123456",
+    role: "language_reviewer_ja" as const,
+  },
 };

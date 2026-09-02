@@ -5,7 +5,7 @@ import { buildPublishFixture } from "./support/fixture";
 import { writeState } from "./support/state";
 
 /**
- * Provision the two staff accounts (super_admin + editor) with verified TOTP,
+ * Provision the three staff accounts (super_admin + editor + JA reviewer) with verified TOTP,
  * build the publish fixture (fail-fast gate assertion inside), and persist the
  * accounts+secrets for the specs. Runs once before the suite.
  */
@@ -15,8 +15,9 @@ export default async function globalSetup() {
   try {
     const publisher = await provisionStaffUser(pg, E2E_USERS.publisher);
     const editor = await provisionStaffUser(pg, E2E_USERS.editor);
+    const reviewerJa = await provisionStaffUser(pg, E2E_USERS.reviewerJa);
     await buildPublishFixture(pg);
-    writeState({ publisher, editor });
+    writeState({ publisher, editor, reviewerJa });
   } finally {
     await pg.end();
   }
