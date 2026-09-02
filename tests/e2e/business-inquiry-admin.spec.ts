@@ -44,6 +44,7 @@ test("editor securely reviews and updates a business inquiry on desktop and mobi
 
     await page.setViewportSize({ width: 390, height: 844 });
     await page.reload();
+    await expect(page.getByRole("heading", { name: "Business inquiries", exact: true })).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
     expect((await new AxeBuilder({ page }).analyze()).violations, "axe on mobile inquiry queue").toEqual([]);
   } finally {
