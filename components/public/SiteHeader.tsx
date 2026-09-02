@@ -1,6 +1,8 @@
 import type { Locale } from "@/lib/locales";
 import type { LocaleAlternate } from "@/lib/public-read/queries";
 import { homePath } from "@/lib/public-read/paths";
+import { todayPath } from "@/lib/public-read/paths";
+import { todayUi } from "@/lib/i18n/today";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 
 /**
@@ -29,12 +31,15 @@ export function SiteHeader({
         >
           {brand}
         </a>
-        <LanguageSwitcher
-          current={locale}
-          alternates={alternates}
-          notAvailableLabel={notAvailableLabel}
-          languageLabel={languageLabel}
-        />
+        <div className="flex items-center gap-2 sm:gap-4">
+          <a href={todayPath(locale)} className="inline-flex min-h-10 items-center rounded-cta px-2 text-xs font-bold text-teal-dark transition hover:bg-info-bg sm:px-3 sm:text-sm">{todayUi(locale).link}</a>
+          <LanguageSwitcher
+            current={locale}
+            alternates={alternates}
+            notAvailableLabel={notAvailableLabel}
+            languageLabel={languageLabel}
+          />
+        </div>
       </div>
     </header>
   );

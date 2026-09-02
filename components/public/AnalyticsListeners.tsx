@@ -53,12 +53,18 @@ export function AnalyticsListeners() {
               element,
               window.setTimeout(() => {
                 fired.add(element);
-                const sectionId = (element as HTMLElement).dataset.sectionId;
-                emit("menu_view", {
-                  listingId,
-                  locale,
-                  props: sectionId ? { section_id: sectionId } : {},
-                });
+                const analytics = (element as HTMLElement).dataset.analytics;
+                if (analytics === "today-note") {
+                  const noteId = (element as HTMLElement).dataset.noteId;
+                  if (noteId) emit("today_note_view", { locale, props: { note_id: noteId } });
+                } else {
+                  const sectionId = (element as HTMLElement).dataset.sectionId;
+                  emit("menu_view", {
+                    listingId,
+                    locale,
+                    props: sectionId ? { section_id: sectionId } : {},
+                  });
+                }
               }, 1_000),
             );
           } else if (!entry.isIntersecting) {
@@ -73,7 +79,7 @@ export function AnalyticsListeners() {
       { threshold: 0.5 },
     );
     document
-      .querySelectorAll("[data-analytics='menu-section']")
+      .querySelectorAll("[data-analytics='menu-section'], [data-analytics='today-note']")
       .forEach((element) => observer.observe(element));
 
     return () => {

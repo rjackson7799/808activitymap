@@ -646,4 +646,12 @@ export const EXTRA_SURFACES: ExtraSurface[] = [
     predicate: { kind: "fnOwned", fn: "upsert_provenance" },
     aal: "none",
   },
+  {
+    description: "Weekly editorial editions are read and mutated only through guarded functions and the server read model",
+    roles: STAFF_ROLES,
+    tables: ["today_editions", "today_edition_locales", "today_edition_items"],
+    ops: [],
+    predicate: { kind: "fnOwned", fn: "create/save/review/set-items/publish/archive/list today edition functions" },
+    aal: "none",
+  },
 ];

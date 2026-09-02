@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { ArrowUpRight, BriefcaseBusiness, ClipboardCheck, Clock3, History, Languages, MapPinned, MessageSquareText, Settings2, ShieldCheck, Tags, Ticket } from "lucide-react";
+import { ArrowUpRight, BriefcaseBusiness, ClipboardCheck, Clock3, History, Languages, MapPinned, MessageSquareText, Newspaper, Settings2, ShieldCheck, Tags, Ticket } from "lucide-react";
 import { AuthzError, STAFF_ROLES } from "@/lib/auth/claims";
 import { requireRole } from "@/lib/auth/require-role";
 import { canManageBusinessInquiries } from "@/lib/business-inquiries/admin";
@@ -83,6 +83,12 @@ export default async function AdminPage() {
             title="Deals"
             description="Prepare localized offers and manage disclosed, tracked partner links."
             icon={<Ticket aria-hidden="true" className="h-5 w-5" />}
+          />
+          <WorkspaceCard
+            href="/admin/today"
+            title="This week"
+            description="Prepare, review, and publish the weekly editorial note."
+            icon={<Newspaper aria-hidden="true" className="h-5 w-5" />}
           />
           {canManageBusinessInquiries(claims.appRoles) ? (
             <WorkspaceCard

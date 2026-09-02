@@ -18,6 +18,7 @@ import type {
   PhotoDTO,
   SitemapRow,
   SlugResolution,
+  TodayDTO,
 } from "./dto";
 import {
   formatMenuItemPrice,
@@ -27,7 +28,7 @@ import {
   resolveSeo,
 } from "./fallback";
 import { computeBadgeStatus, computeFreshness, type ProvenanceRow } from "./freshness";
-import { categoryPath, homePath, listingPath } from "./paths";
+import { categoryPath, homePath, listingPath, todayPath } from "./paths";
 
 /**
  * Public read model (CP4) — the public authorization boundary. Reads run through the
@@ -762,13 +763,63 @@ export async function getHomeDTO(client: SupabaseClient, locale: Locale): Promis
   return { categories: categories.map(({ slug, label, count }) => ({ slug, label, count })) };
 }
 
-/** Sitemap rows: home + eligible category + listing pages, publishable only, no aliases, no KO. */
+/** Current weekly editorial edition. Drafts and unpublished locale copy never enter the DTO. */
+export async function getTodayDTO(client: SupabaseClient, locale: Locale): Promise<TodayDTO | null> {
+  if (!(await getServedLocaleSet(client)).has(locale)) return null;
+  const { data, error } = await client
+    .from("today_editions")
+    .select("id,week_of,published_at,today_edition_locales!inner(locale,status,title,dek,body),today_edition_items(listing_id,position)")
+    .eq("market_id", "oahu-waikiki")
+    .eq("status", "published")
+    .eq("today_edition_locales.locale", locale)
+    .eq("today_edition_locales.status", "published")
+    .order("week_of", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (error) throw new Error(`today edition read failed: ${error.message}`);
+  if (!data) return null;
+
+  type Row = {
+    id: string;
+    week_of: string;
+    published_at: string;
+    today_edition_locales: Array<{ locale: Locale; status: string; title: string; dek: string; body: string }>;
+    today_edition_items: Array<{ listing_id: string; position: number }>;
+  };
+  const row = data as unknown as Row;
+  const copy = row.today_edition_locales[0];
+  if (!copy) return null;
+  const ordered = [...row.today_edition_items].sort((a, b) => a.position - b.position);
+  const listingRows = await Promise.all(ordered.map((item) => getListingDTO(client, locale, item.listing_id)));
+  return {
+    id: row.id,
+    locale,
+    weekOf: row.week_of,
+    publishedAt: row.published_at,
+    title: copy.title,
+    dek: copy.dek,
+    body: copy.body,
+    listings: listingRows.filter((listing): listing is ListingDTO => listing !== null).map((listing) => ({
+      id: listing.id,
+      slug: listing.slug,
+      name: listing.name,
+      priceBand: listing.priceBand,
+      primaryCategory: listing.primaryCategory,
+      photo: listing.photos[0] ?? null,
+      neighborhood: listing.address.city,
+      editorialNote: listing.editorialNote,
+    })),
+  };
+}
+
+/** Sitemap rows: home + current editorial + eligible category + listing pages, publishable only, no aliases, no KO. */
 export async function getSitemapRows(client: SupabaseClient): Promise<SitemapRow[]> {
   const served = [...(await getServedLocaleSet(client))];
   const rows: SitemapRow[] = [];
 
   for (const locale of served) {
     rows.push({ path: homePath(locale), locale });
+    rows.push({ path: todayPath(locale), locale });
     const home = await getHomeDTO(client, locale);
     for (const cat of home.categories) {
       rows.push({ path: categoryPath(locale, cat.slug), locale });

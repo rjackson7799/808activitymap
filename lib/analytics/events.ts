@@ -113,7 +113,7 @@ export const EVENT_REGISTRY = {
     listingScoped: true,
   },
   today_note_view: {
-    status: "planned", // /today/ editorial (D5)
+    status: "implemented", // /today/ editorial (D5), visible for at least one second
     source: CLIENT,
     props: z.strictObject({ note_id: z.uuid() }),
     listingScoped: false,

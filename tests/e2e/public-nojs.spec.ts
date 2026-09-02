@@ -35,3 +35,11 @@ test("JA listing renders native content + correct lang without JS", async ({ pag
   await expect(page.getByRole("heading", { level: 1, name: "アロハ・ラーメン・ハレ" })).toBeVisible();
   await expect(page.getByText("豚骨ラーメン")).toBeVisible();
 });
+
+test("weekly editorial and shortlist render without JS", async ({ page }) => {
+  await page.goto("/today");
+  await expect(page.getByRole("heading", { level: 1, name: "Two counters for an easy Waikīkī evening" })).toBeVisible();
+  await expect(page.getByText(/focused bowl of tonkotsu/)).toBeVisible();
+  await expect(page.getByRole("link", { name: /Aloha Ramen Hale/ })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Waikiki Sushi Ten/ })).toBeVisible();
+});

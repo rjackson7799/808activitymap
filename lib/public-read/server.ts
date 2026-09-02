@@ -4,7 +4,7 @@ import { createSupabaseServiceClient } from "@/lib/auth/server";
 import type { Locale } from "@/lib/locales";
 import * as q from "./queries";
 import { loadAppConfig } from "./config";
-import { TAG_PUBLIC, TAG_SITEMAP, tagForListing } from "./tags";
+import { TAG_PUBLIC, TAG_SITEMAP, TAG_TODAY, tagForListing } from "./tags";
 
 /**
  * Server-bound + cached public read model (CP4). Binds the query functions to a single
@@ -47,6 +47,9 @@ export const getCategoryLocaleAlternates = (categoryId: string) =>
 
 export const getHomeDTO = (locale: Locale) =>
   cached(() => q.getHomeDTO(db(), locale), ["home-dto", locale], [TAG_SITEMAP, TAG_PUBLIC]);
+
+export const getTodayDTO = (locale: Locale) =>
+  cached(() => q.getTodayDTO(db(), locale), ["today-dto", locale], [TAG_TODAY, TAG_SITEMAP, TAG_PUBLIC]);
 
 export const getSitemapRows = () =>
   cached(() => q.getSitemapRows(db()), ["sitemap-rows"], [TAG_SITEMAP, TAG_PUBLIC]);

@@ -11,6 +11,7 @@ import {
   getListingDTO,
   getServedLocaleSet,
   getSitemapRows,
+  getTodayDTO,
   listEligiblePages,
   resolveListingSlug,
 } from "@/lib/public-read/queries";
@@ -77,6 +78,25 @@ describe("eligibility surface", () => {
     // draft C and every KO row are absent.
     expect(keys.some((k) => k.startsWith(LISTING.coffee))).toBe(false);
     expect(keys.some((k) => k.endsWith("|ko"))).toBe(false);
+  });
+});
+
+describe("weekly editorial read model", () => {
+  it("serves reviewed EN/JA editions with an allowlisted shortlist and fences KO", async () => {
+    const en = await getTodayDTO(client, "en");
+    expect(en).toMatchObject({
+      id: "85000000-0000-4000-8000-000000000001",
+      locale: "en",
+      title: "Two counters for an easy Waikīkī evening",
+    });
+    expect(en?.listings.map((listing) => listing.id)).toEqual([LISTING.ramen, LISTING.sushi]);
+    expect(Object.keys(en ?? {}).sort()).toEqual(["body","dek","id","listings","locale","publishedAt","title","weekOf"]);
+    assertNoCanaries(en);
+    const ja = await getTodayDTO(client, "ja");
+    expect(ja?.title).toBe("ワイキキで気軽に楽しむ、二つのカウンター");
+    expect(ja?.listings[0]?.name).toBe("アロハ・ラーメン・ハレ");
+    assertNoCanaries(ja);
+    expect(await getTodayDTO(client, "ko")).toBeNull();
   });
 });
 
