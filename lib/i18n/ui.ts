@@ -30,6 +30,14 @@ export interface UiStrings {
   tomorrow: string;
   weekdays: Record<"mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun", string>;
   menu: string;
+  deals: string;
+  revealDeal: string;
+  revealingDeal: string;
+  dealCode: string;
+  dealExpires: (date: string) => string;
+  dealUnavailable: string;
+  dealDisclosure: string;
+  sponsored: string;
   menuComingSoon: (date: string) => string;
   ownerPick: string;
   hours: string;
@@ -85,6 +93,14 @@ const en: UiStrings = {
   tomorrow: "tomorrow",
   weekdays: { mon: "Mon", tue: "Tue", wed: "Wed", thu: "Thu", fri: "Fri", sat: "Sat", sun: "Sun" },
   menu: "Menu",
+  deals: "Current offers",
+  revealDeal: "Reveal offer code",
+  revealingDeal: "Revealing…",
+  dealCode: "Offer code",
+  dealExpires: (date) => `Expires ${date}`,
+  dealUnavailable: "This offer is no longer available.",
+  dealDisclosure: "Code reveals estimate offer interest; they do not confirm redemption.",
+  sponsored: "Sponsored",
   menuComingSoon: (date) => `Menu coming soon — profile verified ${date}`,
   ownerPick: "Owner’s pick",
   hours: "Hours",
@@ -140,6 +156,14 @@ const ja: UiStrings = {
   tomorrow: "明日",
   weekdays: { mon: "月", tue: "火", wed: "水", thu: "木", fri: "金", sat: "土", sun: "日" },
   menu: "メニュー",
+  deals: "現在の特典",
+  revealDeal: "特典コードを表示",
+  revealingDeal: "表示中…",
+  dealCode: "特典コード",
+  dealExpires: (date) => `有効期限：${date}`,
+  dealUnavailable: "この特典は現在ご利用いただけません。",
+  dealDisclosure: "コード表示数は特典への関心の目安であり、利用実績を示すものではありません。",
+  sponsored: "スポンサー",
   menuComingSoon: (date) => `メニューは近日公開 — ${date}に店舗確認済み`,
   ownerPick: "店主のおすすめ",
   hours: "営業時間",
@@ -185,6 +209,14 @@ const ko: UiStrings = {
   viewDetails: "자세히 보기",
   skipToContent: "본문으로 건너뛰기",
   languageLabel: "언어",
+  deals: "현재 혜택",
+  revealDeal: "혜택 코드 보기",
+  revealingDeal: "불러오는 중…",
+  dealCode: "혜택 코드",
+  dealExpires: (date) => `만료일: ${date}`,
+  dealUnavailable: "이 혜택은 더 이상 제공되지 않습니다.",
+  dealDisclosure: "코드 조회 수는 혜택 관심도의 추정치이며 실제 사용을 확인하지 않습니다.",
+  sponsored: "스폰서",
   verificationDue: "확인 정보 재검토 중",
   verificationInProgress: "확인 진행 중",
   localTipLabel: "현지인의 한마디",

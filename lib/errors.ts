@@ -111,6 +111,18 @@ function mapRaiseMessage(message: string): MappedError | null {
   if (message.includes("menu_locale_incomplete")) {
     return { code: "menu_locale_incomplete", message: "Confirm every translated menu item and complete all names before approval." };
   }
+  if (message.includes("deal_locales_not_approved")) {
+    return { code: "deal_locales_not_approved", message: "English and Japanese offer wording must pass QA before activation." };
+  }
+  if (message.includes("approval_evidence_invalid")) {
+    return { code: "approval_evidence_invalid", message: "Choose an approved evidence document with recorded vendor rights." };
+  }
+  if (message.includes("invalid_deal_window")) {
+    return { code: "invalid_deal_window", message: "Choose a future expiration later than the offer start." };
+  }
+  if (message.includes("deal_not_") || message.includes("deal_locale_not_reviewable")) {
+    return { code: "deal_unavailable", message: "That offer changed or is no longer available. Refresh and try again." };
+  }
   if (message.includes("permission_denied")) {
     return {
       code: "permission_denied",

@@ -25,6 +25,7 @@ describe("event dictionary — status gate", () => {
         "language_switch",
         "share_click",
         "direction_click",
+        "deal_reveal",
         "report_change",
       ]),
     );
@@ -39,7 +40,7 @@ describe("event dictionary — status gate", () => {
   });
 
   it("keeps deferred events as `planned` (not emittable)", () => {
-    for (const name of ["deal_reveal", "affiliate_clickout", "today_note_view", "menu_item_expand"] as EventName[]) {
+    for (const name of ["affiliate_clickout", "today_note_view", "menu_item_expand"] as EventName[]) {
       expect(isImplemented(name)).toBe(false);
     }
   });
@@ -72,13 +73,16 @@ describe("parseEventInput", () => {
     );
   });
 
-  it("rejects a planned event even if well-formed", () => {
-    expect(() =>
-      parseEventInput(
-        { name: "deal_reveal", props: { deal_id: "00000000-0000-4000-8000-000000000001" } },
-        { source: "server" },
-      ),
-    ).toThrow(/not implemented/);
+  it("accepts the implemented server-only deal reveal contract", () => {
+    const value = parseEventInput(
+      { name: "deal_reveal", props: { deal_id: "00000000-0000-4000-8000-000000000001" } },
+      { source: "server" },
+    );
+    expect(value).toMatchObject({ name: "deal_reveal", source: "server", listingScoped: true });
+    expect(() => parseEventInput(
+      { name: "deal_reveal", props: { deal_id: "00000000-0000-4000-8000-000000000001" } },
+      { source: "client" },
+    )).toThrow(/may not be emitted/);
   });
 
   it("rejects source forgery — a client body cannot yield a server-only event", () => {

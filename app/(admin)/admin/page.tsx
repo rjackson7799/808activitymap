@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { ArrowUpRight, BriefcaseBusiness, ClipboardCheck, Clock3, History, Languages, MapPinned, MessageSquareText, Settings2, ShieldCheck, Tags } from "lucide-react";
+import { ArrowUpRight, BriefcaseBusiness, ClipboardCheck, Clock3, History, Languages, MapPinned, MessageSquareText, Settings2, ShieldCheck, Tags, Ticket } from "lucide-react";
 import { AuthzError, STAFF_ROLES } from "@/lib/auth/claims";
 import { requireRole } from "@/lib/auth/require-role";
 import { canManageBusinessInquiries } from "@/lib/business-inquiries/admin";
@@ -77,6 +77,12 @@ export default async function AdminPage() {
             title="Corrections"
             description="Process community-submitted listing corrections."
             icon={<MessageSquareText aria-hidden="true" className="h-5 w-5" />}
+          />
+          <WorkspaceCard
+            href="/admin/deals"
+            title="Deals"
+            description="Prepare, review, schedule, and remove permissioned offers."
+            icon={<Ticket aria-hidden="true" className="h-5 w-5" />}
           />
           {canManageBusinessInquiries(claims.appRoles) ? (
             <WorkspaceCard

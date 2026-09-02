@@ -14,6 +14,7 @@ const items = [
   { href: "/admin/approvals", label: "Approvals" },
   { href: "/admin/freshness", label: "Freshness" },
   { href: "/admin/change-requests", label: "Corrections" },
+  { href: "/admin/deals", label: "Deals" },
   { href: "/admin/business-inquiries", label: "Inquiries", inquiryOnly: true },
   { href: "/admin/audit", label: "Audit log" },
   { href: "/admin/config", label: "Configuration" },

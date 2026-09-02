@@ -63,6 +63,15 @@ export const REVIEWER_LOCALE: Partial<Record<Role, string>> = {
  * bypass grants and RLS — FORCE ROW LEVEL SECURITY must NEVER be enabled.
  */
 export const PROTECTED_COLUMNS: Partial<Record<TableName, string[]>> = {
+  deals: [
+    "status",
+    "approval_evidence_media_id",
+    "approved_by",
+    "approved_at",
+    "killed_by",
+    "killed_at",
+  ],
+  deal_locales: ["status", "reviewed_by", "reviewed_at"],
   listings: ["publication_status"],
   listing_locales: ["status"],
   menu_version_locales: [
@@ -329,26 +338,31 @@ export const SEMANTICS: Record<Action, Partial<Record<Cell, Emission[]>>> = {
     "✔": [
       {
         tables: ["deal_locales", "deals"],
-        ops: ["insert", "update", "delete"],
+        ops: ["select"],
         predicate: { kind: "all" },
         aal: "mfa",
       },
+      { tables: ["deals"], ops: [], predicate: { kind: "fnOwned", fn: "create_deal/activate_deal/kill_deal" }, aal: "mfa" },
+      { tables: ["deal_locales"], ops: [], predicate: { kind: "fnOwned", fn: "save_deal_locale/review_deal_locale" }, aal: "mfa" },
     ],
     "✔/✔/✔": [
       {
         tables: ["deal_locales", "deals"],
-        ops: ["insert", "update", "delete"],
+        ops: ["select"],
         predicate: { kind: "all" },
         aal: "mfa",
       },
+      { tables: ["deals"], ops: [], predicate: { kind: "fnOwned", fn: "create_deal/activate_deal/kill_deal" }, aal: "mfa" },
+      { tables: ["deal_locales"], ops: [], predicate: { kind: "fnOwned", fn: "save_deal_locale/review_deal_locale" }, aal: "mfa" },
     ],
     draft: [
       {
-        tables: ["deals"],
-        ops: ["insert"],
+        tables: ["deal_locales", "deals"],
+        ops: ["select"],
         predicate: { kind: "all" },
         aal: "none",
       },
+      { tables: ["deals"], ops: [], predicate: { kind: "fnOwned", fn: "create_deal" }, aal: "mfa" },
     ],
     request: [
       {

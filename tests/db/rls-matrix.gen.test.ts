@@ -51,6 +51,10 @@ const P = {
   changeRequest: "77000000-0000-4000-8000-000000000027",
   qaAssignment: "77000000-0000-4000-8000-000000000028",
   qaSession: "77000000-0000-4000-8000-000000000029",
+  deal: "77000000-0000-4000-8000-000000000030",
+  dealLocale: "77000000-0000-4000-8000-000000000031",
+  deal2: "77000000-0000-4000-8000-000000000032",
+  dealLocaleKo: "77000000-0000-4000-8000-000000000033",
 };
 const PROBE_SESSION = "77000000-0000-4000-8000-000000000099";
 const LIVE_DATABASE_ROLES = new Set([
@@ -86,6 +90,12 @@ async function seedProbeFamily(tx: TxSql): Promise<void> {
       ('${P.listing}', '${P.loc}'), ('${P.listing2}', '${P.loc2}');
     insert into public.change_requests (id, target_id, base_version, diff, sla_due_at) values
       ('${P.changeRequest}', '${P.listing}', 1, '{"field":"hours","details":"Probe correction details."}'::jsonb, now() + interval '48 hours');
+    insert into public.deals (id,listing_id,reveal_code,starts_at,expires_at,created_by) values
+      ('${P.deal}','${P.listing}','PROBE',now(),now()+interval '1 day','${P.actor}'),
+      ('${P.deal2}','${P.listing2}','PROBE2',now(),now()+interval '1 day','${P.actor}');
+    insert into public.deal_locales (id,deal_id,locale,title,terms) values
+      ('${P.dealLocale}','${P.deal}','ja','プローブ特典','プローブ利用条件'),
+      ('${P.dealLocaleKo}','${P.deal}','ko','프로브 혜택','프로브 이용 조건');
     insert into public.listing_locales (listing_id, locale, name) values
       ('${P.listing}', 'ja', 'プローブ'), ('${P.listing}', 'ko', '프로브');
     insert into public.categories (id, market_id) values
@@ -150,6 +160,17 @@ interface WriteProbes {
 }
 
 const PROBES: Record<string, WriteProbes> = {
+  deals: {
+    update: `update deals set reveal_code = reveal_code where id = '${P.deal}'`,
+    insert: `insert into deals (listing_id,reveal_code,starts_at,expires_at,created_by) values ('${P.listing2}','NEW',now(),now()+interval '1 day','${P.actor}')`,
+    del: `delete from deals where id = '${P.deal}'`,
+  },
+  deal_locales: {
+    localeScoped: true,
+    update: (l) => `update deal_locales set title = title where deal_id = '${P.deal}' and locale = '${l}'`,
+    insert: (l) => `insert into deal_locales (deal_id,locale,title,terms) values ('${P.deal2}','${l}','Probe deal','Probe terms')`,
+    del: `delete from deal_locales where id = '${P.dealLocale}'`,
+  },
   qa_assignments: {
     update: `update qa_assignments set assigned_at = assigned_at where id = '${P.qaAssignment}'`,
     insert: `insert into qa_assignments (target_type,target_id,locale,assigned_to) values ('listing_locale','${P.listing2}','ja','${P.other}')`,

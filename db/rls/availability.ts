@@ -36,6 +36,8 @@ export const LIVE_TABLES: readonly TableName[] = [
   "categories",
   "category_locales",
   "change_requests",
+  "deal_locales",
+  "deals",
   "hours_exceptions",
   "hours_sets",
   "listing_categories",

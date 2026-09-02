@@ -69,6 +69,7 @@ test("admin pages are axe-clean; taxonomy form is keyboard-operable with visible
     "/admin/qa/ko",
     "/admin/freshness",
     "/admin/change-requests",
+    "/admin/deals",
     "/admin/audit",
     "/admin/config",
     `/admin/listings/${FIXTURE.listing}`,

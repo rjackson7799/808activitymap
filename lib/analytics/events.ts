@@ -101,7 +101,7 @@ export const EVENT_REGISTRY = {
 
   // ── Planned (later slices — drafted contract, NOT emittable) ─────────────
   deal_reveal: {
-    status: "planned", // Slice 7 — unique per session per deal; server-validated (P0-9)
+    status: "implemented", // unique per session per deal; recorded by reveal_active_deal (P0-9)
     source: SERVER,
     props: z.strictObject({ deal_id: z.uuid() }),
     listingScoped: true,
