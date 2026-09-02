@@ -23,7 +23,7 @@ export function SiteHeader({
   languageLabel: string;
 }) {
   return (
-    <header className="sticky top-0 z-10 h-[4.25rem] border-b border-hairline bg-white/95 backdrop-blur">
+    <header className="sticky top-0 z-10 h-[4.25rem] border-b border-hairline bg-white">
       <div className="mx-auto flex h-full max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
         <a
           href={homePath(locale)}

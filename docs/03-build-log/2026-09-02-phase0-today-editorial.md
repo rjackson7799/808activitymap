@@ -21,6 +21,8 @@ Implemented the current Phase 0 weekly `/today` editorial surface and its staff 
 - Locale reviewers can see and change only their assigned language. Editors manage English and shortlist content; publishers and super-admins control release.
 - Publishing atomically archives the previous edition for the same market, publishes the selected edition, and records all mutations in the audit log.
 - Demo copy remains local/CI seed data only. Staging and production content must be created through the staff workflow.
+- The sticky public header uses an opaque surface instead of a costly backdrop filter, preserving the visual treatment while avoiding unnecessary mobile paint/compositing work.
+- The critical English homepage heading keeps its exact wording and Marcellus treatment while its two macron glyphs use the existing metric-compatible serif fallback, preventing an otherwise redundant Latin-extension font request.
 
 ## Verification
 
@@ -28,4 +30,4 @@ Implemented the current Phase 0 weekly `/today` editorial surface and its staff 
 - TypeScript and lint checks passed.
 - 274 unit tests and 355 database tests passed.
 - 60 browser scenarios passed, including admin accessibility, English/Japanese typography, mobile overflow, no-JavaScript rendering, sitemap exposure, analytics capture, and public data-leakage guards.
-- Five-sample mobile performance audit passed: 0.99 performance, 1.00 accessibility, 1.00 best practices, 2,032 ms median LCP, and 227 KB median page weight.
+- Final five-sample mobile performance audit passed: 0.98 performance, 1.00 accessibility, 1.00 best practices, 2,384 ms median LCP, and 218 KB median page weight.
