@@ -7,6 +7,7 @@ import { createSupabaseServerClient } from "@/lib/auth/server";
 import { mapAuthzError, mapDbError } from "@/lib/errors";
 import { isLocale } from "@/lib/locales";
 import { TAG_PUBLIC, TAG_SITEMAP, tagForListing } from "@/lib/public-read/tags";
+import { MENU_APPROVAL_ROLES } from "@/lib/menu-approvals/admin";
 
 /**
  * Publish/unpublish + QA + menu-approval server actions (CP3). Publication
@@ -43,6 +44,7 @@ async function denyIfUnauthorized(): Promise<ActionState | null> {
 function revalidateListing(id: string) {
   revalidatePath("/admin/listings");
   revalidatePath(`/admin/listings/${id}`);
+  revalidatePath("/admin/approvals");
   // Public surface (CP4): invalidate the listing's own cached page/data, the sitemap, and
   // the category/home aggregates. updateTag (Next 16, Server-Action-only) purges the tag
   // on-demand with read-your-own-writes semantics, so the listing drops from the public
@@ -126,8 +128,12 @@ export async function transitionListingLocale(_prev: ActionState, formData: Form
  * `menu_evidence_missing`, which we surface verbatim in the mapped message.
  */
 export async function recordMenuApproval(_prev: ActionState, formData: FormData): Promise<ActionState> {
-  const denied = await denyIfUnauthorized();
-  if (denied) return denied;
+  try {
+    await requireRole(MENU_APPROVAL_ROLES, { aal2: true });
+  } catch (e) {
+    if (e instanceof AuthzError) return { error: mapAuthzError(e).message, code: e.reason };
+    throw e;
+  }
 
   const listing_id = String(formData.get("listing_id") ?? "");
   const mvl_id = String(formData.get("mvl_id") ?? "");

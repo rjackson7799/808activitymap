@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { ArrowUpRight, BriefcaseBusiness, Clock3, History, MapPinned, MessageSquareText, Settings2, ShieldCheck, Tags } from "lucide-react";
+import { ArrowUpRight, BriefcaseBusiness, ClipboardCheck, Clock3, History, MapPinned, MessageSquareText, Settings2, ShieldCheck, Tags } from "lucide-react";
 import { AuthzError, STAFF_ROLES } from "@/lib/auth/claims";
 import { requireRole } from "@/lib/auth/require-role";
 import { canManageBusinessInquiries } from "@/lib/business-inquiries/admin";
@@ -59,6 +59,12 @@ export default async function AdminPage() {
             title="Freshness"
             description="Monitor approved facts against their review windows."
             icon={<Clock3 aria-hidden="true" className="h-5 w-5" />}
+          />
+          <WorkspaceCard
+            href="/admin/approvals"
+            title="Menu approvals"
+            description="Track written vendor sign-off and evidence by locale."
+            icon={<ClipboardCheck aria-hidden="true" className="h-5 w-5" />}
           />
           <WorkspaceCard
             href="/admin/change-requests"
