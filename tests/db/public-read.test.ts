@@ -57,7 +57,7 @@ function assertNoCanaries(dto: unknown) {
 const LISTING_DTO_KEYS = [
   "id", "locale", "name", "slug", "seo", "editorialNote", "priceBand",
   "primaryCategory", "secondaryCategories", "address", "phone", "geo",
-  "operationalStatus", "hours", "photos", "menu", "deals", "provenance",
+  "operationalStatus", "hours", "photos", "menu", "deals", "affiliateLinks", "provenance",
 ].sort();
 
 describe("eligibility surface", () => {

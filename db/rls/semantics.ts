@@ -63,6 +63,7 @@ export const REVIEWER_LOCALE: Partial<Record<Role, string>> = {
  * bypass grants and RLS — FORCE ROW LEVEL SECURITY must NEVER be enabled.
  */
 export const PROTECTED_COLUMNS: Partial<Record<TableName, string[]>> = {
+  affiliate_links: ["status", "consecutive_failures", "last_checked_at", "last_http_status"],
   deals: [
     "status",
     "approval_evidence_media_id",
@@ -344,6 +345,7 @@ export const SEMANTICS: Record<Action, Partial<Record<Cell, Emission[]>>> = {
       },
       { tables: ["deals"], ops: [], predicate: { kind: "fnOwned", fn: "create_deal/activate_deal/kill_deal" }, aal: "mfa" },
       { tables: ["deal_locales"], ops: [], predicate: { kind: "fnOwned", fn: "save_deal_locale/review_deal_locale" }, aal: "mfa" },
+      { tables: ["affiliate_links"], ops: [], predicate: { kind: "fnOwned", fn: "create_affiliate_link/set_affiliate_link_status/list_admin_affiliate_links" }, aal: "mfa" },
     ],
     "✔/✔/✔": [
       {
@@ -354,6 +356,7 @@ export const SEMANTICS: Record<Action, Partial<Record<Cell, Emission[]>>> = {
       },
       { tables: ["deals"], ops: [], predicate: { kind: "fnOwned", fn: "create_deal/activate_deal/kill_deal" }, aal: "mfa" },
       { tables: ["deal_locales"], ops: [], predicate: { kind: "fnOwned", fn: "save_deal_locale/review_deal_locale" }, aal: "mfa" },
+      { tables: ["affiliate_links"], ops: [], predicate: { kind: "fnOwned", fn: "create_affiliate_link/set_affiliate_link_status/list_admin_affiliate_links" }, aal: "mfa" },
     ],
     draft: [
       {

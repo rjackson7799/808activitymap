@@ -26,6 +26,7 @@ import { HoursTable } from "@/components/public/HoursTable";
 import { HowWeKeepCurrent } from "@/components/public/HowWeKeepCurrent";
 import { ShareButton } from "@/components/public/ShareButton";
 import { DealCard } from "@/components/public/DealCard";
+import { AffiliateModule } from "@/components/public/AffiliateModule";
 import { MapPin, Phone } from "lucide-react";
 
 /**
@@ -178,6 +179,17 @@ export default async function ListingPage({
                   </div>
                   <p className="mt-3 text-xs leading-5 text-muted">{strings.dealDisclosure}</p>
                 </section>
+              ) : null}
+
+              {dto.affiliateLinks.length > 0 ? (
+                <AffiliateModule
+                  links={dto.affiliateLinks}
+                  locale={locale}
+                  title={strings.affiliateTitle}
+                  intro={strings.affiliateIntro}
+                  cta={strings.affiliateCta}
+                  disclosure={strings.affiliateDisclosure}
+                />
               ) : null}
 
               <div className="mt-10">

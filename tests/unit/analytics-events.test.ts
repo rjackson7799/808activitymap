@@ -26,6 +26,7 @@ describe("event dictionary — status gate", () => {
         "share_click",
         "direction_click",
         "deal_reveal",
+        "affiliate_clickout",
         "report_change",
       ]),
     );
@@ -40,7 +41,7 @@ describe("event dictionary — status gate", () => {
   });
 
   it("keeps deferred events as `planned` (not emittable)", () => {
-    for (const name of ["affiliate_clickout", "today_note_view", "menu_item_expand"] as EventName[]) {
+    for (const name of ["today_note_view", "menu_item_expand"] as EventName[]) {
       expect(isImplemented(name)).toBe(false);
     }
   });
@@ -81,6 +82,18 @@ describe("parseEventInput", () => {
     expect(value).toMatchObject({ name: "deal_reveal", source: "server", listingScoped: true });
     expect(() => parseEventInput(
       { name: "deal_reveal", props: { deal_id: "00000000-0000-4000-8000-000000000001" } },
+      { source: "client" },
+    )).toThrow(/may not be emitted/);
+  });
+
+  it("accepts the server-only affiliate clickout contract", () => {
+    const value = parseEventInput(
+      { name: "affiliate_clickout", props: { partner: "demo-partner", context: "nearby_activity" } },
+      { source: "server" },
+    );
+    expect(value).toMatchObject({ name: "affiliate_clickout", source: "server", listingScoped: true });
+    expect(() => parseEventInput(
+      { name: "affiliate_clickout", props: { partner: "demo-partner", context: "nearby_activity" } },
       { source: "client" },
     )).toThrow(/may not be emitted/);
   });

@@ -6,8 +6,9 @@ import { AuthzError } from "@/lib/auth/claims";
 import { requireRole } from "@/lib/auth/require-role";
 import { createSupabaseServerClient } from "@/lib/auth/server";
 import { mapAuthzError, mapDbError } from "@/lib/errors";
-import { TAG_PUBLIC } from "@/lib/public-read/tags";
+import { TAG_PUBLIC, tagForListing } from "@/lib/public-read/tags";
 import type { Role } from "@/db/rls/matrix";
+import { validateAffiliateDestination } from "@/lib/affiliate/url";
 
 export interface DealActionState { ok?: boolean; error?: string; code?: string }
 
@@ -113,6 +114,50 @@ export async function killDeal(_previous: DealActionState, formData: FormData): 
   const { error } = await db.rpc("kill_deal", { p_deal_id: id.data });
   if (error) return result(error);
   revalidatePath("/admin/deals");
+  updateTag(TAG_PUBLIC);
+  return { ok: true };
+}
+
+export async function createAffiliateLink(_previous: DealActionState, formData: FormData): Promise<DealActionState> {
+  const denied = await authorize(EDITOR_ROLES);
+  if (denied) return { error: denied.message, code: denied.code };
+  const parsed = z.object({
+    listing_id: z.uuid(),
+    partner_key: z.string().trim().regex(/^[a-z0-9][a-z0-9_-]{1,39}$/),
+    partner_name: z.string().trim().min(2).max(80),
+    destination_url: z.string().trim().max(2000),
+    context: z.enum(["nearby_activity", "reservation", "transportation", "other"]),
+    sort_order: z.coerce.number().int().min(-1000).max(1000),
+  }).safeParse(Object.fromEntries(formData.entries()));
+  if (!parsed.success) return { error: "Choose a listing and enter valid partner details." };
+  const destination = validateAffiliateDestination(parsed.data.destination_url);
+  if (!destination.ok) return { error: destination.error };
+  const db = await createSupabaseServerClient();
+  const { error } = await db.rpc("create_affiliate_link", {
+    p_listing_id: parsed.data.listing_id,
+    p_partner_key: parsed.data.partner_key,
+    p_partner_name: parsed.data.partner_name,
+    p_destination_url: destination.url.toString(),
+    p_context: parsed.data.context,
+    p_sort_order: parsed.data.sort_order,
+  });
+  if (error) return result(error);
+  revalidatePath("/admin/deals");
+  updateTag(tagForListing(parsed.data.listing_id));
+  updateTag(TAG_PUBLIC);
+  return { ok: true };
+}
+
+export async function setAffiliateLinkStatus(_previous: DealActionState, formData: FormData): Promise<DealActionState> {
+  const denied = await authorize(EDITOR_ROLES);
+  if (denied) return { error: denied.message, code: denied.code };
+  const parsed = z.object({ id: z.uuid(), status: z.enum(["active", "hidden"]) }).safeParse(Object.fromEntries(formData.entries()));
+  if (!parsed.success) return { error: "That affiliate link is no longer available." };
+  const db = await createSupabaseServerClient();
+  const { data: listingId, error } = await db.rpc("set_affiliate_link_status", { p_link_id: parsed.data.id, p_status: parsed.data.status });
+  if (error) return result(error);
+  revalidatePath("/admin/deals");
+  if (typeof listingId === "string") updateTag(tagForListing(listingId));
   updateTag(TAG_PUBLIC);
   return { ok: true };
 }

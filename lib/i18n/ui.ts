@@ -38,6 +38,10 @@ export interface UiStrings {
   dealUnavailable: string;
   dealDisclosure: string;
   sponsored: string;
+  affiliateTitle: string;
+  affiliateIntro: string;
+  affiliateCta: (partner: string) => string;
+  affiliateDisclosure: string;
   menuComingSoon: (date: string) => string;
   ownerPick: string;
   hours: string;
@@ -101,6 +105,10 @@ const en: UiStrings = {
   dealUnavailable: "This offer is no longer available.",
   dealDisclosure: "Code reveals estimate offer interest; they do not confirm redemption.",
   sponsored: "Sponsored",
+  affiliateTitle: "Explore nearby",
+  affiliateIntro: "Optional activity and travel ideas for your time in Hawaiʻi.",
+  affiliateCta: (partner) => `Explore with ${partner}`,
+  affiliateDisclosure: "Affiliate link. We may earn a commission at no extra cost to you.",
   menuComingSoon: (date) => `Menu coming soon — profile verified ${date}`,
   ownerPick: "Owner’s pick",
   hours: "Hours",
@@ -164,6 +172,10 @@ const ja: UiStrings = {
   dealUnavailable: "この特典は現在ご利用いただけません。",
   dealDisclosure: "コード表示数は特典への関心の目安であり、利用実績を示すものではありません。",
   sponsored: "スポンサー",
+  affiliateTitle: "周辺の体験を探す",
+  affiliateIntro: "ハワイ滞在中のアクティビティや移動に役立つ情報です。",
+  affiliateCta: (partner) => `${partner}で見る`,
+  affiliateDisclosure: "アフィリエイトリンクです。ご利用により、追加料金なしで当サイトに紹介料が入る場合があります。",
   menuComingSoon: (date) => `メニューは近日公開 — ${date}に店舗確認済み`,
   ownerPick: "店主のおすすめ",
   hours: "営業時間",
@@ -217,6 +229,10 @@ const ko: UiStrings = {
   dealUnavailable: "이 혜택은 더 이상 제공되지 않습니다.",
   dealDisclosure: "코드 조회 수는 혜택 관심도의 추정치이며 실제 사용을 확인하지 않습니다.",
   sponsored: "스폰서",
+  affiliateTitle: "주변 즐길 거리",
+  affiliateIntro: "하와이 여행을 위한 선택형 액티비티 및 교통 정보입니다.",
+  affiliateCta: (partner) => `${partner}에서 보기`,
+  affiliateDisclosure: "제휴 링크입니다. 추가 비용 없이 당사가 수수료를 받을 수 있습니다.",
   verificationDue: "확인 정보 재검토 중",
   verificationInProgress: "확인 진행 중",
   localTipLabel: "현지인의 한마디",

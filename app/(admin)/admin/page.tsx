@@ -81,7 +81,7 @@ export default async function AdminPage() {
           <WorkspaceCard
             href="/admin/deals"
             title="Deals"
-            description="Prepare, review, schedule, and remove permissioned offers."
+            description="Prepare localized offers and manage disclosed, tracked partner links."
             icon={<Ticket aria-hidden="true" className="h-5 w-5" />}
           />
           {canManageBusinessInquiries(claims.appRoles) ? (

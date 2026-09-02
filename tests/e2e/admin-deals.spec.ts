@@ -21,7 +21,8 @@ test("publisher prepares, reviews, activates, and reveals a localized Phase 0 of
       timeZone: "Pacific/Honolulu", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false,
     }).format(date).replace(" ", "T");
 
-    await page.getByLabel("Listing").selectOption(LISTING.ramen);
+    const createOffer = page.getByRole("region", { name: "Create offer draft" });
+    await createOffer.getByLabel("Listing").selectOption(LISTING.ramen);
     await page.getByLabel("Reveal code").fill(CODE);
     await page.getByLabel("Label this as sponsored content").check();
     await page.getByLabel("Starts (Hawaii time)").fill(hawaiiLocal(start));
