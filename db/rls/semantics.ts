@@ -549,6 +549,22 @@ const STAFF_ROLES: Role[] = [
  */
 export const EXTRA_SURFACES: ExtraSurface[] = [
   {
+    description: "Operations staff can read assisted email/SMS evidence and response status",
+    roles: ["super_admin", "publisher", "editor", "ops_agent"],
+    tables: ["assisted_messages"],
+    ops: ["select"],
+    predicate: { kind: "all" },
+    aal: "none",
+  },
+  {
+    description: "Assisted update intake and response recording are owned by guarded functions",
+    roles: ["super_admin", "publisher", "editor", "ops_agent"],
+    tables: ["assisted_messages"],
+    ops: [],
+    predicate: { kind: "fnOwned", fn: "record_assisted_update / record_assisted_response" },
+    aal: "none",
+  },
+  {
     description: "All staff can read locale QA assignment and capacity records",
     roles: STAFF_ROLES,
     tables: ["qa_assignments", "qa_work_sessions"],

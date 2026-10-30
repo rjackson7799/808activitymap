@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { Role } from "@/db/rls/matrix";
+import { canManageAssistedUpdates } from "@/lib/assisted-updates/admin";
 import { canManageBusinessInquiries } from "@/lib/business-inquiries/admin";
 import { cn } from "@/lib/utils";
 
@@ -14,6 +15,7 @@ const items = [
   { href: "/admin/approvals", label: "Approvals" },
   { href: "/admin/freshness", label: "Freshness" },
   { href: "/admin/change-requests", label: "Corrections" },
+  { href: "/admin/assisted-updates", label: "Assisted updates", assistedOnly: true },
   { href: "/admin/deals", label: "Deals" },
   { href: "/admin/today", label: "This week" },
   { href: "/admin/business-inquiries", label: "Inquiries", inquiryOnly: true },
@@ -23,7 +25,11 @@ const items = [
 
 export function AdminNav({ roles }: { roles: readonly Role[] }) {
   const pathname = usePathname();
-  const visibleItems = items.filter((item) => !("inquiryOnly" in item) || canManageBusinessInquiries(roles));
+  const visibleItems = items.filter((item) => {
+    if ("inquiryOnly" in item) return canManageBusinessInquiries(roles);
+    if ("assistedOnly" in item) return canManageAssistedUpdates(roles);
+    return true;
+  });
 
   return (
     <nav aria-label="Admin" className="-mx-2 flex min-w-0 gap-1 overflow-x-auto px-2 pb-1 lg:mx-0 lg:px-0 lg:pb-0">

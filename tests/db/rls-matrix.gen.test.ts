@@ -57,6 +57,7 @@ const P = {
   dealLocaleKo: "77000000-0000-4000-8000-000000000033",
   affiliate: "77000000-0000-4000-8000-000000000034",
   affiliate2: "77000000-0000-4000-8000-000000000035",
+  assistedMessage: "77000000-0000-4000-8000-000000000036",
 };
 const PROBE_SESSION = "77000000-0000-4000-8000-000000000099";
 const LIVE_DATABASE_ROLES = new Set([
@@ -92,6 +93,13 @@ async function seedProbeFamily(tx: TxSql): Promise<void> {
       ('${P.listing}', '${P.loc}'), ('${P.listing2}', '${P.loc2}');
     insert into public.change_requests (id, target_id, base_version, diff, sla_due_at) values
       ('${P.changeRequest}', '${P.listing}', 1, '{"field":"hours","details":"Probe correction details."}'::jsonb, now() + interval '48 hours');
+    insert into public.assisted_messages
+      (id, market_id, listing_id, channel, locale, from_address, body, received_at,
+       response_due_at, linked_change_request_id, recorded_by)
+    values
+      ('${P.assistedMessage}', 'oahu-waikiki', '${P.listing}', 'email', 'en',
+       'probe@example.invalid', 'Probe assisted message body.', now(), now() + interval '1 day',
+       '${P.changeRequest}', '${P.actor}');
     insert into public.deals (id,listing_id,reveal_code,starts_at,expires_at,created_by) values
       ('${P.deal}','${P.listing}','PROBE',now(),now()+interval '1 day','${P.actor}'),
       ('${P.deal2}','${P.listing2}','PROBE2',now(),now()+interval '1 day','${P.actor}');
@@ -165,6 +173,11 @@ interface WriteProbes {
 }
 
 const PROBES: Record<string, WriteProbes> = {
+  assisted_messages: {
+    update: `update assisted_messages set body = body where id = '${P.assistedMessage}'`,
+    insert: `insert into assisted_messages (market_id,listing_id,channel,locale,from_address,body,received_at,response_due_at,linked_change_request_id,recorded_by) values ('oahu-waikiki','${P.listing2}','sms','en','+18085550100','Inserted assisted update probe.',now(),now()+interval '1 day','${P.changeRequest}','${P.actor}')`,
+    del: `delete from assisted_messages where id = '${P.assistedMessage}'`,
+  },
   affiliate_links: {
     update: `update affiliate_links set partner_name = partner_name where id = '${P.affiliate}'`,
     insert: `insert into affiliate_links (listing_id,partner_key,partner_name,destination_url,created_by) values ('${P.listing2}','insert-probe','Insert Probe','https://example.com/insert','${P.actor}')`,

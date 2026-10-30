@@ -10,6 +10,7 @@ type QueueRow = {
   target_id: string;
   base_version: number;
   diff: { field?: string; details?: string };
+  proposer_channel: string;
   reporter_name: string | null;
   reporter_email: string | null;
   status: string;
@@ -31,7 +32,7 @@ export default async function ChangeRequestsPage() {
   const db = await createSupabaseServerClient();
   const { data, error } = await db
     .from("change_requests")
-    .select("id,target_id,base_version,diff,reporter_name,reporter_email,status,assignee,sla_due_at,created_at,resolution_note,listings(version,listing_locales(locale,name))")
+    .select("id,target_id,base_version,diff,proposer_channel,reporter_name,reporter_email,status,assignee,sla_due_at,created_at,resolution_note,listings(version,listing_locales(locale,name))")
     .order("status", { ascending: true })
     .order("sla_due_at", { ascending: true });
   const rows = (data ?? []) as unknown as QueueRow[];
@@ -93,8 +94,9 @@ export default async function ChangeRequestsPage() {
 
               return (
                 <article
+                  id={`request-${row.id}`}
                   key={row.id}
-                  className={`overflow-hidden rounded-card border bg-white shadow-card ${overdue ? "border-error/40" : "border-hairline-strong"}`}
+                  className={`scroll-mt-6 overflow-hidden rounded-card border bg-white shadow-card ${overdue ? "border-error/40" : "border-hairline-strong"}`}
                 >
                   <div className="border-b border-hairline bg-neutral/45 px-5 py-4 sm:px-6">
                     <div className="flex flex-wrap items-start justify-between gap-3">
@@ -122,6 +124,7 @@ export default async function ChangeRequestsPage() {
                       <Detail label="Field" value={humanize(row.diff.field || "Not specified")} />
                       <Detail label="Version at submission / current" value={`${row.base_version} / ${row.listings?.version ?? "Unknown"}`} />
                       <Detail label="Reported change" value={row.diff.details || "No details supplied"} wide />
+                      <Detail label="Source" value={sourceLabel(row.proposer_channel)} />
                       <Detail label="Reporter" value={[row.reporter_name, row.reporter_email].filter(Boolean).join(" · ") || "Anonymous"} />
                       <Detail label="Assignee" value={row.assignee ?? "Unassigned"} />
                     </dl>
@@ -182,6 +185,13 @@ function resolutionClassName(status: string) {
   if (status === "merged") return "border-success/15 bg-success-bg";
   if (status === "rejected") return "border-error/15 bg-error-bg";
   return "border-hairline-strong bg-neutral";
+}
+
+function sourceLabel(channel: string) {
+  if (channel === "assisted_email") return "Assisted email";
+  if (channel === "assisted_sms") return "Assisted SMS";
+  if (channel === "portal") return "Portal";
+  return "Public correction";
 }
 
 function formatAge(hours: number) {

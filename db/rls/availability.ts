@@ -32,6 +32,7 @@ export const LIVE_ROLES: readonly Role[] = [
  */
 export const LIVE_TABLES: readonly TableName[] = [
   "app_config",
+  "assisted_messages",
   "audit_log",
   "categories",
   "category_locales",

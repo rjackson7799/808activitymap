@@ -1,9 +1,10 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { ArrowUpRight, BriefcaseBusiness, ClipboardCheck, Clock3, History, Languages, MapPinned, MessageSquareText, Newspaper, Settings2, ShieldCheck, Tags, Ticket } from "lucide-react";
+import { ArrowUpRight, BriefcaseBusiness, ClipboardCheck, Clock3, History, Languages, MailCheck, MapPinned, MessageSquareText, Newspaper, Settings2, ShieldCheck, Tags, Ticket } from "lucide-react";
 import { AuthzError, STAFF_ROLES } from "@/lib/auth/claims";
 import { requireRole } from "@/lib/auth/require-role";
 import { canManageBusinessInquiries } from "@/lib/business-inquiries/admin";
+import { canManageAssistedUpdates } from "@/lib/assisted-updates/admin";
 
 /**
  * Admin dashboard. Self-guards (the layout also guards — defense in depth;
@@ -78,6 +79,14 @@ export default async function AdminPage() {
             description="Process community-submitted listing corrections."
             icon={<MessageSquareText aria-hidden="true" className="h-5 w-5" />}
           />
+          {canManageAssistedUpdates(claims.appRoles) ? (
+            <WorkspaceCard
+              href="/admin/assisted-updates"
+              title="Assisted updates"
+              description="Record vendor email and SMS changes with response tracking."
+              icon={<MailCheck aria-hidden="true" className="h-5 w-5" />}
+            />
+          ) : null}
           <WorkspaceCard
             href="/admin/deals"
             title="Deals"
